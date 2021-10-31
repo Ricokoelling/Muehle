@@ -1,39 +1,33 @@
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
-public class drawBoard {
+public class drawBoard extends JFrame{
+    private static final MyPanel pane = new MyPanel();
+    private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-    public static void main(String args[]) {
-
-        MyFrame f = new MyFrame();
-        f.setTitle("Drawing Graphics in a Frame Directly");
-        f.setBounds(100,50,1280,720);
-        f.setVisible(true);
-    }
-
-    static class MyFrame extends Frame {
-        public void paint(Graphics g) {
-            int diameter=200;
-            int radius=diameter/2;
-
-            //Rectangles
-            //First Rectangle
-            g.drawRect((this.getWidth()/2)-radius,(this.getHeight()/2)-radius,diameter,diameter);
-            //Second Rectangle
-            g.drawRect((this.getWidth()/2)-radius*2,(this.getHeight()/2)-radius*2,diameter*2,diameter*2);
-            //Third Rectangle
-            g.drawRect((this.getWidth()/2)-radius*3,(this.getHeight()/2)-radius*3,diameter*3,diameter*3);
-
-            //Lines
-            //Line 1
-            g.drawLine((this.getWidth()/2)-radius*3,this.getHeight()/2, (this.getWidth()/2)-radius,this.getHeight()/2);
-            //Line 2
-            g.drawLine((this.getWidth()/2), (this.getHeight()/2)-radius*3, this.getWidth()/2, (this.getHeight()/2)-radius);
-            //Line 3
-            g.drawLine((this.getWidth()/2)+radius, this.getHeight()/2, (this.getWidth()/2)+diameter*3/2,this.getHeight()/2);
-            //Linie 4
-            g.drawLine(this.getWidth()/2, (this.getHeight()/2)+radius, this.getWidth()/2, (this.getHeight()/2)+radius*3);
+    WindowListener exitListener = new WindowAdapter() {
+        @Override
+        public void windowClosing(WindowEvent e) {
+            int confirm = JOptionPane.showOptionDialog(
+                    null, "Are You Sure to Close Application?",
+                    "Exit Confirmation", JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null, null, null);
+            if (confirm == 0) {
+                System.exit(0);
+            }
         }
+    };
+
+    public drawBoard() {
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.setSize(screenSize.width, screenSize.height);
+        this.add(pane);
+        this.addWindowListener(exitListener);
+        this.setVisible(true);
     }
+
+
 
 }
 
