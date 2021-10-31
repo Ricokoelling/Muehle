@@ -24,6 +24,7 @@ public class Options extends JFrame{
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setSize(screenSize.width, screenSize.height);
         this.setVisible(true);
+        this.setResizable(false);
        // comboBox.setSize(200,200);
         //this.add(comboBox);
         this.addWindowListener(exitListener);

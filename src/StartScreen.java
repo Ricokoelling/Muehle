@@ -45,7 +45,7 @@ public class StartScreen extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == btn1){
             this.dispose();
-            drawBoard playField = new drawBoard();
+            playBoard playField = new playBoard();
         }
         if(e.getSource() == btn2){
             this.dispose();
