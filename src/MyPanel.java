@@ -8,18 +8,19 @@ public class MyPanel extends JPanel {
     }
 
     public void paint(Graphics g) {
-        int diameter = screenSize.width / 7;
-        int radius = screenSize.width / 14;
+        int diameter            = screenSize.width / 7;
+        int radius              = screenSize.width / 14;
+        int numbersOfRectangles = 3;
+
 
         Graphics2D g2D = (Graphics2D) g;
         g2D.setStroke(new BasicStroke(5));
+
         //Rectangles
-        //first Rectangle(smallest)
-        g2D.drawRect((screenSize.width / 2) - radius, (screenSize.height / 2) - radius, diameter, diameter);
-        //Second Rectangle
-        g2D.drawRect((screenSize.width / 2) - radius * 2, (screenSize.height / 2) - radius * 2, diameter * 2, diameter * 2);
-        //Third Rectangle(biggest)
-        g2D.drawRect((screenSize.width / 2) - radius * 3, (screenSize.height / 2) - radius * 3, diameter * 3, diameter * 3);
+        for(int i=1;i<numbersOfRectangles+1;i++){
+            g2D.drawRect((screenSize.width / 2) - radius*i, (screenSize.height / 2) - radius*i, diameter*i, diameter*i);
+        }
+
         //Lines
         //Line 1
         g2D.drawLine((screenSize.width / 2) - radius * 3, screenSize.height / 2, (screenSize.width / 2) - radius, screenSize.height / 2);
@@ -30,7 +31,7 @@ public class MyPanel extends JPanel {
         //Line 4
         g2D.drawLine(screenSize.width / 2, (screenSize.height / 2) + radius, screenSize.width / 2, (screenSize.height / 2) + radius * 3);
 
-        //Circle for mouselistener
+        //Circle for mouseListener
             //biggest rect
                 //top
         g2D.fillOval((screenSize.width / 2) - radius * 3 - 15, (screenSize.height / 2) - radius * 3 - 15, 30, 30);

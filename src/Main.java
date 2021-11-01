@@ -4,6 +4,4 @@ public class Main {
         StartScreen start = new StartScreen();
     }
 
-
-
 }
