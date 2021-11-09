@@ -5,25 +5,49 @@ public class Stones {
     private int position;
     private int stNumb;
     private boolean state;
-    private Stones[] playerOne = new Stones[8];
-    private Stones[] playerTwo = new Stones[8];
+    private int playerNumb;
+    private Stones[] player = new Stones[16];
 
 
     public Stones() {
     }
 
-    public Stones(int pos, int stNumb, boolean state) {
+    public Stones(int pos, int stNumb, boolean state, int plNumb) {
         this.position = pos;
         this.stNumb = stNumb;
         this.state = state;
+        this.playerNumb = plNumb;
     }
 
-    public void setPlayerOne(Stones[] playerOne) {
-        this.playerOne = playerOne;
+    public void setPlayer(Stones[] player) {
+        this.player = player;
     }
 
-    public void setPlayerTwo(Stones[] playerTwo) {
-        this.playerTwo = playerTwo;
+    public Stones[] getPlayer() {
+        return player;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public int getStNumb() {
+        return stNumb;
+    }
+
+    public void setStNumb(int stNumb) {
+        this.stNumb = stNumb;
+    }
+
+    public boolean isState() {
+        return state;
+    }
+
+    public void setState(boolean state) {
+        this.state = state;
+    }
 }

@@ -14,15 +14,15 @@ public class PhaseOne extends Stones{
     public void putStones(int player, int pos) {
 
             if(player == 1 && plOne < 9){       //uses playnumber and stonenumber to determine which map he needed use
-                Stones stone = new Stones(pos, plOne, true);
+                Stones stone = new Stones(pos, plOne, true,1);
                 playerOne[plOne] = stone;
-                setPlayerOne(playerOne);
+                setPlayer(playerOne);
                 plOne++;
             }
             else{
-                Stones stone = new Stones(pos,plTwo,true);
+                Stones stone = new Stones(pos,plTwo,true,2);
                 playerTwo[plTwo] = stone;
-                setPlayerTwo(playerTwo);
+                setPlayer(playerTwo);
                 plTwo++;
             }
 
