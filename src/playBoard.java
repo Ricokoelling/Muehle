@@ -25,17 +25,19 @@ public class playBoard extends JFrame implements MouseInputListener {
     };*/
 
     public playBoard() {
+        this.setSize(screenSize.width,screenSize.height);
+        this.addMouseListener(this);
+        this.addMouseMotionListener(this);
+        this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.add(pane);
-        this.setResizable(true);
         //this.addWindowListener(exitListener);
         this.setVisible(true);
-        this.addMouseMotionListener(this);
         start();
     }
 
     public void start(){
-        phaseOne.putStones();
+        phaseOne.putStones(1);
     }
 
 
@@ -46,24 +48,16 @@ public class playBoard extends JFrame implements MouseInputListener {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        System.out.println(e.getX()  + " " + e.getY());
+
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        phaseOne.setState(true);
-        if (e.getX() > (screenSize.width / 2) - radius * 3 - 15 && e.getX() < (screenSize.width / 2) - radius * 3 + 15 && e.getY() > (screenSize.height / 2) - radius * 3 - 15 && e.getY() < (screenSize.height / 2) - radius * 3 + 45) {
-            phaseOne.setePosition(e.getX(),e.getY());
-            System.out.println("hello");
-        }
-        if (e.getX() > (screenSize.width / 2) + ((diameter * 3) / 2) - radius * 3 - 15 && e.getX() < (screenSize.width / 2) + ((diameter * 3) / 2) - radius * 3 + 15 && e.getY() > (screenSize.height / 2) - radius * 3 - 15 && e.getY() < (screenSize.height / 2) - radius * 3 + 45) {
-            System.out.println("your mum gay2");
-        }
+
 
     }
 
