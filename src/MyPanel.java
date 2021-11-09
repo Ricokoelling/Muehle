@@ -11,15 +11,37 @@ public class MyPanel extends JPanel {
         int diameter            = this.getWidth() / 7;
         int radius              = this.getWidth() / 14;
         int numbersOfRectangles = 3;
+        int circleDiameter      = 30;
+        int circleRadius        = circleDiameter/2;
+        int[][] xyOfPoints      = new int[24][2];
 
 
         Graphics2D g2D = (Graphics2D) g;
         g2D.setStroke(new BasicStroke(5));
 
         //Rectangles
-        for(int i=1;i<numbersOfRectangles+1;i++){
-            g2D.drawRect((this.getWidth() / 2) - radius*i, (this.getHeight() / 2) - radius*i, diameter*i, diameter*i);
+        for(int i=1;i<=numbersOfRectangles;i++){
+            int x=(this.getWidth() / 2) - radius*i;
+            int y=(this.getHeight() / 2) - radius*i;
+            System.out.println("oberster Punkt "+i+":"+x+"\t"+y);
+
+            g2D.drawRect(x, y, diameter*i, diameter*i);
+
+            //Upper Line
+            g2D.fillOval(x - circleRadius, y - circleRadius, circleDiameter, circleDiameter);
+            g2D.fillOval(x + 1 * radius * i - circleRadius, y - circleRadius, circleDiameter, circleDiameter);
+            g2D.fillOval(x + 2 * radius * i - circleRadius, y - circleRadius, circleDiameter, circleDiameter);
+            //Middle Line
+            g2D.fillOval(x - circleRadius, y + radius * i- circleRadius, circleDiameter, circleDiameter);
+            g2D.fillOval(x + 2 * radius * i - circleRadius, y + radius * i - circleRadius, circleDiameter, circleDiameter);
+            //Last Line
+            g2D.fillOval(x - circleRadius, y + 2 * radius * i - circleRadius, circleDiameter, circleDiameter);
+            g2D.fillOval(x + 1 * radius * i - circleRadius, y + 2 * radius * i - circleRadius, circleDiameter, circleDiameter);
+            g2D.fillOval(x + 2 * radius * i - circleRadius, y + 2 * radius * i- circleRadius, circleDiameter, circleDiameter);
+
         }
+
+
 
         //Lines
         //Line 1
@@ -31,6 +53,8 @@ public class MyPanel extends JPanel {
         //Line 4
         g2D.drawLine(this.getWidth() / 2, (this.getHeight() / 2) + radius, this.getWidth() / 2, (this.getHeight() / 2) + radius * 3);
 
+
+        /*
         //Circle for mouseListener
             //biggest rect
                 //top
@@ -66,6 +90,8 @@ public class MyPanel extends JPanel {
                 //botttom
         g2D.fillOval((this.getWidth() / 2) - radius - 15 , (this.getHeight() / 2) - radius + diameter - 15 , 30, 30);
         g2D.fillOval((this.getWidth() / 2) - radius + diameter - 15 , (this.getHeight() / 2) - radius + diameter - 15 , 30, 30);
+
+         */
         }
 
     }
