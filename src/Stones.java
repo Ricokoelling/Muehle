@@ -1,29 +1,29 @@
 import java.util.HashMap;
 
 public class Stones {
-        protected static HashMap<Integer,Integer> position= new HashMap<>();
-        protected static HashMap<Integer,Boolean> status= new HashMap<>();
+
+    private int position;
+    private int stNumb;
+    private boolean state;
+    private Stones[] playerOne = new Stones[8];
+    private Stones[] playerTwo = new Stones[8];
 
 
     public Stones() {
-
     }
 
-    public static HashMap<Integer, Boolean> getStatus() {
-        return status;
+    public Stones(int pos, int stNumb, boolean state) {
+        this.position = pos;
+        this.stNumb = stNumb;
+        this.state = state;
     }
 
-    public static HashMap<Integer, Integer> getPosition() {
-        return position;
+    public void setPlayerOne(Stones[] playerOne) {
+        this.playerOne = playerOne;
     }
 
-    public static void setStatus(int key, boolean value) {
-        Stones.status.put(key, value);
+    public void setPlayerTwo(Stones[] playerTwo) {
+        this.playerTwo = playerTwo;
     }
-
-    public static void setPosition(HashMap<Integer, Integer> position) {
-        Stones.position = position;
-    }
-
 
 }

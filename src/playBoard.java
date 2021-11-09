@@ -79,7 +79,7 @@ public class playBoard extends JFrame implements MouseInputListener {
 
         if(phase == 1) {
             if (e.getX() > (width / 2) - radius * 3 - 15 && e.getX() < (width / 2) - radius * 3 + 15 &&  e.getY() > (height / 2) - radius * 3 && e.getY() < (height / 2) - radius * 3 + 30) {   //position on screen point [0,0]
-                phaseOne.putStones(playerNumber, 0, 0);
+                phaseOne.putStones(playerNumber, 0);
                 playerChange();
             }
         }
