@@ -35,9 +35,6 @@ public class MyPanel extends JPanel {
             //biggest rect
                 //top
         g2D.fillOval((screenSize.width / 2) - radius * 3 - 15, (screenSize.height / 2) - radius * 3 - 15, 30, 30);
-        /*System.out.println(screenSize.width + " " + screenSize.height);
-        System.out.println("board x:"+  ((screenSize.width / 2) - radius * 3 - 15) + " y: " + ((screenSize.height / 2) - radius * 3 - 15));
-        System.out.println("board2 x:"+  ((screenSize.width / 2) - radius * 3 - 15 + 30 ) + " y: " + ((screenSize.height / 2) - radius * 3 - 15 + 30 ));*/
         g2D.fillOval((screenSize.width / 2) - radius * 3 + ((diameter * 3) / 2) - 15, (screenSize.height / 2) - radius * 3 - 15, 30, 30);
         g2D.fillOval((screenSize.width / 2) - radius * 3 + (diameter * 3) - 15, (screenSize.height / 2) - radius * 3 - 15, 30, 30);
 

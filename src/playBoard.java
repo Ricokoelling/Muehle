@@ -7,8 +7,10 @@ public class playBoard extends JFrame implements MouseInputListener {
     private static final MyPanel pane = new MyPanel();
     private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private final PhaseOne phaseOne = new PhaseOne();
-    int diameter = screenSize.width / 7;
-    int radius = screenSize.width / 14;
+    private int diameter = screenSize.width / 7;
+    private int radius = screenSize.width / 14;
+    public int playerNumber = 1;  //takes playerNumber after playerchange
+    public int phase = 1;
 
 
     /*WindowListener exitListener = new WindowAdapter() {
@@ -25,7 +27,7 @@ public class playBoard extends JFrame implements MouseInputListener {
     };*/
 
     public playBoard() {
-        this.setSize(screenSize.width,screenSize.height);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
         this.setResizable(true);
@@ -33,32 +35,43 @@ public class playBoard extends JFrame implements MouseInputListener {
         this.add(pane);
         //this.addWindowListener(exitListener);
         this.setVisible(true);
-        start();
     }
 
-    public void start(){
-        phaseOne.putStones(1);
+    private void playerChange(){
+        int answer = JOptionPane.showConfirmDialog(null,"Did you finish your move?");
+        if(answer == 0) {
+            if (playerNumber == 1) {
+                playerNumber = 2;
+            } else
+                playerNumber = 1;
+        }
     }
-
-
     @Override
     public void mouseDragged(MouseEvent e) {
+        if(phase == 2){
 
+        }
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
 
+        //use later for 4 fade
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
+
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-
-
+        if(phase == 1) {
+            if (true) {   //position on screen point [0,0]
+                phaseOne.putStones(playerNumber, 0, 0);
+                playerChange();
+            }
+        }
     }
 
     @Override
