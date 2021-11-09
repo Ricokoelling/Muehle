@@ -7,8 +7,6 @@ public class playBoard extends JFrame implements MouseInputListener {
     private static final MyPanel pane = new MyPanel();
     private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private final PhaseOne phaseOne = new PhaseOne();
-    private int diameter = screenSize.width / 7;
-    private int radius = screenSize.width / 14;
     public int playerNumber = 1;  //takes playerNumber after playerchange
     public int phase = 1;
 
@@ -38,7 +36,7 @@ public class playBoard extends JFrame implements MouseInputListener {
         this.addMouseMotionListener(this);
 
         //This deactivates the function for the user to resize the window. This is to prevent bugs
-        this.setResizable(false);
+        this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.add(pane);
         //this.addWindowListener(exitListener);
@@ -74,8 +72,13 @@ public class playBoard extends JFrame implements MouseInputListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
+        int height = pane.getHeight();
+        int width = pane.getWidth();
+        int diameter = pane.getWidth() / 7;
+        int radius = pane.getWidth() / 14;
+
         if(phase == 1) {
-            if (true) {   //position on screen point [0,0]
+            if (e.getX() > (width / 2) - radius * 3 - 15 && e.getX() < (width / 2) - radius * 3 + 15 &&  e.getY() > (height / 2) - radius * 3 && e.getY() < (height / 2) - radius * 3 + 30) {   //position on screen point [0,0]
                 phaseOne.putStones(playerNumber, 0, 0);
                 playerChange();
             }
