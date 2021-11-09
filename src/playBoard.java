@@ -27,10 +27,18 @@ public class playBoard extends JFrame implements MouseInputListener {
     };*/
 
     public playBoard() {
+        //For testing purposes
+        //this.setSize(1920,1080);
+
+        //This makes the Frame go Fullscreen
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        //Adds the MouseListener and the MouseMotionListener to the Frame
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
-        this.setResizable(true);
+
+        //This deactivates the function for the user to resize the window. This is to prevent bugs
+        this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.add(pane);
         //this.addWindowListener(exitListener);
