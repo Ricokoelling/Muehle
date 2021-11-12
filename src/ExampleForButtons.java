@@ -1,91 +1,68 @@
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.MouseInputListener;
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 
 
-public class ExampleForButtons extends JFrame implements MouseInputListener {
 
-    private JButton button1;
-    private JPanel panel1;
+public class ExampleForButtons {
 
     public static void main(String[] args) {
-        ExampleForButtons test = new ExampleForButtons();
-    }
-
-
-
-
-    ExampleForButtons(){
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(1920 , 1080);
-        this.add(panel1);
-        this.addMouseMotionListener(this);
-        this.setResizable(true);
-        //this.addWindowListener(exitListener);
-        this.setVisible(true);
-
-        //Makes the button invisible but clickable
-        button1.setOpaque(false);
-        button1.setContentAreaFilled(false);
-        button1.setBorderPainted(false);
-
-        //Checks if the Mouse is on the button
-        button1.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                //System.out.println("Entered");
-            }
-        });
-    }
-
-    public void paint(Graphics g){
-
-        Graphics2D g2D =  (Graphics2D) g;
-        g2D.drawLine(0,0,500,500);
-
-
+        input inp = new input();
+        tes t = new tes();
+        ausgabe aus = new ausgabe();
 
     }
 
+}
+
+class Stone {
+    private int position;
+    private int stNumb;
+    private boolean state;
+    private int playerNumb;
+
+    public Stone(int position, int stNumb, boolean state, int playerNumb) {
+        this.position = position;
+        this.playerNumb = playerNumb;
+        this.state = state;
+        this.stNumb = stNumb;
+    }
     @Override
-    public void mouseDragged(MouseEvent e) {
-        System.out.println("lol");
-        //phase 2
+    public String toString() {
+        return "Stone{" +
+                "position=" + position +
+                ", stNumb=" + stNumb +
+                ", state=" + state +
+                ", playerNumb=" + playerNumb +
+                '}';
     }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        System.out.println(e.getX()  + " " + e.getY());
-        //always has been
+}
+class Mister{
+    protected static Stone[] stein = new Stone[5];
+    public Mister() {
     }
+}
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        //phase 1
+class input{
+    Mister mst = new Mister();
+    public input() {
     }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
+    public void put(int k){
+        for(int i = 0; i < 4; i++){
+            Stone kiesel = new Stone(i,i+1,true, k);
+            Mister.stein[i] = kiesel;
+        }
     }
+}
 
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
+class ausgabe extends Mister{
+    public ausgabe() {
+        for (int i = 0; i < Mister.stein.length + 1; i++) {
+            System.out.println(Mister.stein[i].toString());
+        }
     }
+}
 
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
+class tes extends input{
+    public tes() {
+        put(1);
     }
 }
 

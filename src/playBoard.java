@@ -6,12 +6,12 @@ import java.awt.event.MouseEvent;
 public class playBoard extends JFrame implements MouseInputListener {
     private static final MyPanel pane = new MyPanel();
     private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private final PhaseOne phaseOne = new PhaseOne();
-    public int playerNumber = 1;  //takes playerNumber after playerchange
-    public int phase = 1;
+    private Master mst = new Master();
+    protected int playerNumber = 1;  //takes playerNumber after playerchange
+    protected int phase = 1;
     private int playerOneStones = 9;
     private int playerTwoStones = 9;
-    private final testMuehle test = new testMuehle();
+    private testMuehle test = new testMuehle();
     private int pos;
     private int count = 0;
 
@@ -47,7 +47,6 @@ public class playBoard extends JFrame implements MouseInputListener {
         //this.addWindowListener(exitListener);
         this.setVisible(true);
     }
-
     private boolean takemove(){
         int answer =  0;    //JOptionPane.showConfirmDialog(null,"Did you finish your move?");
 
@@ -101,10 +100,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 1;
-                        phaseOne.putStones(playerNumber, 1);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 1);
@@ -114,10 +113,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 2;
-                        phaseOne.putStones(playerNumber, 2);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 2);
@@ -127,10 +126,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 3;
-                        phaseOne.putStones(playerNumber, 3);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 3);
@@ -140,10 +139,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 10;
-                        phaseOne.putStones(playerNumber, 10);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 10);
@@ -152,10 +151,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 15;
-                        phaseOne.putStones(playerNumber, 15);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 15);
@@ -165,10 +164,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 22;
-                        phaseOne.putStones(playerNumber, 22);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 22);
@@ -177,10 +176,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 23;
-                        phaseOne.putStones(playerNumber, 23);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 23);
@@ -189,10 +188,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 24;
-                        phaseOne.putStones(playerNumber, 24);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 24);
@@ -204,10 +203,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 4;
-                        phaseOne.putStones(playerNumber, 4);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 4);
@@ -216,10 +215,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 5;
-                        phaseOne.putStones(playerNumber, 5);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 5);
@@ -228,10 +227,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 6;
-                        phaseOne.putStones(playerNumber, 6);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 6);
@@ -242,10 +241,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 11;
-                        phaseOne.putStones(playerNumber, 11);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 11);
@@ -254,10 +253,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 14;
-                        phaseOne.putStones(playerNumber, 14);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 14);
@@ -267,10 +266,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 19;
-                        phaseOne.putStones(playerNumber, 19);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 19);
@@ -279,10 +278,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 20;
-                        phaseOne.putStones(playerNumber, 20);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 20);
@@ -291,10 +290,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 21;
-                        phaseOne.putStones(playerNumber, 21);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 21);
@@ -306,10 +305,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 7;
-                        phaseOne.putStones(playerNumber, 7);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 7);
@@ -318,10 +317,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 8;
-                        phaseOne.putStones(playerNumber, 8);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 8);
@@ -330,10 +329,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 9;
-                        phaseOne.putStones(playerNumber, 9);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 9);
@@ -343,10 +342,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 12;
-                        phaseOne.putStones(playerNumber, 12);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 12);
@@ -355,10 +354,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 13;
-                        phaseOne.putStones(playerNumber, 13);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 13);
@@ -368,10 +367,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 16;
-                        phaseOne.putStones(playerNumber, 16);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 16);
@@ -380,10 +379,10 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 17;
-                        phaseOne.putStones(playerNumber, 17);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 17);
@@ -392,21 +391,21 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (phase == 1) {
                     if (takemove()) {
                         pos = 18;
-                        phaseOne.putStones(playerNumber, 18);
+                        mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        count++;
+                        
                     }
                 } else
                     test.removeStone(playerNumber, 18);
             }
         }
-            /*if(count > 6) {
-                if (test.test()) {
-                    phase = 0;
-                    pane.repaint(playerNumber, pos);
+        count++;
+            if( count > 6) {
+                if (mst.test(false)) {
+                    System.out.println("muehle");
                 }
-            }*/
+            }
     }
 
     @Override
