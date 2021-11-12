@@ -54,46 +54,6 @@ public class MyPanel extends JPanel {
         g2D.drawLine((this.getWidth() / 2) + radius, this.getHeight() / 2, (this.getWidth() / 2) + diameter * 3 / 2, this.getHeight() / 2);
         //Line 4
         g2D.drawLine(this.getWidth() / 2, (this.getHeight() / 2) + radius, this.getWidth() / 2, (this.getHeight() / 2) + radius * 3);
-
-
-        /*
-        //Circle for mouseListener
-            //biggest rect
-                //top
-        g2D.fillOval((this.getWidth() / 2) - radius * 3 - 15, (this.getHeight() / 2) - radius * 3 - 15, 30, 30);
-        g2D.fillOval((this.getWidth() / 2) - radius * 3 + ((diameter * 3) / 2) - 15, (this.getHeight() / 2) - radius * 3 - 15, 30, 30);
-        g2D.fillOval((this.getWidth() / 2) - radius * 3 + (diameter * 3) - 15, (this.getHeight() / 2) - radius * 3 - 15, 30, 30);
-
-                //side
-        g2D.fillOval((this.getWidth() / 2) - radius * 3 - 15, (this.getHeight() / 2) - radius * 3 - 15 + ((diameter * 3) / 2), 30, 30);
-        g2D.fillOval((this.getWidth() / 2) - radius * 3 + (diameter * 3) - 15, (this.getHeight() / 2) - radius * 3 - 15 + ((diameter * 3) / 2), 30, 30);
-                //bottom
-        g2D.fillOval((this.getWidth() / 2) - radius * 3 - 15, (this.getHeight() / 2) - radius * 3 - 15 + (diameter * 3), 30, 30);
-        g2D.fillOval((this.getWidth() / 2) - radius * 3 + ((diameter * 3) / 2) - 15, (this.getHeight() / 2) - radius * 3 - 15 + (diameter * 3), 30, 30);
-        g2D.fillOval((this.getWidth() / 2) - radius * 3 + (diameter * 3) - 15, (this.getHeight() / 2) - radius * 3 - 15 + (diameter * 3), 30, 30);
-
-            //mid rect
-                //top
-        g2D.fillOval((this.getWidth() / 2) - radius * 2 - 15 , (this.getHeight() / 2) - radius * 2 - 15 , 30, 30);
-        g2D.fillOval((this.getWidth() / 2) - radius * 2 + ((diameter * 2) / 2)- 15 , (this.getHeight() / 2) - radius * 2 - 15 , 30, 30);
-        g2D.fillOval((this.getWidth() / 2) - radius * 2 + (diameter * 2 )- 15 , (this.getHeight() / 2) - radius * 2 - 15 , 30, 30);
-                //side
-        g2D.fillOval((this.getWidth() / 2) - radius * 2 - 15 , (this.getHeight() / 2) - radius * 2 + ((diameter * 2) / 2) - 15 , 30, 30);
-        g2D.fillOval((this.getWidth() / 2) - radius * 2 + (diameter * 2 )- 15 , (this.getHeight() / 2) - radius * 2 + ((diameter * 2) / 2) - 15 , 30, 30);
-                //bottom
-        g2D.fillOval((this.getWidth() / 2) - radius * 2 - 15 , (this.getHeight() / 2) - radius * 2 + (diameter * 2 ) - 15 , 30, 30);
-        g2D.fillOval((this.getWidth() / 2) - radius * 2 + ((diameter * 2) / 2)- 15 , (this.getHeight() / 2) - radius * 2 + (diameter * 2 ) - 15 , 30, 30);
-        g2D.fillOval((this.getWidth() / 2) - radius * 2 + (diameter * 2 )- 15 , (this.getHeight() / 2) - radius * 2 + (diameter * 2 ) - 15 , 30, 30);
-
-            //smalles rect
-                //top
-        g2D.fillOval((this.getWidth() / 2) - radius - 15 , (this.getHeight() / 2) - radius - 15 , 30, 30);
-        g2D.fillOval((this.getWidth() / 2) - radius + diameter - 15 , (this.getHeight() / 2) - radius - 15 , 30, 30);
-                //botttom
-        g2D.fillOval((this.getWidth() / 2) - radius - 15 , (this.getHeight() / 2) - radius + diameter - 15 , 30, 30);
-        g2D.fillOval((this.getWidth() / 2) - radius + diameter - 15 , (this.getHeight() / 2) - radius + diameter - 15 , 30, 30);
-
-         */
         }
 
     }
