@@ -4,7 +4,6 @@ public class MyPanel extends JPanel {
     private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private int playerNumb = -1;
     private int pos = -1;
-    private int radius          = this.getWidth() / 14;
     private int circleDiameter  = 30;
     private int circleRadius    = circleDiameter/2;
 
@@ -19,11 +18,21 @@ public class MyPanel extends JPanel {
 
     }
     private void drawStone(Graphics2D g2D){
+        int radius          = this.getWidth() / 14;
+        if(playerNumb == 1){
+            g2D.setColor(Color.WHITE);
+        }
+        else{
+            g2D.setColor(Color.BLACK);
+        }
+
+        System.out.println(pos);
         switch(pos){
-            case 1: g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
+            case 1: g2D.fillOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
                     break;
             case 2: g2D.drawOval( ((this.getWidth() / 2) - radius * 3) + radius * 3 - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
                 break;
+
             case 3: g2D.drawOval(((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
                 break;
             case 4: g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius, circleDiameter, circleDiameter);
@@ -71,26 +80,26 @@ public class MyPanel extends JPanel {
         }
     }
     public void paint(Graphics g) {
-        int diameter            = this.getWidth() / 7;
-        int radius              = this.getWidth() / 14;
+        int diameter = this.getWidth() / 7;
+        int radius = this.getWidth() / 14;
         int numbersOfRectangles = 3;
-        int[][] xyOfPoints      = new int[24][2];
+        int[][] xyOfPoints = new int[24][2];
 
 
         Graphics2D g2D = (Graphics2D) g;
         g2D.setStroke(new BasicStroke(5));
-        drawStone(g2D);
+        g2D.setColor(Color.BLACK);
 
         //Rectangles
-        for(int i=1;i<=numbersOfRectangles;i++){
-            int x=(this.getWidth() / 2) - radius*i;
-            int y=(this.getHeight() / 2) - radius*i;
+        for (int i = 1; i <= numbersOfRectangles; i++) {
+            int x = (this.getWidth() / 2) - radius * i;
+            int y = (this.getHeight() / 2) - radius * i;
             //System.out.println("oberster Punkt "+i+":"+x+"\t"+y);
 
-            g2D.drawRect(x, y, diameter*i, diameter*i);
+            g2D.drawRect(x, y, diameter * i, diameter * i);
 
             //Upper Line
-            g2D.fillOval(x - circleRadius, y - circleRadius, circleDiameter, circleDiameter);
+            /*g2D.fillOval(x - circleRadius, y - circleRadius, circleDiameter, circleDiameter);
             g2D.fillOval(x + 1 * radius * i - circleRadius, y - circleRadius, circleDiameter, circleDiameter);
             g2D.fillOval(x + 2 * radius * i - circleRadius, y - circleRadius, circleDiameter, circleDiameter);
 
@@ -102,9 +111,10 @@ public class MyPanel extends JPanel {
             //Last Line
             g2D.fillOval(x - circleRadius, y + 2 * radius * i - circleRadius, circleDiameter, circleDiameter);
             g2D.fillOval(x + 1 * radius * i - circleRadius, y + 2 * radius * i - circleRadius, circleDiameter, circleDiameter);
-            g2D.fillOval(x + 2 * radius * i - circleRadius, y + 2 * radius * i- circleRadius, circleDiameter, circleDiameter);
+            g2D.fillOval(x + 2 * radius * i - circleRadius, y + 2 * radius * i- circleRadius, circleDiameter, circleDiameter);*/
 
         }
+
         //Lines
         //Line 1
         g2D.drawLine((this.getWidth() / 2) - radius * 3, this.getHeight() / 2, (this.getWidth() / 2) - radius, this.getHeight() / 2);
@@ -114,6 +124,8 @@ public class MyPanel extends JPanel {
         g2D.drawLine((this.getWidth() / 2) + radius, this.getHeight() / 2, (this.getWidth() / 2) + diameter * 3 / 2, this.getHeight() / 2);
         //Line 4
         g2D.drawLine(this.getWidth() / 2, (this.getHeight() / 2) + radius, this.getWidth() / 2, (this.getHeight() / 2) + radius * 3);
-        }
+
+        drawStone(g2D);
+    }
 
     }

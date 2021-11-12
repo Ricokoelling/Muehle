@@ -7,7 +7,7 @@ public class Stones {
     private boolean state;
     private int playerNumb;
     private Stones[] player = new Stones[16];
-
+    private int count = 0;
 
     public Stones() {
     }
@@ -19,8 +19,9 @@ public class Stones {
         this.playerNumb = plNumb;
     }
 
-    public void setPlayer(Stones[] player) {
-        this.player = player;
+    public void setPlayer(Stones st) {
+        player[count] = st;
+        count++;
     }
 
     public Stones[] getPlayer() {
