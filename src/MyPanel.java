@@ -23,7 +23,7 @@ public class MyPanel extends JPanel {
         for(int i=1;i<=numbersOfRectangles;i++){
             int x=(this.getWidth() / 2) - radius*i;
             int y=(this.getHeight() / 2) - radius*i;
-            System.out.println("oberster Punkt "+i+":"+x+"\t"+y);
+            //System.out.println("oberster Punkt "+i+":"+x+"\t"+y);
 
             g2D.drawRect(x, y, diameter*i, diameter*i);
 
@@ -31,9 +31,11 @@ public class MyPanel extends JPanel {
             g2D.fillOval(x - circleRadius, y - circleRadius, circleDiameter, circleDiameter);
             g2D.fillOval(x + 1 * radius * i - circleRadius, y - circleRadius, circleDiameter, circleDiameter);
             g2D.fillOval(x + 2 * radius * i - circleRadius, y - circleRadius, circleDiameter, circleDiameter);
+
             //Middle Line
             g2D.fillOval(x - circleRadius, y + radius * i- circleRadius, circleDiameter, circleDiameter);
             g2D.fillOval(x + 2 * radius * i - circleRadius, y + radius * i - circleRadius, circleDiameter, circleDiameter);
+
             //Last Line
             g2D.fillOval(x - circleRadius, y + 2 * radius * i - circleRadius, circleDiameter, circleDiameter);
             g2D.fillOval(x + 1 * radius * i - circleRadius, y + 2 * radius * i - circleRadius, circleDiameter, circleDiameter);

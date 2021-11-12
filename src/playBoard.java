@@ -76,10 +76,145 @@ public class playBoard extends JFrame implements MouseInputListener {
         int width = pane.getWidth();
         int diameter = pane.getWidth() / 7;
         int radius = pane.getWidth() / 14;
-
+        int circleDiameter      = 30;
+        int circleRadius        = circleDiameter/2;
+        System.out.println(e.getX() + " " + e.getY());
+        System.out.println((((this.getWidth() / 2) - radius * 3) + 2  * radius * 3 - circleRadius -50) + " " +(((this.getWidth() / 2) - radius * 3) + 2  * radius * 3 - circleRadius + 50));
+        System.out.println((((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 50) + " " + (((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 50));
         if(phase == 1) {
-            if (e.getX() > (width / 2) - radius * 3 - 15 && e.getX() < (width / 2) - radius * 3 + 15 &&  e.getY() > (height / 2) - radius * 3 && e.getY() < (height / 2) - radius * 3 + 30) {   //position on screen point [0,0]
-                phaseOne.putStones(playerNumber, 0);
+            // biggest rect
+            // pos 1 2 3
+            if (e.getX() > ((this.getWidth() / 2) - radius * 3) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3)- circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) - circleRadius + 50 ) {   //point [1]
+                //phaseOne.putStones(playerNumber, 8);
+                System.out.println("pos: 1");
+                playerChange();
+            }
+            if (e.getX() > ((this.getWidth() / 2) - radius * 3) + radius * 3 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) + radius * 3 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) - circleRadius + 50 ) {   //point [2]
+               //phaseOne.putStones(playerNumber, 8);
+                System.out.println("pos: 2");
+                playerChange();
+            }
+            if (e.getX() > ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) - circleRadius + 50 ) {   //point [3]
+                //phaseOne.putStones(playerNumber, 8);
+                System.out.println("pos: 3");
+                playerChange();
+            }
+            // pos 10 & 15
+            if (e.getX() > ((this.getWidth() / 2) - radius * 3) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius + 50 ) {   //point [10]
+                //phaseOne.putStones(playerNumber, 8);
+                System.out.println("pos: 10");
+                playerChange();
+            }
+            if (e.getX() > ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius + 50 ) {   //point [15]
+                //phaseOne.putStones(playerNumber, 8);
+                System.out.println("pos: 15");
+                playerChange();
+            }
+            //pos 22 23 24
+            if (e.getX() > ((this.getWidth() / 2) - radius * 3) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 50 ) {   //point [22]
+                //phaseOne.putStones(playerNumber, 7);
+                System.out.println("pos: 22");
+                playerChange();
+            }
+            if (e.getX() > ((this.getWidth() / 2) - radius * 3) + 1 + radius * 3  - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) + 1 + radius * 3  - circleRadius + 50 && e.getY() > ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 50 && e.getY() < ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 50 ) {   //point [23]
+                //phaseOne.putStones(playerNumber, 7);
+                System.out.println("pos: 23");
+                playerChange();
+            }
+            if (e.getX() > ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3  - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3  - circleRadius + 50 && e.getY() > ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 50 && e.getY() < ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 50 ) {   //point [24]
+                //phaseOne.putStones(playerNumber, 7);
+                System.out.println("pos: 24");
+                playerChange();
+            }
+
+            // middle rect
+            //pos 4 5 6
+            if (e.getX() > ((this.getWidth() / 2) - radius * 2) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2)- circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 2) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 2) - circleRadius + 50 ) {   //point [4]
+                //phaseOne.putStones(playerNumber, 8);
+                System.out.println("pos: 4");
+                playerChange();
+            }
+            if (e.getX() > ((this.getWidth() / 2) - radius * 2) + radius * 2 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2) + radius * 2 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 2) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 2) - circleRadius + 50 ) {   //point [5]
+                //phaseOne.putStones(playerNumber, 8);
+                System.out.println("pos: 5");
+                playerChange();
+            }
+            if (e.getX() > ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 2) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 2) - circleRadius + 50 ) {   //point [6]
+                //phaseOne.putStones(playerNumber, 8);
+                System.out.println("pos: 6");
+                playerChange();
+            }
+
+            // pos 11 14
+            if (e.getX() > ((this.getWidth() / 2) - radius * 2) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2) - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 2) + radius * 2 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 2) + radius * 2 - circleRadius + 50 ) {   //point [11]
+                //phaseOne.putStones(playerNumber, 8);
+                System.out.println("pos: 11");
+                playerChange();
+            }
+            if (e.getX() > ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 2) + radius * 2 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 2) + radius * 2 - circleRadius + 50 ) {   //point [14]
+                //phaseOne.putStones(playerNumber, 8);
+                System.out.println("pos: 14");
+                playerChange();
+            }
+            //pos 19 20 21
+            if (e.getX() > ((this.getWidth() / 2) - radius * 2) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2) - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 50 ) {   //point [19]
+               // phaseOne.putStones(playerNumber, 7);
+                System.out.println("pos: 19");
+                playerChange();
+            }
+            if (e.getX() > ((this.getWidth() / 2) - radius * 2) + radius * 2  - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2) +  1 + radius * 2  - circleRadius + 50 && e.getY() > ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 50 && e.getY() < ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 50 ) {   //point [20]
+               // phaseOne.putStones(playerNumber, 7);
+                System.out.println("pos: 20");
+                playerChange();
+            }
+            if (e.getX() > ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2  - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2  - circleRadius + 50 && e.getY() > ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 50 && e.getY() < ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 50 ) {   //point [21]
+                //phaseOne.putStones(playerNumber, 7);
+                System.out.println("pos: 21");
+                playerChange();
+            }
+
+            //smalles rect
+            //pos 7 8 9
+            if (e.getX() > ((this.getWidth() / 2) - radius) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius)- circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius) - circleRadius + 50 ) {   //point [4]
+                //phaseOne.putStones(playerNumber, 8);
+                System.out.println("pos: 7");
+                playerChange();
+            }
+            if (e.getX() > ((this.getWidth() / 2) - radius) + radius - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) + radius - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius) - circleRadius + 50 ) {   //point [5]
+                //phaseOne.putStones(playerNumber, 8);
+                System.out.println("pos: 8");
+                playerChange();
+            }
+            if (e.getX() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius) - circleRadius + 50 ) {   //point [6]
+               // phaseOne.putStones(playerNumber, 8);
+                System.out.println("pos: 9");
+                playerChange();
+            }
+            // pos 12 13
+            if (e.getX() > ((this.getWidth() / 2) - radius) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius) + radius - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius) + radius - circleRadius + 50 ) {   //point [12]
+                //phaseOne.putStones(playerNumber, 8);
+                System.out.println("pos: 12");
+                playerChange();
+            }
+            if (e.getX() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius) + radius - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius) + radius - circleRadius + 50 ) {   //point [13]
+                //phaseOne.putStones(playerNumber, 8);
+                System.out.println("pos: 13");
+                playerChange();
+            }
+            //pos 16 17 18
+            if (e.getX() > ((this.getWidth() / 2) - radius) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 50 ) {   //point [16]
+                //phaseOne.putStones(playerNumber, 7);
+                System.out.println("pos: 16");
+                playerChange();
+            }
+            if (e.getX() > ((this.getWidth() / 2) - radius) + 1 + radius - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) + 1 + radius  - circleRadius + 50 && e.getY() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 50 && e.getY() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 50 ) {   //point [17]
+               // phaseOne.putStones(playerNumber, 7);
+                System.out.println("pos: 17");
+                playerChange();
+            }
+            if (e.getX() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 50 && e.getY() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 50 && e.getY() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 50 ) {   //point [18]
+               // phaseOne.putStones(playerNumber, 7);
+                System.out.println("pos: 18");
                 playerChange();
             }
         }
