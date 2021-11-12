@@ -1,12 +1,14 @@
-
+import java.util.Iterator;
+import java.util.LinkedList;
 
 public class testMuehle extends Stones{
 
-    private boolean muehle = false;
     private Stones[] player= new Stones[16];
+    private Stones[] stonesMuehle = new Stones[2];
+    private LinkedList<Stones[]> muehlen = new LinkedList<>();
 
     public testMuehle() {
-        muehle = test();
+
     }
     public boolean fNumb(int pos){
 
@@ -59,5 +61,17 @@ public class testMuehle extends Stones{
             }
         }
         return false;
+    }
+
+
+    public void removeStone(int playerNumb, int pos){
+        Iterator it = muehlen.iterator();
+        Stones[] playNumb = getPlayer();
+        for(int i= 0; i < player.length ; i++){
+            if(player[i].getPosition() == pos && player[i].getPlayerNumb() == playerNumb){
+                player[i].setState(false);
+            }
+        }
+
     }
 }

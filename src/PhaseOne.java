@@ -19,7 +19,7 @@ public class PhaseOne extends Stones{
                 setPlayer(playerOne);
                 plOne++;
             }
-            else{
+            if(player == 2 && plTwo < 9){
                 Stones stone = new Stones(pos,plTwo,true,2);
                 playerTwo[plTwo] = stone;
                 setPlayer(playerTwo);

@@ -50,4 +50,8 @@ public class Stones {
     public void setState(boolean state) {
         this.state = state;
     }
+
+    public int getPlayerNumb() {
+        return playerNumb;
+    }
 }
