@@ -4,7 +4,7 @@ import java.util.LinkedList;
 public class testMuehle extends Stones{
 
     private Stones[] player= new Stones[16];
-    private Stones[] stonesMuehle = new Stones[2];
+    private final Stones[] stonesMuehle = new Stones[2];
     private LinkedList<Stones[]> muehlen = new LinkedList<>();
 
     public testMuehle() {
@@ -12,10 +12,7 @@ public class testMuehle extends Stones{
     }
     public boolean fNumb(int pos){
 
-        if(pos == 4 || pos == 7 || pos == 10 || pos == 13 || pos == 16 || pos == 19 || pos == 22) {
-            return false;
-        }
-        return true;
+        return pos != 4 && pos != 7 && pos != 10 && pos != 13 && pos != 16 && pos != 19 && pos != 22;
     }
     public int sNumb(int pos){
         if(pos == 2 || pos == 5 || pos == 8){
@@ -65,11 +62,11 @@ public class testMuehle extends Stones{
 
 
     public void removeStone(int playerNumb, int pos){
-        Iterator it = muehlen.iterator();
+        Iterator<Stones[]> it = muehlen.iterator();
         Stones[] playNumb = getPlayer();
-        for(int i= 0; i < player.length ; i++){
-            if(player[i].getPosition() == pos && player[i].getPlayerNumb() == playerNumb){
-                player[i].setState(false);
+        for (Stones stones : player) {
+            if (stones.getPosition() == pos && stones.getPlayerNumb() == playerNumb) {
+                stones.setState(false);
             }
         }
 

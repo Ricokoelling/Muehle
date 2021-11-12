@@ -1,23 +1,21 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
+
 public class MyPanel extends JPanel {
     private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private int playerNumb = -1;
-    private int pos = -1;
-    private int circleDiameter  = 30;
-    private int circleRadius    = circleDiameter/2;
+    private final HashMap<Integer,Integer> map = new HashMap<>();
 
     public MyPanel() {
         this.setSize(screenSize.width, screenSize.height);
     }
 
     public void repaint(int pos, int playerNumb) {
-        this.pos = pos;
-        this.playerNumb = playerNumb;
+        map.put(pos,playerNumb);
         super.repaint();
 
     }
-    private void drawStone(Graphics2D g2D){
+    private void drawStone(Graphics2D g2D,int pos , int playerNumb){
         int radius          = this.getWidth() / 14;
         if(playerNumb == 1){
             g2D.setColor(Color.WHITE);
@@ -27,56 +25,33 @@ public class MyPanel extends JPanel {
         }
 
         System.out.println(pos);
-        switch(pos){
-            case 1: g2D.fillOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
-                    break;
-            case 2: g2D.drawOval( ((this.getWidth() / 2) - radius * 3) + radius * 3 - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
-                break;
-
-            case 3: g2D.drawOval(((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
-                break;
-            case 4: g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius, circleDiameter, circleDiameter);
-                break;
-            case 5: g2D.drawOval(((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius, ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius, circleDiameter, circleDiameter);
-                break;
-            case 6: g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius, circleDiameter, circleDiameter);
-                break;
-            case 7: g2D.drawOval(((this.getWidth() / 2) - radius * 3) + 1 + radius * 3 -circleRadius, ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius, circleDiameter, circleDiameter);
-                break;
-            case 8: g2D.drawOval(((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius, ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius, circleDiameter, circleDiameter);
-                break;
-            case 9: g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
-                break;
-            case 10: g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
-                break;
-            case 11: g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
-                break;
-            case 12: g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
-                break;
-            case 13: g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
-                break;
-            case 14: g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
-                break;
-            case 15: g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
-                break;
-            case 16: g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
-                break;
-            case 17: g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
-                break;
-            case 18: g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
-                break;
-            case 19: g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
-                break;
-            case 20: g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
-                break;
-            case 21: g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
-                break;
-            case 22: g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
-                break;
-            case 23: g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
-                break;
-            case 24: g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
-                break;
+        int circleDiameter = 30;
+        int circleRadius = circleDiameter / 2;
+        switch (pos) {
+            case 1 -> g2D.fillOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
+            case 2 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) + radius * 3 - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
+            case 3 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
+            case 4 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius, circleDiameter, circleDiameter);
+            case 5 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius, ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius, circleDiameter, circleDiameter);
+            case 6 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius, circleDiameter, circleDiameter);
+            case 7 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) + 1 + radius * 3 - circleRadius, ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius, circleDiameter, circleDiameter);
+            case 8 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius, ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius, circleDiameter, circleDiameter);
+            case 9 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
+            case 10 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
+            case 11 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
+            case 12 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
+            case 13 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
+            case 14 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
+            case 15 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
+            case 16 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
+            case 17 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
+            case 18 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
+            case 19 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
+            case 20 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
+            case 21 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
+            case 22 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
+            case 23 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
+            case 24 -> g2D.drawOval(((this.getWidth() / 2) - radius * 3) - circleRadius, ((this.getHeight() / 2) - radius * 3) - circleRadius, circleDiameter, circleDiameter);
         }
     }
     public void paint(Graphics g) {
@@ -125,7 +100,9 @@ public class MyPanel extends JPanel {
         //Line 4
         g2D.drawLine(this.getWidth() / 2, (this.getHeight() / 2) + radius, this.getWidth() / 2, (this.getHeight() / 2) + radius * 3);
 
-        drawStone(g2D);
+        for(Integer key : map.keySet()){
+            drawStone(g2D,key, map.get(key));
+        }
     }
 
     }

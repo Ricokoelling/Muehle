@@ -1,5 +1,3 @@
-import java.util.*;
-
 public class PhaseOne extends Stones{
 
     private int plOne = 0;

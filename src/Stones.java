@@ -1,12 +1,10 @@
-import java.util.HashMap;
-
 public class Stones {
 
     private int position;
     private int stNumb;
     private boolean state;
     private int playerNumb;
-    private Stones[] player = new Stones[16];
+    private final Stones[] player = new Stones[16];
     private int count = 0;
 
     public Stones() {
