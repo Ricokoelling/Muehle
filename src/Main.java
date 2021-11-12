@@ -1,5 +1,3 @@
-import java.awt.*;
-
 public class Main {
 
     public static void main(String[] args) {
@@ -8,3 +6,14 @@ public class Main {
     }
 
 }
+
+
+/*
+--> Label(status) maxa
+--> testmuehle      rico
+--> removeStone     rico
+--> nicht auf selbe position setzen bzw dann auch schieben rico/maxa
+
+
+
+*/

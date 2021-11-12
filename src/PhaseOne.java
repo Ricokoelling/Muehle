@@ -8,7 +8,7 @@ public class PhaseOne extends Stones{
     }
 
     public void putStones(int player, int pos) {
-        System.out.println(player + " " + plOne);
+        //System.out.println(player + " " + plOne);
             if(player == 1 && plOne < 9){       //uses playnumber and stonenumber to determine which map he needed use
                 Stones stone = new Stones(pos, plOne, true,1);
                 setPlayer(stone);
@@ -19,7 +19,5 @@ public class PhaseOne extends Stones{
                 setPlayer(stone);
                 plTwo++;
             }
-
-
     }
 }

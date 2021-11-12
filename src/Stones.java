@@ -4,7 +4,7 @@ public class Stones {
     private int stNumb;
     private boolean state;
     private int playerNumb;
-    private final Stones[] player = new Stones[16];
+    private Stones[] player = new Stones[18];
     private int count = 0;
 
     public Stones() {
@@ -19,7 +19,7 @@ public class Stones {
 
     public void setPlayer(Stones st) {
         player[count] = st;
-        count++;
+        count+= 1;
     }
 
     public Stones[] getPlayer() {
@@ -52,5 +52,16 @@ public class Stones {
 
     public int getPlayerNumb() {
         return playerNumb;
+    }
+
+    @Override
+    public String toString() {
+        return "Stones{" +
+                "position=" + position +
+                ", stNumb=" + stNumb +
+                ", state=" + state +
+                ", playerNumb=" + playerNumb +
+                ", count=" + count +
+                '}';
     }
 }
