@@ -12,6 +12,7 @@ public class playBoard extends JFrame implements MouseInputListener {
     private int playerOneStones = 9;
     private int playerTwoStones = 9;
     private testMuehle test = new testMuehle();
+    private int pos;
 
 
     /*WindowListener exitListener = new WindowAdapter() {
@@ -95,10 +96,12 @@ public class playBoard extends JFrame implements MouseInputListener {
             if (e.getX() > ((this.getWidth() / 2) - radius * 3) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3)- circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) - circleRadius + 50 ) {   //point [1]
                if(phase == 1){
                     if (playerChange())
+                        pos = 1;
                         phaseOne.putStones(playerNumber, 1);
                 }
                 else
                         test.removeStone(playerNumber,1);
+
 
 
                 }
@@ -304,6 +307,7 @@ public class playBoard extends JFrame implements MouseInputListener {
 
             if(test.test()){
                 phase = 0;
+                pane.repaint(playerNumber,pos);
             }
     }
 
