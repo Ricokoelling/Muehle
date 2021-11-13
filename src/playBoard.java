@@ -14,7 +14,7 @@ public class playBoard extends JFrame implements MouseInputListener {
     private testMuehle test = new testMuehle();
     private int pos;
     private int count = 0;
-
+    private boolean b =false;
 
     /*WindowListener exitListener = new WindowAdapter() {
         @Override
@@ -92,6 +92,7 @@ public class playBoard extends JFrame implements MouseInputListener {
         int circleDiameter      = 30;
         int circleRadius        = circleDiameter/2;
         //System.out.println(e.getX() + " " + e.getY());
+        changePlayerStatus();
 
         if(phase == 1) {
             // biggest rect
@@ -421,6 +422,16 @@ public class playBoard extends JFrame implements MouseInputListener {
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    private void changePlayerStatus(){
+        if(b==false){
+            pane.playerStatus.setText("Player 2");
+            b=true;
+        }else{
+            pane.playerStatus.setText("Player 1");
+            b=false;
+        }
     }
 
 }

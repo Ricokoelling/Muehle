@@ -5,10 +5,11 @@ import java.util.HashMap;
 public class MyPanel extends JPanel {
     private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private final HashMap<Integer,Integer> map = new HashMap<>();
-
+    protected static Label playerStatus = new Label("Player 1") ;
 
     public MyPanel() {
         this.setSize(screenSize.width, screenSize.height);
+        this.add(playerStatus);
     }
 
     public void repaint(int pos, int playerNumb) {
@@ -59,12 +60,11 @@ public class MyPanel extends JPanel {
         int diameter = this.getWidth() / 7;
         int radius = this.getWidth() / 14;
         int numbersOfRectangles = 3;
-        int[][] xyOfPoints = new int[24][2];
-
 
         Graphics2D g2D = (Graphics2D) g;
         g2D.setStroke(new BasicStroke(5));
         g2D.setColor(Color.BLACK);
+
 
         //Rectangles
         for (int i = 1; i <= numbersOfRectangles; i++) {
