@@ -9,6 +9,8 @@ public class MyPanel extends JPanel {
 
     public MyPanel() {
         this.setSize(screenSize.width, screenSize.height);
+        //Define Font and Font Size with this function
+        playerStatus.setFont(new Font("Arial", Font.PLAIN, 50));
         this.add(playerStatus);
     }
 
