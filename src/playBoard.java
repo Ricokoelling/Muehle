@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class playBoard extends JFrame implements MouseInputListener {
@@ -89,9 +90,8 @@ public class playBoard extends JFrame implements MouseInputListener {
         int circleDiameter      = 30;
         int circleRadius        = circleDiameter/2;
         //System.out.println(e.getX() + " " + e.getY());
-        changePlayerStatus();
-
-        if(phase == 1) {
+        changeStatus(1);
+        System.out.println(phase);
             // biggest rect
             // pos 1 2 3
             if (e.getX() > ((this.getWidth() / 2) - radius * 3) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) - circleRadius + 50) {   //point [1]
@@ -101,11 +101,14 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
                 }
+                else {
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                }
             }
-
             if (e.getX() > ((this.getWidth() / 2) - radius * 3) + radius * 3 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) + radius * 3 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) - circleRadius + 50) {   //point [2]
                 if (phase == 1) {
                     if (takemove()) {
@@ -115,6 +118,12 @@ public class playBoard extends JFrame implements MouseInputListener {
                         playerChange();
                         
                     }
+                }
+                else {
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
                 }
 
             }
@@ -128,6 +137,12 @@ public class playBoard extends JFrame implements MouseInputListener {
                         
                     }
                 }
+                else {
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
+                }
             }
             // pos 10 & 15
             if (e.getX() > ((this.getWidth() / 2) - radius * 3) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius + 50) {   //point [10]
@@ -137,8 +152,13 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
+                }
+                else {
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
                 }
             }
             if (e.getX() > ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius + 50) {   //point [15]
@@ -148,8 +168,13 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
+                }
+                else {
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
                 }
             }
             //pos 22 23 24
@@ -160,8 +185,13 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
+                }
+                else{
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
                 }
             }
             if (e.getX() > ((this.getWidth() / 2) - radius * 3) + 1 + radius * 3 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) + 1 + radius * 3 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 50) {   //point [23]
@@ -171,8 +201,13 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
+                }
+                else{
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
                 }
             }
             if (e.getX() > ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 50) {   //point [24]
@@ -182,11 +217,15 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
                 }
+                else{
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
+                }
             }
-
             // middle rect
             //pos 4 5 6
             if (e.getX() > ((this.getWidth() / 2) - radius * 2) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2) - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 2) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 2) - circleRadius + 50) {   //point [4]
@@ -196,8 +235,13 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
+                }
+                else{
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
                 }
             }
             if (e.getX() > ((this.getWidth() / 2) - radius * 2) + radius * 2 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2) + radius * 2 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 2) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 2) - circleRadius + 50) {   //point [5]
@@ -207,8 +251,13 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
+                }
+                else{
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
                 }
             }
             if (e.getX() > ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 2) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 2) - circleRadius + 50) {   //point [6]
@@ -218,8 +267,13 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
+                }
+                else{
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
                 }
             }
 
@@ -231,8 +285,13 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
+                }
+                else{
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
                 }
             }
             if (e.getX() > ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 2) + radius * 2 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 2) + radius * 2 - circleRadius + 50) {   //point [14]
@@ -242,8 +301,13 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
+                }
+                else{
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
                 }
             }
             //pos 19 20 21
@@ -254,8 +318,13 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
+                }
+                else{
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
                 }
             }
             if (e.getX() > ((this.getWidth() / 2) - radius * 2) + radius * 2 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2) + 1 + radius * 2 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 50) {   //point [20]
@@ -265,8 +334,13 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
+                }
+                else{
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
                 }
             }
             if (e.getX() > ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 50) {   //point [21]
@@ -276,11 +350,15 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
                 }
+                else{
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
+                }
             }
-
             //smalles rect
             //pos 7 8 9
             if (e.getX() > ((this.getWidth() / 2) - radius) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius) - circleRadius + 50) {   //point [4]
@@ -290,8 +368,13 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
+                }
+                else{
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
                 }
             }
             if (e.getX() > ((this.getWidth() / 2) - radius) + radius - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) + radius - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius) - circleRadius + 50) {   //point [5]
@@ -301,8 +384,13 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
+                }
+                else{
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
                 }
             }
             if (e.getX() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius) - circleRadius + 50) {   //point [6]
@@ -312,8 +400,13 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
+                }
+                else{
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
                 }
             }
             // pos 12 13
@@ -324,8 +417,13 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
+                }
+                else{
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
                 }
             }
             if (e.getX() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius) + radius - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius) + radius - circleRadius + 50) {   //point [13]
@@ -335,8 +433,13 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
+                }
+                else{
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
                 }
             }
             //pos 16 17 18
@@ -347,8 +450,13 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
+                }
+                else{
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
                 }
             }
             if (e.getX() > ((this.getWidth() / 2) - radius) + 1 + radius - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) + 1 + radius - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 50) {   //point [17]
@@ -358,8 +466,13 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
+                }
+                else{
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
                 }
             }
             if (e.getX() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 50) {   //point [18]
@@ -369,14 +482,26 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
                     }
                 }
+                else{
+                    mst.removeStones(pos, playerNumber);
+                    pane.removeStone(pos);
+                    changeStatus(1);
+                    phase = 1;
+                }
             }
-        }
         count++;
-            if( count > 6) {
-                if (mst.test(true)) {
+            if( count > 4) {
+                if (mst.test(true) || mst.test(false)) {
+                    if(playerNumber == 1){
+                        playerNumber = 2;
+                    }
+                    else{
+                        playerNumber = 1;
+                    }
+                    changeStatus(2);
+                    phase = 0;
                 }
             }
     }
@@ -396,13 +521,18 @@ public class playBoard extends JFrame implements MouseInputListener {
 
     }
 
-    private void changePlayerStatus(){
-        if(!b){
-            MyPanel.playerStatus.setText("Player 2");
-            b=true;
-        }else{
-            MyPanel.playerStatus.setText("Player 1");
-            b=false;
+    private void changeStatus(int state){
+        if(state == 1) {
+            if (!b) {
+                MyPanel.playerStatus.setText("Player 2");
+                b = true;
+            } else {
+                MyPanel.playerStatus.setText("Player 1");
+                b = false;
+            }
+        }
+        else if(state == 2){
+            MyPanel.playerStatus.setText("Remove");
         }
     }
 

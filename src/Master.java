@@ -40,39 +40,6 @@ public class Master {
         } else {
             testList = playerTwo;
         }
-
-        /*for(int i= 0; i < testList.size() ; i++) {
-            int pos1 = testList.get(i).getPosition();
-            if (i+1 < testList.size()) {
-                int pos2 = testList.get(i+1).getPosition();
-                if (pos1 + 1 == pos2 && fNumb(pos2)) {
-                    if ( i+2 < testList.size()) {
-                        int pos3 = testList.get(i+2).getPosition();
-                            if (pos1 + 2 == pos3 && pos2 + 1 == pos3 && fNumb(pos3)) {
-                                return true;
-                            }
-                            if (i > 0 ) {
-                                int pos4 = testList.get(i-1).getPosition();
-                                if (pos1 - 1 == pos4 && pos2 - 2 == pos4 ) {
-                                    if (pos4 == 3 || pos4 == 6 || pos4 == 9 || pos4 == 12 || pos4 == 15 || pos4 == 18 || pos4 == 21) {
-                                        return true;
-                                    }
-                                }
-                            }
-                    } else if (sNumb(pos1) == 1 || sNumb(pos1) == 2) {
-                        for (int j = i + 1; j < testList.size(); j++) {
-                            if (sNumb(testList.get(j).getPosition()) == sNumb(pos1)) {
-                                for (int k = j + 1; k < testList.size(); k++) {
-                                    if (sNumb(testList.get(k).getPosition()) == sNumb(testList.get(j).getPosition())) {
-                                        return true;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }*/
         for (int i = 0; i < testList.size(); i++) {
             int pos1 = testList.get(i).getPosition();
             for (int j = 0; j < testList.size(); j++) {
@@ -191,7 +158,6 @@ public class Master {
     private void muehle(Stones stone1, Stones stone2, Stones stone3) {
         Stones[] temp = {stone1,stone2,stone3};
         muehlen.add(temp);
-        removeStones();
     }
 
     private boolean inMuehle(int pos1, int pos2) {
@@ -209,8 +175,36 @@ public class Master {
         }
         return true;
     }
+    private boolean inMuehle(int pos1) {
 
-    private void removeStones(){
+        for (Stones[] stones : muehlen) {
+            for (Stones value : stones) {
+                if (value.getPosition() == pos1) {
+                    for (Stones stone : stones) {
+                            return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
 
+    public void removeStones(int pos, int playerNumb){
+        if(inMuehle(pos)){
+            if(playerNumb == 1){
+                for(int i = 0; i < playerOne.size(); i++){
+                    if(playerOne.get(i).getPosition() == pos){
+                        playerOne.remove(i);
+                    }
+                }
+            }
+            else{
+                for(int i = 0; i < playerTwo.size(); i++){
+                    if(playerTwo.get(i).getPosition() == pos){
+                        playerTwo.remove(i);
+                    }
+                }
+            }
+        }
     }
 }

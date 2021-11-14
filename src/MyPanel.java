@@ -19,6 +19,12 @@ public class MyPanel extends JPanel {
         super.repaint();
 
     }
+
+    public void removeStone(int pos){
+
+        map.remove(pos);
+        repaint();
+    }
     private void drawStone(Graphics2D g2D,int pos , int playerNumb){
         int radius          = this.getWidth() / 14;
         if(playerNumb == 1){
@@ -27,7 +33,6 @@ public class MyPanel extends JPanel {
         else{
             g2D.setColor(Color.BLACK);
         }
-
         //System.out.println("Pos:"+pos);
         int circleDiameter = 30;
         int circleRadius = circleDiameter / 2;
