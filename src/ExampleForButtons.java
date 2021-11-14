@@ -1,12 +1,18 @@
-
-
+import java.util.ArrayList;
 
 public class ExampleForButtons {
 
+
+    private static ArrayList<Integer> list = new ArrayList<>();
     public static void main(String[] args) {
-        input inp = new input();
+        /*input inp = new input();
         tes t = new tes();
-        ausgabe aus = new ausgabe();
+        ausgabe aus = new ausgabe();*/
+        list.add(5);
+        list.add(10);
+
+        System.out.println(list);
+
 
     }
 

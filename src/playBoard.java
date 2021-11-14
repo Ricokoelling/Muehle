@@ -403,8 +403,7 @@ public class playBoard extends JFrame implements MouseInputListener {
         }
         count++;
             if( count > 6) {
-                if (mst.test(false)) {
-                    System.out.println("muehle");
+                if (mst.test(true)) {
                 }
             }
     }
