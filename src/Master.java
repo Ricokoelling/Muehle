@@ -109,22 +109,22 @@ public class Master {
                 }
             }
             if(sNumb(pos1) == 0){
-                switch (pos1){
-                    case 1:{ for(Stones stones : testList) {
-                               if((stones.getPosition() == 10 || stones.getPosition() == 22) && stones.getPosition() !=  pos1 && inMuehle(pos1,stones.getPosition())){
-                                   for(Stones value : testList){
-                                       if((value.getPosition() == 10 || value.getPosition() == 22) && value.getPosition() !=  pos1 && value.getPosition() != stones.getPosition()){
-                                           muehle(testList.get(i), stones, value);
-                                           return true;
-                                       }
-                                   }
-                               }
-                            }
-                    }
-                    break;
-                    case 3: {
+                switch (pos1) {
+                    case 1 -> {
                         for (Stones stones : testList) {
-                            if ((stones.getPosition() == 15 || stones.getPosition() == 24) && stones.getPosition() != pos1 && inMuehle(pos1,stones.getPosition())) {
+                            if ((stones.getPosition() == 10 || stones.getPosition() == 22) && stones.getPosition() != pos1 && inMuehle(pos1, stones.getPosition())) {
+                                for (Stones value : testList) {
+                                    if ((value.getPosition() == 10 || value.getPosition() == 22) && value.getPosition() != pos1 && value.getPosition() != stones.getPosition()) {
+                                        muehle(testList.get(i), stones, value);
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    case 3 -> {
+                        for (Stones stones : testList) {
+                            if ((stones.getPosition() == 15 || stones.getPosition() == 24) && stones.getPosition() != pos1 && inMuehle(pos1, stones.getPosition())) {
                                 for (Stones value : testList) {
                                     if ((value.getPosition() == 15 || value.getPosition() == 24) && value.getPosition() != pos1 && value.getPosition() != stones.getPosition()) {
                                         muehle(testList.get(i), stones, value);
@@ -134,12 +134,11 @@ public class Master {
                             }
                         }
                     }
-                    break;
-                    case 4: {
-                        for(Stones stones : testList) {
-                            if((stones.getPosition() == 11 || stones.getPosition() == 19) && stones.getPosition() !=  pos1 && inMuehle(pos1,stones.getPosition())){
-                                for(Stones value : testList){
-                                    if((value.getPosition() == 11 || value.getPosition() == 19) && value.getPosition() !=  pos1 && value.getPosition() != stones.getPosition()){
+                    case 4 -> {
+                        for (Stones stones : testList) {
+                            if ((stones.getPosition() == 11 || stones.getPosition() == 19) && stones.getPosition() != pos1 && inMuehle(pos1, stones.getPosition())) {
+                                for (Stones value : testList) {
+                                    if ((value.getPosition() == 11 || value.getPosition() == 19) && value.getPosition() != pos1 && value.getPosition() != stones.getPosition()) {
                                         muehle(testList.get(i), stones, value);
                                         return true;
                                     }
@@ -147,12 +146,11 @@ public class Master {
                             }
                         }
                     }
-                    break;
-                    case 6:{
-                        for(Stones stones : testList) {
-                            if((stones.getPosition() == 14 || stones.getPosition() == 21) && stones.getPosition() !=  pos1 && inMuehle(pos1,stones.getPosition())){
-                                for(Stones value : testList){
-                                    if((value.getPosition() == 14 || value.getPosition() == 21) && value.getPosition() !=  pos1 && value.getPosition() != stones.getPosition()){
+                    case 6 -> {
+                        for (Stones stones : testList) {
+                            if ((stones.getPosition() == 14 || stones.getPosition() == 21) && stones.getPosition() != pos1 && inMuehle(pos1, stones.getPosition())) {
+                                for (Stones value : testList) {
+                                    if ((value.getPosition() == 14 || value.getPosition() == 21) && value.getPosition() != pos1 && value.getPosition() != stones.getPosition()) {
                                         muehle(testList.get(i), stones, value);
                                         return true;
                                     }
@@ -160,12 +158,11 @@ public class Master {
                             }
                         }
                     }
-                    break;
-                    case 7:{
-                        for(Stones stones : testList) {
-                            if((stones.getPosition() == 12 || stones.getPosition() == 16) && stones.getPosition() !=  pos1 && inMuehle(pos1,stones.getPosition())){
-                                for(Stones value : testList){
-                                    if((value.getPosition() == 12 || value.getPosition() == 16) && value.getPosition() !=  pos1 && value.getPosition() != stones.getPosition()){
+                    case 7 -> {
+                        for (Stones stones : testList) {
+                            if ((stones.getPosition() == 12 || stones.getPosition() == 16) && stones.getPosition() != pos1 && inMuehle(pos1, stones.getPosition())) {
+                                for (Stones value : testList) {
+                                    if ((value.getPosition() == 12 || value.getPosition() == 16) && value.getPosition() != pos1 && value.getPosition() != stones.getPosition()) {
                                         muehle(testList.get(i), stones, value);
                                         return true;
                                     }
@@ -173,12 +170,11 @@ public class Master {
                             }
                         }
                     }
-                    break;
-                    case 9:{
-                        for(Stones stones : testList) {
-                            if((stones.getPosition() == 13 || stones.getPosition() == 18) && stones.getPosition() !=  pos1 && inMuehle(pos1,stones.getPosition())){
-                                for(Stones value : testList){
-                                    if((value.getPosition() == 13 || value.getPosition() == 18) && value.getPosition() !=  pos1 && value.getPosition() != stones.getPosition()){
+                    case 9 -> {
+                        for (Stones stones : testList) {
+                            if ((stones.getPosition() == 13 || stones.getPosition() == 18) && stones.getPosition() != pos1 && inMuehle(pos1, stones.getPosition())) {
+                                for (Stones value : testList) {
+                                    if ((value.getPosition() == 13 || value.getPosition() == 18) && value.getPosition() != pos1 && value.getPosition() != stones.getPosition()) {
                                         muehle(testList.get(i), stones, value);
                                         return true;
                                     }
@@ -186,7 +182,6 @@ public class Master {
                             }
                         }
                     }
-
                 }
             }
         }
