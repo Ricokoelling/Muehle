@@ -56,7 +56,7 @@ public class playBoard extends JFrame implements MouseInputListener {
         return false;
     }
     private void playerChange(){
-
+        changeStatus(1);
         if (playerNumber == 1) {
             playerNumber = 2;
             playerOneStones--;
@@ -90,8 +90,7 @@ public class playBoard extends JFrame implements MouseInputListener {
         int circleDiameter      = 30;
         int circleRadius        = circleDiameter/2;
         //System.out.println(e.getX() + " " + e.getY());
-        changeStatus(1);
-        System.out.println(phase);
+        //System.out.println(phase);
             // biggest rect
             // pos 1 2 3
             if (e.getX() > ((this.getWidth() / 2) - radius * 3) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) - circleRadius + 50) {   //point [1]
@@ -100,6 +99,7 @@ public class playBoard extends JFrame implements MouseInputListener {
                         pos = 1;
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
+                        changeStatus(1);
                         playerChange();
                     }
                 }
@@ -116,7 +116,7 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
+
                     }
                 }
                 else {
@@ -134,7 +134,7 @@ public class playBoard extends JFrame implements MouseInputListener {
                         mst.add(pos,true,playerNumber);
                         pane.repaint(pos, playerNumber);
                         playerChange();
-                        
+
                     }
                 }
                 else {

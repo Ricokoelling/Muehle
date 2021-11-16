@@ -19,12 +19,12 @@ public class Master {
         }
     }
 
-    public boolean fNumb(int pos) {
+    private boolean fNumb(int pos) {
 
         return pos != 4 && pos != 7 && pos != 10 && pos != 13 && pos != 16 && pos != 19 && pos != 22;
     }
 
-    public int sNumb(int pos) {
+    private int sNumb(int pos) {
         if (pos == 2 || pos == 5 || pos == 8) {
             return 1;
         } else if (pos == 17 || pos == 20 || pos == 23) {
@@ -180,9 +180,7 @@ public class Master {
         for (Stones[] stones : muehlen) {
             for (Stones value : stones) {
                 if (value.getPosition() == pos1) {
-                    for (Stones stone : stones) {
                             return false;
-                    }
                 }
             }
         }

@@ -11,8 +11,14 @@ public class Main {
 /*
 
 --> removeStone     rico
+
 --> nicht auf selbe position setzen bzw dann auch schieben rico/maxa
 
+--> drag Stones maxa
+
+--> phase 3
+
+--> features
 
 
 */

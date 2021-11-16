@@ -17,18 +17,17 @@ public class MyPanel extends JPanel {
     public void repaint(int pos, int playerNumb) {
         map.put(pos,playerNumb);
         super.repaint();
-
     }
 
     public void removeStone(int pos){
-
         map.remove(pos);
         repaint();
     }
+
     private void drawStone(Graphics2D g2D,int pos , int playerNumb){
         int radius          = this.getWidth() / 14;
         if(playerNumb == 1){
-            g2D.setColor(Color.WHITE);
+            g2D.setColor(Color.GRAY);
         }
         else{
             g2D.setColor(Color.BLACK);
@@ -69,6 +68,7 @@ public class MyPanel extends JPanel {
         int numbersOfRectangles = 3;
 
         Graphics2D g2D = (Graphics2D) g;
+        g2D.clearRect(0, 0, this.getWidth(), this.getHeight());
         g2D.setStroke(new BasicStroke(5));
         g2D.setColor(Color.BLACK);
 
