@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class MyPanel extends JPanel {
     private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private final HashMap<Integer,Integer> map = new HashMap<>();
+    private final HashMap<Integer,Boolean> map = new HashMap<>();
     protected static Label playerStatus = new Label("Player 1") ;
 
     public MyPanel() {
@@ -14,7 +14,7 @@ public class MyPanel extends JPanel {
         this.add(playerStatus);
     }
 
-    public void repaint(int pos, int playerNumb) {
+    public void repaint(int pos, boolean playerNumb) {
         map.put(pos,playerNumb);
         super.repaint();
     }
@@ -24,13 +24,13 @@ public class MyPanel extends JPanel {
         repaint();
     }
 
-    private void drawStone(Graphics2D g2D,int pos , int playerNumb){
+    private void drawStone(Graphics2D g2D,int pos , boolean playerNumb){
         int radius          = this.getWidth() / 14;
-        if(playerNumb == 1){
-            g2D.setColor(Color.GRAY);
+        if(playerNumb){
+            g2D.setColor(Color.BLACK);
         }
         else{
-            g2D.setColor(Color.BLACK);
+            g2D.setColor(Color.gray);
         }
         //System.out.println("Pos:"+pos);
         int circleDiameter = 30;
