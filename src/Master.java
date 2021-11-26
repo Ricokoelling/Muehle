@@ -27,7 +27,6 @@ public class Master {
     }
 
     private boolean fNumb(int pos) {
-
         return pos != 4 && pos != 7 && pos != 10 && pos != 13 && pos != 16 && pos != 19 && pos != 22;
     }
 
@@ -38,6 +37,35 @@ public class Master {
             return 2;
         } else
             return 0;
+    }
+    private boolean validMove(int pos1, int pos2){
+
+        if(pos1 == 1 && pos2 == 10 || pos2 == 1 && pos1 == 10)
+            return true;
+        if(pos1 == 10 && pos2 == 22 || pos2 == 10 && pos1 == 22)
+            return true;
+        if(pos1 == 4 && pos2 == 11 || pos2 == 4 && pos1 == 11)
+            return true;
+        if(pos1 == 11 && pos2 == 19 || pos2 == 11 && pos1 == 19)
+            return true;
+        if(pos1 == 7 && pos2 == 12 || pos2 == 7 && pos1 == 12)
+            return true;
+        if(pos1 == 12 && pos2 == 16 || pos2 == 12 && pos1 == 16)
+            return true;
+        if(pos1 == 9 && pos2 == 13 || pos2 == 9 && pos1 == 13)
+            return true;
+        if(pos1 == 13 && pos2 == 18 || pos2 == 13 && pos1 == 18)
+            return true;
+        if(pos1 == 6 && pos2 == 14 || pos2 == 6 && pos1 == 14)
+            return true;
+        if(pos1 == 14 && pos2 == 21 || pos2 == 14 && pos1 == 21)
+            return true;
+        if(pos1 == 3 && pos2 == 15 || pos2 == 3 && pos1 == 15)
+            return true;
+        if(pos1 == 15 && pos2 == 24 || pos2 == 15 && pos1 == 24)
+            return true;
+
+        return false;
     }
 
     public boolean test(boolean player) {
@@ -207,7 +235,6 @@ public class Master {
             if(playerNumb == false){
                 for (int i = 0; i < playerOne.size(); i++) {
                     if (playerOne.get(i).getPosition() == pos) {
-                        System.out.println("lol2");
                         playerOne.remove(i);
                     }
                 }
@@ -251,5 +278,30 @@ public class Master {
             }
         return true;
     }
-
+    public boolean freeposNextto(int pos1, int pos2, boolean playNumb){   //this.pos1 == playBoard.pos2 || pos2 ist ursprungspos
+        int stone = 0;  //zum überschreiben der pos des stones
+        if (playNumb) {
+            for (int i = 0; i < playerOne.size(); i++) {
+                if (playerOne.get(i).getPosition() == pos2)
+                    stone = i;
+            }
+        } else {
+            for (int i = 0; i < playerTwo.size(); i++) {
+                if (playerTwo.get(i).getPosition() == pos2)
+                    stone = i;
+            }
+        }
+        System.out.println("posGO: " + pos1 + "posUr: " + pos2);
+        if (posTaken(pos1)) {
+            if (((pos1 - 1 == pos2) || pos1 + 1 == pos2) || validMove(pos1, pos2) || (sNumb(pos1) == 1 && sNumb(pos2) == 1 || sNumb(pos1) == 2 && sNumb(pos2) == 2)) {
+                if (playNumb) {
+                    playerOne.get(stone).setPosition(pos1);
+                } else {
+                    playerTwo.get(stone).setPosition(pos1);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
 }
