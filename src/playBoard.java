@@ -3,15 +3,16 @@ import javax.swing.event.MouseInputListener;
 import java.awt.event.MouseEvent;
 
 public class playBoard extends JFrame implements MouseInputListener {
-    private static final MyPanel pane = new MyPanel();
-    private final Master mst = new Master();
-    protected boolean playerNumber = true;  //true --> player 1 ----- false --> player 2
-    protected int phase = 1;
-    private int pos;
-    private int pos2 = 0;
-    private int count = 0;
-    private boolean onlyonce = false;
-    private boolean phaseChange = false;
+    private     static      final MyPanel pane  = new MyPanel();
+    private     final       Master mst          = new Master();
+    private     int         pos;
+    private     int         pos2                = 0;
+    private     int         count               = 0;
+    private     boolean     onlyOnce            = false;
+    private     boolean     phaseChange         = false;
+
+    protected   boolean     playerNumber        = true;  //true --> player 1 ----- false --> player 2
+    protected   int         phase               = 1;
 
     /*WindowListener exitListener = new WindowAdapter() {
         @Override
@@ -156,8 +157,8 @@ public class playBoard extends JFrame implements MouseInputListener {
             }
 
             //System.out.println("pos " + pos + "pos2: " + pos2);
-            if(pos2 != pos && !onlyonce && mst.sameplayerStone(pos,playerNumber)) {
-                onlyonce = true;
+            if(pos2 != pos && !onlyOnce && mst.sameplayerStone(pos,playerNumber)) {
+                onlyOnce = true;
 
                 if (mst.freeposNextto(pos2, pos, playerNumber)) { //check if pos2 is free and if it is only one step away
                     pane.moveStone(pos, pos2, playerNumber);
@@ -196,6 +197,7 @@ public class playBoard extends JFrame implements MouseInputListener {
         boolean poswasTaken = false;
         //System.out.println(e.getX() + " " + e.getY());
         //System.out.println(phase);
+        //System.out.println(playerNumber);
         if(true){
         // biggest rect
         // pos 1 2 3
@@ -318,7 +320,7 @@ public class playBoard extends JFrame implements MouseInputListener {
     @Override
     public void mouseReleased(MouseEvent e) {
             if(phase == 2){
-                onlyonce = false;
+                onlyOnce = false;
             }
     }
 
@@ -341,8 +343,8 @@ public class playBoard extends JFrame implements MouseInputListener {
             }
         }
         else if(state == 2){
-            pane.setPlayerStatus("Remove");
-        }
+                pane.setPlayerStatus("Remove");
+            }
         else if(state == 3){
             if (!playerNumber) {
                 pane.setPlayerStatus("Player 2 move");
@@ -351,6 +353,7 @@ public class playBoard extends JFrame implements MouseInputListener {
             }
         }
     }
+
 
 }
 

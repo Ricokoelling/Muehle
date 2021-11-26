@@ -38,7 +38,7 @@ public class MyPanel extends JPanel {
             g2D.setColor(Color.BLACK);
         }
         else{
-            g2D.setColor(Color.gray);
+            g2D.setColor(Color.GRAY);
         }
         //System.out.println("Pos:"+pos);
         int circleDiameter = 30;
