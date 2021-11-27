@@ -5,7 +5,7 @@ import java.awt.event.MouseEvent;
 public class playBoard extends JFrame implements MouseInputListener {
     private     static      final MyPanel pane  = new MyPanel();
     private     final       Master mst          = new Master();
-    private     int         pos;
+    private     int         pos                 = 0;
     private     int         pos2                = 0;
     private     int         count               = 0;
     private     boolean     onlyOnce            = false;
@@ -157,20 +157,23 @@ public class playBoard extends JFrame implements MouseInputListener {
             }
 
             //System.out.println("pos " + pos + "pos2: " + pos2);
-            if(pos2 != pos && !onlyOnce && mst.sameplayerStone(pos,playerNumber)) {
+            if(pos2 != pos && !onlyOnce && !mst.sameplayerStone(pos,playerNumber)) { //changed sameplayer stone and solved the problem
                 onlyOnce = true;
-
+                if(mst.winConditionOne(playerNumber)){
+                    phase = 4;
+                    System.out.println("player " + playerNumber + "won the Game!");
+                }
                 if (mst.freeposNextto(pos2, pos, playerNumber)) { //check if pos2 is free and if it is only one step away
                     pane.moveStone(pos, pos2, playerNumber);
                     changeStatus(3);
                 } else
                     poswasTaken = true;
 
-                if ((mst.test(true) || mst.test(false))) {
+                if ((mst.checkMill(true) || mst.checkMill(false))) {
                     changeStatus(2);
                     phase = 0;
                 }
-                System.out.println("postaken " + poswasTaken );
+                //System.out.println("postaken " + poswasTaken );
                 if (phase == 2 && !poswasTaken) {
                     playerChange();
                 }
@@ -302,11 +305,12 @@ public class playBoard extends JFrame implements MouseInputListener {
                 }else {
                     changeStatus(3);
                     phase = 2;
+                    playerChange();
                 }
                 count--;
             }
         }
-        if(count > 3 && (mst.test(true) || mst.test(false)) && phase == 1){
+        if(count > 3 && (mst.checkMill(true) || mst.checkMill(false)) && phase == 1){
             changeStatus(2);
             phase = 0;
         }

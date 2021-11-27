@@ -3,21 +3,24 @@ import java.util.LinkedList;
 
 public class Master {
 
-    private static ArrayList<Stones>    playerOne   = new ArrayList<>();
-    private static ArrayList<Stones>    playerTwo   = new ArrayList<>();
+    private ArrayList<Stones>    playerOne   = new ArrayList<>();
+    private ArrayList<Stones>    playerTwo   = new ArrayList<>();
     private LinkedList<Stones[]>        muehlen     = new LinkedList<>();
 
     public Master() {
     }
-    /*      dont mind this just for testing :D
-    for(Stones stone: playerOne){
-            System.out.println(stone.toString());
-        }
-        for(Stones value: playerTwo){
-            System.out.println(value.toString());
-        }
+    /**
+    dont mind this just for testing :D
+    for(Stones stonek: playerOne){
+        System.out.println("PlOne: " + stonek.toString());
+    }
+    for(Stones value: playerTwo){
+        System.out.println("Pltwo: " + value.toString());
+    }
      */
-    public void add(int position, boolean state, boolean playerNumb) {
+
+
+    protected void add(int position, boolean state, boolean playerNumb) {
         Stones stone = new Stones(position, state);
         if (playerNumb) {
             playerOne.add(stone);
@@ -25,13 +28,11 @@ public class Master {
             playerTwo.add(stone);
         }
     }
-    
-    //name change from fNumb to falseNumb
+
     private boolean falseNumb(int pos) {
         return pos != 4 && pos != 7 && pos != 10 && pos != 13 && pos != 16 && pos != 19 && pos != 22;
     }
-    
-    //name change from vNumb to verticalNumb
+
     private int verticalNumb(int pos) {
         if (pos == 2 || pos == 5 || pos == 8) {
             return 1;
@@ -41,8 +42,13 @@ public class Master {
             return 0;
     }
 
+    /**
+     * checks if in phase 2 the move is available
+     * @param pos1 position the stone gets moved to
+     * @param pos2 origin position
+     * @return true -> if the move is possible || false -> if the move isn´t listed her or not possible
+     */
     private boolean validMove(int pos1, int pos2){
-
         if(pos1 == 1 && pos2 == 10 || pos2 == 1 && pos1 == 10)
             return true;
         if(pos1 == 10 && pos2 == 22 || pos2 == 10 && pos1 == 22)
@@ -71,7 +77,12 @@ public class Master {
         return false;
     }
 
-    public boolean test(boolean player) {
+    /**
+     * checks if a certian player did place a mill
+     * @param player player who placed the last stone
+     * @return true -> if the player placed a mill || false -> player didnt place a mill
+     */
+    protected boolean checkMill(boolean player) {
         ArrayList<Stones> testList;
         if (player) {
             testList = playerOne;
@@ -81,7 +92,7 @@ public class Master {
         for (int i = 0; i < testList.size(); i++) {
             int pos1 = testList.get(i).getPosition();
             for (int j = 0; j < testList.size(); j++) {
-                if ((pos1 + 1) == testList.get(j).getPosition() && falseNumb(testList.get(j).getPosition()) && inMuehle(pos1, testList.get(j).getPosition())) {
+                if ((pos1 + 1) == testList.get(j).getPosition() && falseNumb(testList.get(j).getPosition()) && inMill(pos1, testList.get(j).getPosition())) {
                     for (Stones stones : testList) {
                         if ((pos1 + 2) == stones.getPosition() && falseNumb(stones.getPosition())) {
                             muehle(testList.get(i), testList.get(j), stones);
@@ -92,7 +103,7 @@ public class Master {
             }
             if (verticalNumb(pos1) == 1) {
                 for (int ii = 0; ii < testList.size(); ii++) {
-                    if (verticalNumb(testList.get(ii).getPosition()) == 1 && testList.get(ii).getPosition() != pos1 && inMuehle(pos1, testList.get(ii).getPosition())) {
+                    if (verticalNumb(testList.get(ii).getPosition()) == 1 && testList.get(ii).getPosition() != pos1 && inMill(pos1, testList.get(ii).getPosition())) {
                         for (Stones stones : testList) {
                             if (verticalNumb(stones.getPosition()) == 1 && stones.getPosition() != pos1 && testList.get(ii).getPosition() != stones.getPosition()) {
                                 muehle(testList.get(i), testList.get(ii), stones);
@@ -103,7 +114,7 @@ public class Master {
                 }
             } else if (verticalNumb(pos1) == 2) {
                 for (int jj = 0; jj < testList.size(); jj++) {
-                    if (verticalNumb(testList.get(jj).getPosition()) == 2 && testList.get(jj).getPosition() != pos1 && inMuehle(pos1, testList.get(jj).getPosition())) {
+                    if (verticalNumb(testList.get(jj).getPosition()) == 2 && testList.get(jj).getPosition() != pos1 && inMill(pos1, testList.get(jj).getPosition())) {
                         for (Stones stones : testList) {
                             if (verticalNumb(stones.getPosition()) == 2 && stones.getPosition() != pos1 && testList.get(jj).getPosition() != stones.getPosition()) {
                                 muehle(testList.get(i), testList.get(jj), stones);
@@ -117,7 +128,7 @@ public class Master {
                 switch (pos1) {
                     case 1 -> {
                         for (Stones stones : testList) {
-                            if ((stones.getPosition() == 10 || stones.getPosition() == 22) && stones.getPosition() != pos1 && inMuehle(pos1, stones.getPosition())) {
+                            if ((stones.getPosition() == 10 || stones.getPosition() == 22) && stones.getPosition() != pos1 && inMill(pos1, stones.getPosition())) {
                                 for (Stones value : testList) {
                                     if ((value.getPosition() == 10 || value.getPosition() == 22) && value.getPosition() != pos1 && value.getPosition() != stones.getPosition()) {
                                         muehle(testList.get(i), stones, value);
@@ -129,7 +140,7 @@ public class Master {
                     }
                     case 3 -> {
                         for (Stones stones : testList) {
-                            if ((stones.getPosition() == 15 || stones.getPosition() == 24) && stones.getPosition() != pos1 && inMuehle(pos1, stones.getPosition())) {
+                            if ((stones.getPosition() == 15 || stones.getPosition() == 24) && stones.getPosition() != pos1 && inMill(pos1, stones.getPosition())) {
                                 for (Stones value : testList) {
                                     if ((value.getPosition() == 15 || value.getPosition() == 24) && value.getPosition() != pos1 && value.getPosition() != stones.getPosition()) {
                                         muehle(testList.get(i), stones, value);
@@ -141,7 +152,7 @@ public class Master {
                     }
                     case 4 -> {
                         for (Stones stones : testList) {
-                            if ((stones.getPosition() == 11 || stones.getPosition() == 19) && stones.getPosition() != pos1 && inMuehle(pos1, stones.getPosition())) {
+                            if ((stones.getPosition() == 11 || stones.getPosition() == 19) && stones.getPosition() != pos1 && inMill(pos1, stones.getPosition())) {
                                 for (Stones value : testList) {
                                     if ((value.getPosition() == 11 || value.getPosition() == 19) && value.getPosition() != pos1 && value.getPosition() != stones.getPosition()) {
                                         muehle(testList.get(i), stones, value);
@@ -153,7 +164,7 @@ public class Master {
                     }
                     case 6 -> {
                         for (Stones stones : testList) {
-                            if ((stones.getPosition() == 14 || stones.getPosition() == 21) && stones.getPosition() != pos1 && inMuehle(pos1, stones.getPosition())) {
+                            if ((stones.getPosition() == 14 || stones.getPosition() == 21) && stones.getPosition() != pos1 && inMill(pos1, stones.getPosition())) {
                                 for (Stones value : testList) {
                                     if ((value.getPosition() == 14 || value.getPosition() == 21) && value.getPosition() != pos1 && value.getPosition() != stones.getPosition()) {
                                         muehle(testList.get(i), stones, value);
@@ -165,7 +176,7 @@ public class Master {
                     }
                     case 7 -> {
                         for (Stones stones : testList) {
-                            if ((stones.getPosition() == 12 || stones.getPosition() == 16) && stones.getPosition() != pos1 && inMuehle(pos1, stones.getPosition())) {
+                            if ((stones.getPosition() == 12 || stones.getPosition() == 16) && stones.getPosition() != pos1 && inMill(pos1, stones.getPosition())) {
                                 for (Stones value : testList) {
                                     if ((value.getPosition() == 12 || value.getPosition() == 16) && value.getPosition() != pos1 && value.getPosition() != stones.getPosition()) {
                                         muehle(testList.get(i), stones, value);
@@ -177,7 +188,7 @@ public class Master {
                     }
                     case 9 -> {
                         for (Stones stones : testList) {
-                            if ((stones.getPosition() == 13 || stones.getPosition() == 18) && stones.getPosition() != pos1 && inMuehle(pos1, stones.getPosition())) {
+                            if ((stones.getPosition() == 13 || stones.getPosition() == 18) && stones.getPosition() != pos1 && inMill(pos1, stones.getPosition())) {
                                 for (Stones value : testList) {
                                     if ((value.getPosition() == 13 || value.getPosition() == 18) && value.getPosition() != pos1 && value.getPosition() != stones.getPosition()) {
                                         muehle(testList.get(i), stones, value);
@@ -193,41 +204,64 @@ public class Master {
         return false;
     }
 
+    /**
+     * addes a mill to the mill List
+     * @param stone1 -
+     * @param stone2 -
+     * @param stone3 -
+     */
     private void muehle(Stones stone1, Stones stone2, Stones stone3) {
         Stones[] temp = {stone1, stone2, stone3};
         muehlen.add(temp);
     }
 
-    private boolean inMuehle(int pos1, int pos2) {
+    /**
+     * checks if two Stones already build a mill
+     * @param pos1 position from stone one
+     * @param pos2 position from stone two
+     * @return true -> isn´t in a mill || false -> is in a mill
+     */
+    private boolean inMill(int pos1, int pos2) {
         for (Stones[] stones : muehlen) {
             for (Stones value : stones) {
                 if (value.getPosition() == pos1) {
                     for (Stones stone : stones) {
                         if (stone.getPosition() == pos2) {
-                            return false;                       //returns false for is in mill
+                            return false;
                         }
                     }
                 }
             }
         }
-        return true;                                            //returns true for is not in mill
+        return true;
     }
 
-    private boolean inMuehle(int pos1) {
+    /**
+     * checks if the Stone is in a mill
+     * @param pos stone position which is checked, doesnt matter from which player
+     * @return true -> is not in mill || false -> isn't in a mill
+     */
+    private boolean inMill(int pos) {
         for (Stones[] stones : muehlen) {
             for (Stones value : stones) {
-                if (value.getPosition() == pos1) {
-                    return false;                               //returns false for is in mill
+                if (value.getPosition() == pos) {
+                    return false;
                 }
             }
         }
-        return true;                                            //returns true for is not in mill
+        return true;
     }
 
-    public boolean removeStones(int pos, boolean playerNumb) {
-        //deleted the second if statement cause if playerNumb == true it goes in the first if its not true than it has to be false so it goes into else
+    /**
+     * removes Stone from player List and checks if their are only mills to remove from
+     * @param pos stone which is going to be removed
+     * @param playerNumb player who removes the stone
+     * @return true -> if stone is found, will be removed || false -> stone couldnt be found so he doesnt get removed
+     */
+    protected boolean removeStones(int pos, boolean playerNumb) {
         //checks if there are only mills and if it is so the player is able to take stones from the mill
-        if(onlyMills(playerNumb)){
+        //only mills should check in playBoard otherwise cant remove stone here
+        if(onlyMills(playerNumb) || inMill(pos)){
             if(playerNumb){
                 for (int i = 0; i < playerTwo.size(); i++) {
                     if (playerTwo.get(i).getPosition() == pos) {
@@ -242,37 +276,26 @@ public class Master {
                 }
             }
             return true;
-        } else if (inMuehle(pos)) {
-            if(playerNumb){
-                for (int i = 0; i < playerTwo.size(); i++) {
-                    if (playerTwo.get(i).getPosition() == pos) {
-                        playerTwo.remove(i);
-                    }
-                }
-            }else{
-                for (int i = 0; i < playerOne.size(); i++) {
-                    if (playerOne.get(i).getPosition() == pos) {
-                        playerOne.remove(i);
-                    }
-                }
-            }
-            return true;
         }
-        else return false;
+        return false;
     }
 
-
-    public boolean sameplayerStone(int pos, boolean playerNumb) {
-        //changed the second if statement into else cause if playNumb != true it is false so else is faster and does not have to compare anymore
+    /**
+     * Checks if the stone which should get removed / moved is not from the same player
+     * @param pos position from the stone which should get removed
+     * @param playerNumb player who removes the stone
+     * @return true -> stone can be removed ||false -> stone can't be removed
+     */
+    protected boolean sameplayerStone(int pos, boolean playerNumb) {
         if(playerNumb) {
-            for (int i = 0; i < playerOne.size(); i++) {
-                if(playerOne.get(i).getPosition() == pos){
+            for (Stones stones : playerOne) {
+                if (stones.getPosition() == pos) {
                     return false;
                 }
             }
         }else {
-            for (int i = 0; i < playerTwo.size(); i++) {
-                if(playerTwo.get(i).getPosition() == pos){
+            for (Stones stones : playerTwo) {
+                if (stones.getPosition() == pos) {
                     return false;
                 }
             }
@@ -280,20 +303,33 @@ public class Master {
         return true;
     }
 
-    public boolean posTaken(int pos){
-            for (int i = 0; i < playerOne.size(); i++) {
-                if(playerOne.get(i).getPosition() == pos){
-                    return false;
-                }
+    /**
+     * funktion tests if the position the stone should go to is avalible 
+     * @param pos phase1 stoneplace
+     * @return true -> pos isnt taken || false -> pos is taken
+     */
+    protected boolean posTaken(int pos){
+        for (Stones stones : playerOne) {
+            if (stones.getPosition() == pos) {
+                return false;
             }
-            for (int i = 0; i < playerTwo.size(); i++) {
-                if(playerTwo.get(i).getPosition() == pos){
-                    return false;
-                }
+        }
+        for (Stones stones : playerTwo) {
+            if (stones.getPosition() == pos) {
+                return false;
             }
+        }
         return true;
     }
-    public boolean freeposNextto(int pos1, int pos2, boolean playNumb){   //this.pos1 == playBoard.pos2 || pos2 ist ursprungspos
+
+    /**
+     * Funktion checks if the new position is avaliable and if the pos is only 1 step away
+     * @param pos1 new position
+     * @param pos2 old position
+     * @param playNumb playerNumber
+     * @return true ->stone will be moved to new pos || false ->stone cant move
+     */
+    protected boolean freeposNextto(int pos1, int pos2, boolean playNumb){   //this.pos1 == playBoard.pos2 || pos2 ist ursprungspos
         int stone = 0;  //zum überschreiben der pos des stones
         if (playNumb) {
             for (int i = 0; i < playerOne.size(); i++) {
@@ -306,7 +342,7 @@ public class Master {
                     stone = i;
             }
         }
-        System.out.println("posGO: " + pos1 + "posUr: " + pos2);
+        System.out.println("posGO: " + pos1 + " posUr: " + pos2);
         if (posTaken(pos1)) {
             if (((pos1 - 1 == pos2) || pos1 + 1 == pos2) || validMove(pos1, pos2) || (verticalNumb(pos1) == 1 && verticalNumb(pos2) == 1 || verticalNumb(pos1) == 2 && verticalNumb(pos2) == 2)) {
                 if (playNumb) {
@@ -320,22 +356,108 @@ public class Master {
         return false;
     }
 
-    /**Function the returns boolean depending on if there are only mills or not
+    /**Function that returns boolean depending on if there are only mills or not
      *
      * @param playerNumb transfers
-     * @return
+     * @return true -> their are only mills || false -> at least one stone isn´t in a mill
      */
     protected boolean onlyMills(boolean playerNumb){
         if(playerNumb){
             for(Stones stones: playerTwo){
-                if(inMuehle(stones.getPosition())) return false;
+                if(inMill(stones.getPosition())) return false;
             }
         }else{
             for(Stones stones: playerOne){
-                if(inMuehle(stones.getPosition())) return false;
+                if(inMill(stones.getPosition())) return false;
             }
         }
         return true;
+    }
+
+    /**
+     * checks if one stone is able to move in any direktion
+     * @param pos position of stone
+     * @return true -> stone got available moves || false -> stone cant move
+     */
+    private boolean availableMoves(int pos){
+
+        if((posTaken(pos + 1) && falseNumb(pos + 1)) || pos != 1 && (posTaken(pos - 1) && falseNumb(pos))){
+            System.out.println("linksrechts: " + pos );
+            return true;
+        }
+        if(verticalNumb(pos) == 1){
+            switch (pos){
+                case 2: if(posTaken(5)){
+                    System.out.println("2,5");
+                    return true;
+                }
+                    break;
+                case 5: if(posTaken(2) || posTaken(8)){
+                    System.out.println("2,5,8");
+                    return true;
+                }
+                case 8: if(posTaken(5)){
+                    System.out.println("8,5");
+                    return true;
+                }
+                    break;
+            }
+        }
+        else if(verticalNumb(pos) == 2){
+            switch (pos){
+                case 17: if(posTaken(20)){
+                    System.out.println("17,20");
+                    return true;
+                }
+                    break;
+                case 20: if(posTaken(17) || posTaken(23)){
+                    System.out.println("20,17,23");
+                    return true;
+                }
+                case 23: if(posTaken(20)){
+                    System.out.println("23,20");
+                    return true;
+                }
+                    break;
+            }
+        }
+        // doesn`t work, doesn´t check if the stone.getPosition() could be from the other player so things like 2 1 or 21 1 happen. cant think of a fix yet
+        // wenn du ne idee hast mach das so mir fällt legit nichts ein die anderen sachen oben dürften funktionieren aber bin mir da nicht sicher signed Rico
+        for (Stones stone : playerOne) {
+            if (!validMove(pos, stone.getPosition())) {
+                System.out.println("validpos1: " + pos + " " + stone.getPosition() );
+                return true;
+            }
+        }
+        for (Stones stone : playerTwo) {
+            if (!validMove(pos, stone.getPosition())) {
+                System.out.println("validpos2: " + pos + " " + stone.getPosition());
+                return true;
+            }
+        }
+    return false;
+    }
+    /**
+     * checks if one player won by blocking all the enemies stones
+     * @param playerNumb player who last moved
+     * @return true -> playerWon || false -> player didn't win so match continues
+     */
+    protected boolean winConditionOne(boolean playerNumb){
+        if(playerNumb) {
+            for (Stones stone : playerTwo) {
+                if(!availableMoves(stone.getPosition())){
+                    return true;
+                }
+            }
+        }
+        else{
+            for (Stones stone : playerOne) {
+                if(!availableMoves(stone.getPosition())){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
 

@@ -5,13 +5,11 @@ public class ExampleForButtons {
 
     private static ArrayList<Integer> list = new ArrayList<>();
     public static void main(String[] args) {
-        /*input inp = new input();
-        tes t = new tes();
-        ausgabe aus = new ausgabe();*/
-        list.add(5);
-        list.add(10);
-
-        System.out.println(list);
+        ArrayList<int[][][]> testlist = new ArrayList<>();
+        int[][][] kekw = new int[2][2][2];
+        kekw[0][0][0] = 1;
+        testlist.add(kekw);
+        System.out.println(testlist.get(0)[0][0][0]);
 
 
     }
