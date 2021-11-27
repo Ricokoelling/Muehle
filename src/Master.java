@@ -380,24 +380,22 @@ public class Master {
      * @return true -> stone got available moves || false -> stone cant move
      */
     private boolean availableMoves(int pos){
-
-        if((posTaken(pos + 1) && falseNumb(pos + 1)) || pos != 1 && (posTaken(pos - 1) && falseNumb(pos))){
-            System.out.println("linksrechts: " + pos );
+        if(posTaken(pos + 1) && falseNumb(pos + 1)){
+            return true;
+        }
+        if(pos != 1 && posTaken(pos - 1) && falseNumb(pos)){
             return true;
         }
         if(verticalNumb(pos) == 1){
             switch (pos){
                 case 2: if(posTaken(5)){
-                    System.out.println("2,5");
                     return true;
                 }
                     break;
                 case 5: if(posTaken(2) || posTaken(8)){
-                    System.out.println("2,5,8");
                     return true;
                 }
                 case 8: if(posTaken(5)){
-                    System.out.println("8,5");
                     return true;
                 }
                     break;
@@ -406,33 +404,23 @@ public class Master {
         else if(verticalNumb(pos) == 2){
             switch (pos){
                 case 17: if(posTaken(20)){
-                    System.out.println("17,20");
                     return true;
                 }
                     break;
                 case 20: if(posTaken(17) || posTaken(23)){
-                    System.out.println("20,17,23");
                     return true;
                 }
                 case 23: if(posTaken(20)){
-                    System.out.println("23,20");
                     return true;
                 }
                     break;
             }
         }
-        // doesn`t work, doesn´t check if the stone.getPosition() could be from the other player so things like 2 1 or 21 1 happen. cant think of a fix yet
-        // wenn du ne idee hast mach das so mir fällt legit nichts ein die anderen sachen oben dürften funktionieren aber bin mir da nicht sicher signed Rico
-        for (Stones stone : playerOne) {
-            if (!validMove(pos, stone.getPosition())) {
-                System.out.println("validpos1: " + pos + " " + stone.getPosition() );
-                return true;
-            }
-        }
-        for (Stones stone : playerTwo) {
-            if (!validMove(pos, stone.getPosition())) {
-                System.out.println("validpos2: " + pos + " " + stone.getPosition());
-                return true;
+        for(int i = 1; i < 25; i++){
+            if(posTaken(i)){
+                if(validMove(pos,i)){
+                    return true;
+                }
             }
         }
     return false;
@@ -443,21 +431,22 @@ public class Master {
      * @return true -> playerWon || false -> player didn't win so match continues
      */
     protected boolean winConditionOne(boolean playerNumb){
+
         if(playerNumb) {
             for (Stones stone : playerTwo) {
-                if(!availableMoves(stone.getPosition())){
-                    return true;
+                if(availableMoves(stone.getPosition())){
+                    return false;
                 }
             }
         }
         else{
             for (Stones stone : playerOne) {
-                if(!availableMoves(stone.getPosition())){
-                    return true;
+                if(availableMoves(stone.getPosition())){
+                    return false;
                 }
             }
         }
-        return false;
+        return true;
     }
 }
 

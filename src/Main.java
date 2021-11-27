@@ -42,12 +42,11 @@ positions new: [pos on horizontal, pos in depth*, ring number] * 0 means its the
 
 --> features
 
-phase 1:    -> wird ein stein enfternt so wird dieser am ende wieder hinzugeüft müssen dafür eine variable adden welche die zahl an steinen maximal benennt
-            -> https://youtu.be/clSXp-__jLU
+phase 1:    -> https://youtu.be/clSXp-__jLU
             das video ist privat
 
 phase 2:    nur bis minimal 6 steine um zur phase 3 zu kommen (springen)
-            Siegesbedingungen ausnahme fälle:   --> gewinnen durch einschließen //fast fertig fehlt nur noch die letzte überprüfung
+            Siegesbedingungen ausnahme fälle:   --> gewinnen durch einschließen //should work even on label
                                                 --> gewinnen durch zu wenig steine  // leicht zu machen
                                                 --> unentschieden nach 20 zügen ohne mühle //zug counter
                                                 (nachfragen ob die anderen das haben, wird nicht in den regeln von dem blatt erwähnt)

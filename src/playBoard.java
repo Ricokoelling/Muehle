@@ -10,9 +10,9 @@ public class playBoard extends JFrame implements MouseInputListener {
     private     int         count               = 0;
     private     boolean     onlyOnce            = false;
     private     boolean     phaseChange         = false;
-
     protected   boolean     playerNumber        = true;  //true --> player 1 ----- false --> player 2
     protected   int         phase               = 1;
+    private     int         maxstones           = 17;
 
     /*WindowListener exitListener = new WindowAdapter() {
         @Override
@@ -45,11 +45,18 @@ public class playBoard extends JFrame implements MouseInputListener {
         //this.addWindowListener(exitListener);
         this.setVisible(true);
     }
+
+    /**
+     * after every placement the player gets asked if he wants to do his move (currently disabled, if turned back on change for phase 2 and 3 etc.)
+     */
     private void takemove(){
         //int answer = JOptionPane.showConfirmDialog(null,"Did you finish your move?");
-        if(count > 16){
-            phase = 2;
-            phaseChange = true;
+        if(maxstones == count){
+            if(phase == 1){
+                System.out.println("lolz je baited");
+                phase = 2;
+                phaseChange = true;
+            }
             if (!playerNumber) {
                 MyPanel.playerStatus.setText("Player 2 move");
             } else {
@@ -62,8 +69,12 @@ public class playBoard extends JFrame implements MouseInputListener {
         if(phase == 1) {
             changeStatus(1);
         }
-        else
+        else if(phase == 3) {
             changeStatus(3);
+        }
+        else{
+            changeStatus(4);
+        }
     }
 
     @Override
@@ -159,10 +170,6 @@ public class playBoard extends JFrame implements MouseInputListener {
             //System.out.println("pos " + pos + "pos2: " + pos2);
             if(pos2 != pos && !onlyOnce && !mst.sameplayerStone(pos,playerNumber)) { //changed sameplayer stone and solved the problem
                 onlyOnce = true;
-                if(mst.winConditionOne(playerNumber)){
-                    phase = 4;
-                    System.out.println("player " + playerNumber + "won the Game!");
-                }
                 if (mst.freeposNextto(pos2, pos, playerNumber)) { //check if pos2 is free and if it is only one step away
                     pane.moveStone(pos, pos2, playerNumber);
                     changeStatus(3);
@@ -172,6 +179,11 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if ((mst.checkMill(true) || mst.checkMill(false))) {
                     changeStatus(2);
                     phase = 0;
+                }
+                if(mst.winConditionOne(playerNumber)){
+                    phase = 4;
+                    changeStatus(4);
+                    System.out.println("player " + playerNumber + "won the Game!");
                 }
                 //System.out.println("postaken " + poswasTaken );
                 if (phase == 2 && !poswasTaken) {
@@ -291,6 +303,7 @@ public class playBoard extends JFrame implements MouseInputListener {
             if (mst.posTaken(pos)) {
                 mst.add(pos,true,playerNumber);
                 pane.repaint(pos, playerNumber);
+                System.out.println("max: " + maxstones + " count: " + count);
             }
             else{
                 poswasTaken = true;
@@ -299,6 +312,8 @@ public class playBoard extends JFrame implements MouseInputListener {
         if(phase == 0) {
             if (!mst.posTaken(pos) && mst.sameplayerStone(pos, playerNumber) && mst.removeStones(pos, playerNumber)) {
                 pane.removeStone(pos);
+                maxstones--;
+                System.out.println("max: " + maxstones + " count: " + count);
                 if(count < 18 && !phaseChange){
                     changeStatus(1);
                     phase = 1;
@@ -313,6 +328,11 @@ public class playBoard extends JFrame implements MouseInputListener {
         if(count > 3 && (mst.checkMill(true) || mst.checkMill(false)) && phase == 1){
             changeStatus(2);
             phase = 0;
+        }
+        if((mst.winConditionOne(true) || mst.winConditionOne(false)) && count == maxstones){
+            phase = 4;
+            playerNumber = !playerNumber;
+            changeStatus(4);
         }
         if(phase == 1 && !poswasTaken){
             playerChange();
@@ -338,6 +358,10 @@ public class playBoard extends JFrame implements MouseInputListener {
 
     }
 
+    /**
+     * Changes Status on label depending on phase and which state (condition for label) it is currently in
+     * @param state represents the possibilities that happen
+     */
     private void changeStatus(int state){
         if(state == 1) {
             if (!playerNumber) {
@@ -354,6 +378,13 @@ public class playBoard extends JFrame implements MouseInputListener {
                 pane.setPlayerStatus("Player 2 move");
             } else {
                 pane.setPlayerStatus("Player 1 move");
+            }
+        }
+        else if(state == 4){
+            if (playerNumber) {
+                pane.setPlayerStatus("Player 1 won");
+            } else {
+                pane.setPlayerStatus("Player 2 won");
             }
         }
     }
