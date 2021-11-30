@@ -7,12 +7,16 @@ public class playBoard extends JFrame implements MouseInputListener {
     private     final       Master mst          = new Master();
     private     int         pos                 = 0;
     private     int         pos2                = 0;
+    private     int         pos3                = 0;
     private     int         count               = 0;
+    private     int         playerOnestones     = 9;
+    private     int         playerTwostones     = 9;
     private     boolean     onlyOnce            = false;
     private     boolean     phaseChange         = false;
     protected   boolean     playerNumber        = true;  //true --> player 1 ----- false --> player 2
     protected   int         phase               = 1;
     private     int         maxstones           = 17;
+    private     boolean     playerJump;
 
     /*WindowListener exitListener = new WindowAdapter() {
         @Override
@@ -69,11 +73,13 @@ public class playBoard extends JFrame implements MouseInputListener {
         if(phase == 1) {
             changeStatus(1);
         }
-        else if(phase == 3) {
+        else if(phase == 2) {
             changeStatus(3);
         }
-        else{
+        else if(phase == 3){
             changeStatus(4);
+        } else {
+            changeStatus(5);
         }
     }
 
@@ -176,18 +182,19 @@ public class playBoard extends JFrame implements MouseInputListener {
                 } else
                     poswasTaken = true;
 
-                if ((mst.checkMill(true) || mst.checkMill(false))) {
+                if (mst.checkMill(true) || mst.checkMill(false)){
                     changeStatus(2);
                     phase = 0;
                 }
                 if(mst.winConditionOne(playerNumber)){
                     phase = 4;
-                    changeStatus(4);
+                    changeStatus(5);
                     System.out.println("player " + playerNumber + "won the Game!");
                 }
                 //System.out.println("postaken " + poswasTaken );
                 if (phase == 2 && !poswasTaken) {
                     playerChange();
+                    mst.stillMill(playerNumber);
                 }
             }
         }
@@ -300,10 +307,10 @@ public class playBoard extends JFrame implements MouseInputListener {
         }
     }
         if (phase == 1) {
-            if (mst.posTaken(pos)) {
+            if (pos != 0 && mst.posTaken(pos)) {
                 mst.add(pos,true,playerNumber);
                 pane.repaint(pos, playerNumber);
-                System.out.println("max: " + maxstones + " count: " + count);
+                //System.out.println("max: " + maxstones + " count: " + count);
             }
             else{
                 poswasTaken = true;
@@ -313,14 +320,21 @@ public class playBoard extends JFrame implements MouseInputListener {
             if (!mst.posTaken(pos) && mst.sameplayerStone(pos, playerNumber) && mst.removeStones(pos, playerNumber)) {
                 pane.removeStone(pos);
                 maxstones--;
-                System.out.println("max: " + maxstones + " count: " + count);
-                if(count < 18 && !phaseChange){
+                //System.out.println("max: " + maxstones + " count: " + count);
+                if(!phaseChange){
                     changeStatus(1);
                     phase = 1;
                 }else {
-                    changeStatus(3);
-                    phase = 2;
-                    playerChange();
+                    if(mst.getPlayerStones(!playerNumber) <= 3){
+                        phase = 3;
+                        changeStatus(4);
+                        playerJump = playerNumber;
+                        playerChange();
+                    }else {
+                        changeStatus(3);
+                        phase = 2;
+                        playerChange();
+                    }
                 }
                 count--;
             }
@@ -329,10 +343,11 @@ public class playBoard extends JFrame implements MouseInputListener {
             changeStatus(2);
             phase = 0;
         }
+
         if((mst.winConditionOne(true) || mst.winConditionOne(false)) && count == maxstones){
             phase = 4;
             playerNumber = !playerNumber;
-            changeStatus(4);
+            changeStatus(5);
         }
         if(phase == 1 && !poswasTaken){
             playerChange();
@@ -343,8 +358,112 @@ public class playBoard extends JFrame implements MouseInputListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        int radius = pane.getWidth() / 14;
+        int circleDiameter = 30;
+        int circleRadius = circleDiameter / 2;
             if(phase == 2){
                 onlyOnce = false;
+            }
+            if(phase == 3){
+                if (e.getX() > ((this.getWidth() / 2) - radius * 3) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) - circleRadius + 50) {   //point [1]
+                    pos3 = 1;
+                }
+                if (e.getX() > ((this.getWidth() / 2) - radius * 3) + radius * 3 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) + radius * 3 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) - circleRadius + 50) {   //point [2]
+                    pos3 = 2;
+                }
+                if (e.getX() > ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) - circleRadius + 50) {   //point [3]
+                    pos3 = 3;
+                }
+                // pos 10 & 15
+                if (e.getX() > ((this.getWidth() / 2) - radius * 3) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius + 50) {   //point [10]
+                    pos3 = 10;
+                }
+                if (e.getX() > ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius + 50) {   //point [15]
+                    pos3 = 15;
+                }
+                //pos 22 23 24
+                if (e.getX() > ((this.getWidth() / 2) - radius * 3) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 50) {   //point [22]
+                    pos3 = 22;
+                }
+                if (e.getX() > ((this.getWidth() / 2) - radius * 3) + 1 + radius * 3 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) + 1 + radius * 3 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 50) {   //point [23]
+                    pos3 = 23;
+                }
+                if (e.getX() > ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 50) {   //point [24]
+                    pos3 = 24;
+                }
+                // middle rect
+                //pos 4 5 6
+                if (e.getX() > ((this.getWidth() / 2) - radius * 2) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2) - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 2) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 2) - circleRadius + 50) {   //point [4]
+                    pos3 = 4;
+                }
+                if (e.getX() > ((this.getWidth() / 2) - radius * 2) + radius * 2 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2) + radius * 2 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 2) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 2) - circleRadius + 50) {   //point [5]
+                    pos3 = 5;
+                }
+                if (e.getX() > ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 2) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 2) - circleRadius + 50) {   //point [6]
+                    pos3 = 6;
+                }
+                // pos 11 14
+                if (e.getX() > ((this.getWidth() / 2) - radius * 2) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2) - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 2) + radius * 2 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 2) + radius * 2 - circleRadius + 50) {   //point [11]
+                    pos3 = 11;
+                }
+                if (e.getX() > ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 2) + radius * 2 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 2) + radius * 2 - circleRadius + 50) {   //point [14]
+                    pos3 = 14;
+                }
+                //pos 19 20 21
+                if (e.getX() > ((this.getWidth() / 2) - radius * 2) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2) - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 50) {   //point [19]
+                    pos3 = 19;
+                }
+                if (e.getX() > ((this.getWidth() / 2) - radius * 2) + radius * 2 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2) + 1 + radius * 2 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 50) {   //point [20]
+                    pos3 = 20;
+                }
+                if (e.getX() > ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 50) {   //point [21]
+                    pos3 = 21;
+                }
+                //small rect
+                //pos 7 8 9
+                if (e.getX() > ((this.getWidth() / 2) - radius) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius) - circleRadius + 50) {   //point [4]
+                    pos3 = 7;
+                }
+                if (e.getX() > ((this.getWidth() / 2) - radius) + radius - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) + radius - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius) - circleRadius + 50) {   //point [5]
+                    pos3 = 8;
+                }
+                if (e.getX() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius) - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius) - circleRadius + 50) {   //point [6]
+                    pos3 = 9;
+                }
+                // pos 12 13
+                if (e.getX() > ((this.getWidth() / 2) - radius) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius) + radius - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius) + radius - circleRadius + 50) {   //point [12]
+                    pos3 = 12;
+                }
+                if (e.getX() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius) + radius - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius) + radius - circleRadius + 50) {   //point [13]
+                    pos3 = 13;
+                }
+                //pos 16 17 18
+                if (e.getX() > ((this.getWidth() / 2) - radius) - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 50) {   //point [16]
+                    pos3 = 16;
+                }
+                if (e.getX() > ((this.getWidth() / 2) - radius) + 1 + radius - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) + 1 + radius - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 50) {   //point [17]
+                    pos3 = 17;
+                }
+                if (e.getX() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 50) {   //point [18]
+                    pos3 = 18;
+                }
+
+                if(pos != pos3 && mst.posTaken(pos3) && playerJump == playerNumber){
+                    pane.moveStone(pos,pos3,playerNumber);
+                    mst.moveStone(pos,pos3,playerNumber);
+
+                    if(mst.checkMill(true) || mst.checkMill(false)){
+                        phase = 4;
+                        playerNumber = !playerNumber;
+                        changeStatus(5);
+                    }
+                    if(phase == 3){
+                        playerChange();
+                    }
+                }
+                else{
+                    phase = 2;
+                }
             }
     }
 
@@ -381,6 +500,13 @@ public class playBoard extends JFrame implements MouseInputListener {
             }
         }
         else if(state == 4){
+            if (!playerNumber) {
+                pane.setPlayerStatus("Player 2 jump");
+            } else {
+                pane.setPlayerStatus("Player 1 jump");
+            }
+        }
+        else if(state == 5){
             if (playerNumber) {
                 pane.setPlayerStatus("Player 1 won");
             } else {

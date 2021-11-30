@@ -42,14 +42,20 @@ positions new: [pos on horizontal, pos in depth*, ring number] * 0 means its the
 
 --> features
 
+--> bug:    beide muehlen durch entfernen von 3 lässt weiter removen
+            nach onlyMills und dem entfernen von einem Stein --> setzen auf die gleiche position lässt zu das der spieler alle steine entfernt
+
+--> doppel muehle und onylmills sind noch sehr stark verbugged
+
+
 phase 1:    -> https://youtu.be/clSXp-__jLU
             das video ist privat
 
 phase 2:    nur bis minimal 6 steine um zur phase 3 zu kommen (springen)
-            Siegesbedingungen ausnahme fälle:   --> gewinnen durch einschließen //should work even on label
+            Siegesbedingungen ausnahme fälle:   --> gewinnen durch einschließen //should work even in phase 1
                                                 --> gewinnen durch zu wenig steine  // leicht zu machen
-                                                --> unentschieden nach 20 zügen ohne mühle //zug counter
+                                                --> unentschieden nach 20 zügen ohne mühle //zug counter (extra machen maybe als schwierigkeit sonst haben die andern das nicht)
                                                 (nachfragen ob die anderen das haben, wird nicht in den regeln von dem blatt erwähnt)
-                                                --> unentschieden wenn 3 mal in folge die gleiche Stellung der Spielsteine erreicht wird // das wird schwieriger ka wie wir das machen soll
+
 
 */
