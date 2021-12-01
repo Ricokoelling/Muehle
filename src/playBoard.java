@@ -193,8 +193,8 @@ public class playBoard extends JFrame implements MouseInputListener {
                 }
                 //System.out.println("postaken " + poswasTaken );
                 if (phase == 2 && !poswasTaken) {
-                    playerChange();
                     mst.stillMill(playerNumber);
+                    playerChange();
                 }
             }
         }

@@ -42,11 +42,7 @@ positions new: [pos on horizontal, pos in depth*, ring number] * 0 means its the
 
 --> features
 
---> bug:    beide muehlen durch entfernen von 3 lässt weiter removen
-            nach onlyMills und dem entfernen von einem Stein --> setzen auf die gleiche position lässt zu das der spieler alle steine entfernt
-
---> doppel muehle und onylmills sind noch sehr stark verbugged
-
+--> wenn aus einer doppel muehle ein stein entfernt werden soll funktioniert das bloß wenn es ein stein aus der ersten muehle ist, sonst müssen mehrere steine enfternt werden
 
 phase 1:    -> https://youtu.be/clSXp-__jLU
             das video ist privat
