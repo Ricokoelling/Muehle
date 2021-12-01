@@ -42,7 +42,7 @@ positions new: [pos on horizontal, pos in depth*, ring number] * 0 means its the
 
 --> features
 
---> wenn aus einer doppel muehle ein stein entfernt werden soll funktioniert das bloß wenn es ein stein aus der ersten muehle ist, sonst müssen mehrere steine enfternt werden
+--> doppel muehlen sollten jetzt funktionieren, aber nicht dreifachmuehlen. dafür müssten wir die überprüfung besser machen, wir zeigen es einfach sickert nicht mit mehr als ner doppel muehle
 
 phase 1:    -> https://youtu.be/clSXp-__jLU
             das video ist privat

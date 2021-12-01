@@ -33,7 +33,6 @@ public class Master {
     private boolean falseNumb(int pos) {
         return pos != 4 && pos != 7 && pos != 10 && pos != 13 && pos != 16 && pos != 19 && pos != 22;
     }
-
     private int verticalNumb(int pos) {
         if (pos == 2 || pos == 5 || pos == 8) {
             return 1;
@@ -210,39 +209,29 @@ public class Master {
 
     /**
      * checks if the mills still exits
-     *
      * @param playerNumber the player who last placed a stone
      */
-    protected boolean stillMill(boolean playerNumber) {
-        if (playerNumber) {
-            for(int i = 0; i < muehlenPlayerTwo.size(); i++) {
-                for(int j = 0; j < muehlenPlayerTwo.get(i).length; j++){
-                    for(Stones stone: playerTwo){
-                        if(stone.getPosition() == muehlenPlayerTwo.get(i)[j].getPosition()){
-                            muehlenPlayerTwo.remove(i);
-                            if(muehlenPlayerTwo.size() == 0){
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
+    protected void stillMill(boolean playerNumber) {
+        if(playerNumber){
+            muehlenPlayerTwo.clear();
+            checkMill(!playerNumber);
         }
         else{
-            for(int i = 0; i < muehlenPlayerOne.size(); i++) {
-                for(int j = 0; j < muehlenPlayerOne.get(i).length; j++) {
-                    for (Stones stone : playerOne) {
-                        if (stone.getPosition() == muehlenPlayerOne.get(i)[j].getPosition()) {
-                            muehlenPlayerOne.remove(i);
-                            if (muehlenPlayerOne.size() == 0) {
-                                return true;
-                            }
-                        }
-                    }
-                }
+            muehlenPlayerOne.clear();
+            checkMill(!playerNumber);
+        }
+        for(Stones[] stones: muehlenPlayerOne){
+            for (Stones value: stones){
+                System.out.println("1: " + value.toString());
             }
         }
-        return false;
+        System.out.println();
+        for(Stones[] stones: muehlenPlayerTwo){
+            for (Stones value: stones){
+                System.out.println("2: " + value.toString());
+            }
+        }
+        System.out.println("cut \n");
     }
 
     /**
@@ -259,17 +248,7 @@ public class Master {
         else {
             muehlenPlayerTwo.add(temp);
         }
-        System.out.println();
-        for(Stones[] stone: muehlenPlayerOne){
-            for(int i = 0; i < 3; i++) {
-                System.out.println("addOne: " + stone[i].toString());
-            }
-        }
-        for(Stones[] value: muehlenPlayerTwo){
-            for(int i = 0; i < 3; i++) {
-                System.out.println("addTwo: " + value[i].toString());
-            }
-        }
+
     }
     /**
      * checks if two Stones already build a mill
@@ -334,32 +313,26 @@ public class Master {
      * @return true -> if stone is found, will be removed || false -> stone couldnt be found so he doesnt get removed
      */
     protected boolean removeStones(int pos, boolean playerNumb) {
-        boolean kekw = false;
         //checks if there are only mills and if it is so the player is able to take stones from the mill
         //only mills should check in playBoard otherwise cant remove stone here
-        if(onlyMills(playerNumb) || inMill(pos)){
-            if(onlyMills(playerNumb)){
-                kekw = true;
-            }
-            if(playerNumb){
+        if (onlyMills(playerNumb) || inMill(pos)) {
+            if (playerNumb) {
                 for (int i = 0; i < playerTwo.size(); i++) {
                     if (playerTwo.get(i).getPosition() == pos) {
                         playerTwo.remove(i);
-                        break;
+                        stillMill(true);
+                        return true;
                     }
                 }
-            }else {
+            } else {
                 for (int i = 0; i < playerOne.size(); i++) {
                     if (playerOne.get(i).getPosition() == pos) {
                         playerOne.remove(i);
-                        break;
+                        stillMill(false);
+                        return true;
                     }
                 }
             }
-            if(kekw) {
-                stillMill(playerNumb);
-            }
-            return true;
         }
         return false;
     }
