@@ -44,6 +44,8 @@ positions new: [pos on horizontal, pos in depth*, ring number] * 0 means its the
 
 --> doppel muehlen sollten jetzt funktionieren, aber nicht dreifachmuehlen. dafür müssten wir die überprüfung besser machen, wir zeigen es einfach sickert nicht mit mehr als ner doppel muehle
 
+--> hab keine Möglichkeit gefunden um ein Label transparent zu machen
+
 phase 1:    -> https://youtu.be/clSXp-__jLU
             das video ist privat
 
@@ -52,6 +54,8 @@ phase 2:    nur bis minimal 6 steine um zur phase 3 zu kommen (springen)
                                                 --> gewinnen durch zu wenig steine  // leicht zu machen
                                                 --> unentschieden nach 20 zügen ohne mühle //zug counter (extra machen maybe als schwierigkeit sonst haben die andern das nicht)
                                                 (nachfragen ob die anderen das haben, wird nicht in den regeln von dem blatt erwähnt)
+
+
 
 
 */

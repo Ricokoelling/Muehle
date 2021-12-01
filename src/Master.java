@@ -413,7 +413,7 @@ public class Master {
         return false;
     }
 
-    /**Function that returns boolean depending on if there are only mills or not
+    /**Function that returns boolean depending on if there are only mills or not()
      *
      * @param playerNumb transfers
      * @return true -> their are only mills || false -> at least one stone isn´t in a mill
