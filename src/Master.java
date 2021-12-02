@@ -214,24 +214,12 @@ public class Master {
     protected void stillMill(boolean playerNumber) {
         if(playerNumber){
             muehlenPlayerTwo.clear();
-            checkMill(!playerNumber);
+            checkMill(false);
         }
         else{
             muehlenPlayerOne.clear();
-            checkMill(!playerNumber);
+            checkMill(true);
         }
-        for(Stones[] stones: muehlenPlayerOne){
-            for (Stones value: stones){
-                System.out.println("1: " + value.toString());
-            }
-        }
-        System.out.println();
-        for(Stones[] stones: muehlenPlayerTwo){
-            for (Stones value: stones){
-                System.out.println("2: " + value.toString());
-            }
-        }
-        System.out.println("cut \n");
     }
 
     /**
@@ -399,7 +387,6 @@ public class Master {
                     stone = i;
             }
         }
-        System.out.println("posGO: " + pos1 + " posUr: " + pos2);
         if (posTaken(pos1)) {
             if (((pos1 - 1 == pos2) || pos1 + 1 == pos2) || validMove(pos1, pos2) || (verticalNumb(pos1) == 1 && verticalNumb(pos2) == 1 || verticalNumb(pos1) == 2 && verticalNumb(pos2) == 2)) {
                 if (playNumb) {

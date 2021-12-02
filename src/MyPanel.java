@@ -14,7 +14,7 @@ public class MyPanel extends JPanel {
 
         //Define Font and Font Size with this function
         //Syntax : Label.setFont(new Font(Fontname(String), Font.PLAIN, Font Size in Pixel))
-        playerStatus.setFont(new Font("Arial", Font.PLAIN, 80));
+        playerStatus.setFont(new Font("Arial", Font.PLAIN, 50));
         playerStatus.setBackground(Color.WHITE);
         add(playerStatus);
     }

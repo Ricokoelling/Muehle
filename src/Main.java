@@ -38,22 +38,18 @@ positions new: [pos on horizontal, pos in depth*, ring number] * 0 means its the
 
 --> true pl1 || false pl2
 
---> phase 3
-
 --> features
 
---> doppel muehlen sollten jetzt funktionieren, aber nicht dreifachmuehlen. dafür müssten wir die überprüfung besser machen, wir zeigen es einfach sickert nicht mit mehr als ner doppel muehle
+--> ich hab das label kleiner gemacht sonst gibt es bei 1920x1080 probleme.
+--> es sollte jetzt alles funktionieren müssen aber noch mehr testen um nicht noch bugs zu finden
+--> nach dem jump muss man zweimal ziehen um den stein zu bewegen. why? maybe das noch lösen
+--> features einbauen:
+                        --> maybe bissle den hintergrund ändern damit es besser aussieht.
+                        --> undo button
+                        --> reset button
+                        --> player stones left
+                        --> more?
 
---> hab keine Möglichkeit gefunden um ein Label transparent zu machen
-
-phase 1:    -> https://youtu.be/clSXp-__jLU
-            das video ist privat
-
-phase 2:    nur bis minimal 6 steine um zur phase 3 zu kommen (springen)
-            Siegesbedingungen ausnahme fälle:   --> gewinnen durch einschließen //should work even in phase 1
-                                                --> gewinnen durch zu wenig steine  // leicht zu machen
-                                                --> unentschieden nach 20 zügen ohne mühle //zug counter (extra machen maybe als schwierigkeit sonst haben die andern das nicht)
-                                                (nachfragen ob die anderen das haben, wird nicht in den regeln von dem blatt erwähnt)
 
 
 

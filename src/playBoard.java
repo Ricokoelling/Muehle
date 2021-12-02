@@ -17,6 +17,8 @@ public class playBoard extends JFrame implements MouseInputListener {
     protected   int         phase               = 1;
     private     int         maxstones           = 17;
     private     boolean     playerJump;
+    private     boolean     boothphase3         = false;
+    private     boolean     phase3point5        = false;
 
     /*WindowListener exitListener = new WindowAdapter() {
         @Override
@@ -57,7 +59,6 @@ public class playBoard extends JFrame implements MouseInputListener {
         //int answer = JOptionPane.showConfirmDialog(null,"Did you finish your move?");
         if(maxstones == count){
             if(phase == 1){
-                System.out.println("lolz je baited");
                 phase = 2;
                 phaseChange = true;
             }
@@ -83,6 +84,18 @@ public class playBoard extends JFrame implements MouseInputListener {
         }
     }
 
+    private boolean checkPhase3(){
+        if(mst.getPlayerStones(!playerNumber) == 3 && phaseChange){
+            System.out.println("yur mom");
+            phase3point5 = true;
+            changeStatus(4);
+            phase = 3;
+            playerJump = !playerNumber;
+            playerChange();
+            return true;
+        }
+        return false;
+    }
     @Override
     public void mouseDragged(MouseEvent e) {
         int radius = pane.getWidth() / 14;
@@ -181,7 +194,6 @@ public class playBoard extends JFrame implements MouseInputListener {
                     changeStatus(3);
                 } else
                     poswasTaken = true;
-
                 if (mst.checkMill(true) || mst.checkMill(false)){
                     changeStatus(2);
                     phase = 0;
@@ -194,7 +206,9 @@ public class playBoard extends JFrame implements MouseInputListener {
                 //System.out.println("postaken " + poswasTaken );
                 if (phase == 2 && !poswasTaken) {
                     mst.stillMill(playerNumber);
-                    playerChange();
+                    if(!checkPhase3()) {
+                        playerChange();
+                    }
                 }
             }
         }
@@ -217,9 +231,7 @@ public class playBoard extends JFrame implements MouseInputListener {
         int circleDiameter = 30;
         int circleRadius = circleDiameter / 2;
         boolean poswasTaken = false;
-        //System.out.println(e.getX() + " " + e.getY());
-        //System.out.println(phase);
-        //System.out.println(playerNumber);
+        pos = 0;
         if(true){
         // biggest rect
         // pos 1 2 3
@@ -310,7 +322,6 @@ public class playBoard extends JFrame implements MouseInputListener {
             if (pos != 0 && mst.posTaken(pos)) {
                 mst.add(pos,true,playerNumber);
                 pane.repaint(pos, playerNumber);
-                //System.out.println("max: " + maxstones + " count: " + count);
             }
             else{
                 poswasTaken = true;
@@ -320,17 +331,17 @@ public class playBoard extends JFrame implements MouseInputListener {
             if (!mst.posTaken(pos) && mst.sameplayerStone(pos, playerNumber) && mst.removeStones(pos, playerNumber)) {
                 pane.removeStone(pos);
                 maxstones--;
-                //System.out.println("max: " + maxstones + " count: " + count);
+                if(mst.getPlayerStones(!playerNumber) < 3 && phaseChange){         //checks if the player whos stone got removed has still enough stones to potentially place a mill
+                    playerNumber = !playerNumber;
+                    changeStatus(5);
+                    phase = 4;
+                }
                 if(!phaseChange){
                     changeStatus(1);
                     phase = 1;
                 }else {
-                    if(mst.getPlayerStones(!playerNumber) <= 3){
-                        phase = 3;
-                        changeStatus(4);
-                        playerJump = playerNumber;
-                        playerChange();
-                    }else {
+                    if(!checkPhase3())
+                    {
                         changeStatus(3);
                         phase = 2;
                         playerChange();
@@ -343,7 +354,10 @@ public class playBoard extends JFrame implements MouseInputListener {
             changeStatus(2);
             phase = 0;
         }
-
+        if((mst.getPlayerStones(true) < 3 || mst.getPlayerStones(false) < 3) && phaseChange){
+            phase = 4;
+            changeStatus(5);
+        }
         if((mst.winConditionOne(true) || mst.winConditionOne(false)) && count == maxstones){
             phase = 4;
             playerNumber = !playerNumber;
@@ -447,22 +461,35 @@ public class playBoard extends JFrame implements MouseInputListener {
                 if (e.getX() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 50 && e.getX() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 50 && e.getY() > ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius - 50 && e.getY() < ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 50) {   //point [18]
                     pos3 = 18;
                 }
+                if(!boothphase3) {
+                    if (pos != pos3 && mst.posTaken(pos3) && playerJump == playerNumber) {
+                        pane.moveStone(pos, pos3, playerNumber);
+                        mst.moveStone(pos, pos3, playerNumber);
+                        System.out.println(playerNumber);
 
-                if(pos != pos3 && mst.posTaken(pos3) && playerJump == playerNumber){
-                    pane.moveStone(pos,pos3,playerNumber);
-                    mst.moveStone(pos,pos3,playerNumber);
+                        if (mst.checkMill(playerNumber)){
+                            changeStatus(2);
+                            phase = 0;
 
-                    if(mst.checkMill(true) || mst.checkMill(false)){
-                        phase = 4;
-                        playerNumber = !playerNumber;
-                        changeStatus(5);
-                    }
-                    if(phase == 3){
-                        playerChange();
+                        }else {
+                            phase = 2;
+                            changeStatus(3);
+                            playerChange();
+                        }
                     }
                 }
                 else{
-                    phase = 2;
+                    if (pos != pos3 && mst.posTaken(pos3)) {
+                        pane.moveStone(pos, pos3, playerNumber);
+                        mst.moveStone(pos, pos3, playerNumber);
+                        if (mst.checkMill(!playerNumber)) {
+                            changeStatus(2);
+                            phase = 0;
+                        }
+                        if (phase == 3) {
+                            playerChange();
+                        }
+                    }
                 }
             }
     }
