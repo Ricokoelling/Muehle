@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class playBoard extends JFrame implements MouseInputListener {
@@ -18,6 +19,8 @@ public class playBoard extends JFrame implements MouseInputListener {
     private     int         maxstones           = 17;
     private     boolean     playerJump;
     private     boolean     boothphase3         = false;
+
+    JButton reset = new JButton("Reset");
 
     /*WindowListener exitListener = new WindowAdapter() {
         @Override
@@ -47,7 +50,9 @@ public class playBoard extends JFrame implements MouseInputListener {
         //This deactivates the function for the user to resize the window. This is to prevent bugs
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         this.add(pane);
+
         //this.addWindowListener(exitListener);
         this.setVisible(true);
     }

@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class Master {
@@ -6,6 +7,8 @@ public class Master {
     private ArrayList<Stones> playerTwo = new ArrayList<>();
     private ArrayList<Stones[]> muehlenPlayerOne = new ArrayList<>();
     private ArrayList<Stones[]> muehlenPlayerTwo = new ArrayList<>();
+
+    JButton button1 = new JButton("Reset");
 
     public Master() {
     }

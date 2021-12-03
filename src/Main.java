@@ -54,6 +54,7 @@ positions new: [pos on horizontal, pos in depth*, ring number] * 0 means its the
 ++ size 1920x1080
 maybe undo butteon
 reset button maxa
+    -> Anpassung der größe und Ort sieht scheiße aus und zerstört den Code
 
 
 

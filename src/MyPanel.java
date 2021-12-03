@@ -7,15 +7,15 @@ public class MyPanel extends JPanel {
     private final HashMap<Integer,Boolean> map = new HashMap<>();
     protected static Label playerStatus = new Label("Player 1 place") ;
 
+
+
     public MyPanel() {
         this.setSize(1920,1080);
-        //playerStatus.setOpaque(false);
-        this.setLayout(new FlowLayout());
 
         //Define Font and Font Size with this function
         //Syntax : Label.setFont(new Font(Fontname(String), Font.PLAIN, Font Size in Pixel))
         playerStatus.setFont(new Font("Arial", Font.PLAIN, 50));
-        playerStatus.setBackground(Color.WHITE);
+        playerStatus.setBackground(getWoodenColor());
         add(playerStatus);
     }
 
@@ -75,13 +75,34 @@ public class MyPanel extends JPanel {
             case 24 -> g2D.fillOval((this.getWidth() / 2) - radius * 3 + 2 * radius * 3 - circleRadius, (this.getHeight() / 2) - radius * 3 + 2 * radius * 3    - circleRadius, circleDiameter, circleDiameter);
         }
     }
+
+    /*** Function to return a Color Object with Wooden looking Style
+     *
+     * @return Color Object with Wooden looking Style
+     */
+    protected Color getWoodenColor(){
+        return new Color(202, 164, 114);
+    }
+
+    /*** Clears the Screen of anything
+     *
+     * @param g Graphics Object
+     */
+    protected void clearRect(Graphics g){
+        Graphics2D g2D = (Graphics2D) g;
+        g2D.clearRect(0, 0, this.getWidth(), this.getHeight());
+    }
+
+
     public void paint(Graphics g) {
         int diameter = this.getWidth() / 7;
         int radius = this.getWidth() / 14;
         int numbersOfRectangles = 3;
 
         Graphics2D g2D = (Graphics2D) g;
-        g2D.clearRect(0, 0, this.getWidth(), this.getHeight());
+        clearRect(g);
+        g2D.setColor(getWoodenColor());
+        g2D.fillRect(0,0, this.getWidth(),this.getHeight());
         g2D.setStroke(new BasicStroke(5));
         g2D.setColor(Color.BLACK);
         //Rectangles
