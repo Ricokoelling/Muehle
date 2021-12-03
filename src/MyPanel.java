@@ -8,7 +8,7 @@ public class MyPanel extends JPanel {
     protected static Label playerStatus = new Label("Player 1 place") ;
 
     public MyPanel() {
-        this.setSize(screenSize.width, screenSize.height);
+        this.setSize(1920,1080);
         //playerStatus.setOpaque(false);
         this.setLayout(new FlowLayout());
 

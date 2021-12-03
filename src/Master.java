@@ -236,7 +236,6 @@ public class Master {
         else {
             muehlenPlayerTwo.add(temp);
         }
-
     }
     /**
      * checks if two Stones already build a mill
@@ -308,7 +307,7 @@ public class Master {
                 for (int i = 0; i < playerTwo.size(); i++) {
                     if (playerTwo.get(i).getPosition() == pos) {
                         playerTwo.remove(i);
-                        stillMill(true);
+                        System.out.println();
                         return true;
                     }
                 }
@@ -316,7 +315,7 @@ public class Master {
                 for (int i = 0; i < playerOne.size(); i++) {
                     if (playerOne.get(i).getPosition() == pos) {
                         playerOne.remove(i);
-                        stillMill(false);
+                        System.out.println();
                         return true;
                     }
                 }

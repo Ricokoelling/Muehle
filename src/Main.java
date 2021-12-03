@@ -1,7 +1,6 @@
 public class Main {
 
     public static void main(String[] args) {
-        //StartScreen start = new StartScreen();
         playBoard Board = new playBoard();
     }
 
@@ -50,6 +49,11 @@ positions new: [pos on horizontal, pos in depth*, ring number] * 0 means its the
                         --> player stones left
                         --> more?
 
+-- startscreen
+--options
+++ size 1920x1080
+maybe undo butteon
+reset button maxa
 
 
 
