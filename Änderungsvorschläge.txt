@@ -1,3 +1,0 @@
-1. Entweder eine Fullscreen/Borderless Anwendung machen oder nicht den vollen Bildschirm ausfüllen nur bis zur Taskbar.
--> Begründung: Finde das sieht n bissel Kacke aus
-2. Die größen im Panel sollten sich nicht nach der Screen Size richten, da die ja einmal beim laden des Codes festgelegt sind.

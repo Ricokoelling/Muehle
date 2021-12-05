@@ -1,12 +1,11 @@
-import javax.swing.*;
 import java.util.ArrayList;
 
 public class Master {
 
-    private ArrayList<Stones> playerOne = new ArrayList<>();
-    private ArrayList<Stones> playerTwo = new ArrayList<>();
-    private ArrayList<Stones[]> muehlenPlayerOne = new ArrayList<>();
-    private ArrayList<Stones[]> muehlenPlayerTwo = new ArrayList<>();
+    private final ArrayList<Stones> playerOne = new ArrayList<>();
+    private final ArrayList<Stones> playerTwo = new ArrayList<>();
+    private final ArrayList<Stones[]> muehlenPlayerOne = new ArrayList<>();
+    private final ArrayList<Stones[]> muehlenPlayerTwo = new ArrayList<>();
 
     public Master() {
     }
@@ -77,10 +76,7 @@ public class Master {
             return true;
         if (pos1 == 3 && pos2 == 15 || pos2 == 3 && pos1 == 15)
             return true;
-        if (pos1 == 15 && pos2 == 24 || pos2 == 15 && pos1 == 24)
-            return true;
-
-        return false;
+        return pos1 == 15 && pos2 == 24 || pos2 == 15 && pos1 == 24;
     }
 
     /**

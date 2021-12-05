@@ -3,7 +3,6 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class MyPanel extends JPanel {
-    private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private final        HashMap<Integer,Boolean> map = new HashMap<>();
     protected static     Label playerStatus = new Label("Player 1 place\t") ;
     private Color playerOne = Color.BLACK;
@@ -13,8 +12,6 @@ public class MyPanel extends JPanel {
 
     public MyPanel() {
         this.setSize(1920,1080);
-        //Define Font and Font Size with this function
-        //Syntax : Label.setFont(new Font(Fontname(String), Font.PLAIN, Font Size in Pixel))
         playerStatus.setFont(new Font("Arial", Font.PLAIN, 40));
         playerStatus.setBackground(getWoodenColor());
         add(playerStatus);
@@ -47,8 +44,8 @@ public class MyPanel extends JPanel {
         setPlayerStatus("Player 1 place", playerOne);
     }
     protected void setPlayerStatus(String playerStatus, Color c){
-        this.playerStatus.setForeground(c);
-        this.playerStatus.setText(playerStatus);
+        MyPanel.playerStatus.setForeground(c);
+        MyPanel.playerStatus.setText(playerStatus);
     }
 
     private void drawStone(Graphics2D g2D, int pos , boolean playerNumb){
@@ -61,7 +58,6 @@ public class MyPanel extends JPanel {
         }
         int circleDiameter = 50;
         int circleRadius = circleDiameter / 2;
-        System.out.println(this.getWidth() + "  " + this.getHeight());
         switch (pos) {
             case  1->  g2D.fillOval((this.getWidth() / 2) - radius * 3                  - circleRadius, (this.getHeight() / 2) - radius * 3                     - circleRadius, circleDiameter, circleDiameter);
             case  2->  g2D.fillOval((this.getWidth() / 2) - radius * 3 + radius * 3     - circleRadius, (this.getHeight() / 2) - radius * 3                     - circleRadius, circleDiameter, circleDiameter);
