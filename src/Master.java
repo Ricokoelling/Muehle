@@ -8,8 +8,6 @@ public class Master {
     private ArrayList<Stones[]> muehlenPlayerOne = new ArrayList<>();
     private ArrayList<Stones[]> muehlenPlayerTwo = new ArrayList<>();
 
-    JButton button1 = new JButton("Reset");
-
     public Master() {
     }
 
@@ -310,7 +308,7 @@ public class Master {
                 for (int i = 0; i < playerTwo.size(); i++) {
                     if (playerTwo.get(i).getPosition() == pos) {
                         playerTwo.remove(i);
-                        System.out.println();
+                        stillMill(true);
                         return true;
                     }
                 }
@@ -318,7 +316,7 @@ public class Master {
                 for (int i = 0; i < playerOne.size(); i++) {
                     if (playerOne.get(i).getPosition() == pos) {
                         playerOne.remove(i);
-                        System.out.println();
+                        stillMill(false);
                         return true;
                     }
                 }

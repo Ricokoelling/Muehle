@@ -3,7 +3,6 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class MyPanel extends JPanel {
-    private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private final        HashMap<Integer,Boolean> map = new HashMap<>();
     protected static     Label playerStatus = new Label("Player 1 place\t") ;
 
@@ -32,10 +31,11 @@ public class MyPanel extends JPanel {
         map.remove(pos1);
         repaint(pos2,playerNumb);
     }
-    //Changes String of the Label on the board to show what the Players have to do
-    public void setPlayerStatus(String playerStatus) {MyPanel.playerStatus.setText(playerStatus);}
 
-    //this version 1.1 of the setPlayerStatus Function it can also add a new color to the Label
+    public void setPlayerStatus(String playerStatus) {
+        MyPanel.playerStatus.setText(playerStatus);
+    }
+
     public void setPlayerStatus(String playerStatus, Color c){
         this.playerStatus.setForeground(c);
         this.playerStatus.setText(playerStatus);
@@ -49,7 +49,6 @@ public class MyPanel extends JPanel {
         else{
             g2D.setColor(Color.GRAY);
         }
-        //System.out.println("Pos:"+pos);
         int circleDiameter = 50;
         int circleRadius = circleDiameter / 2;
         switch (pos) {
@@ -112,22 +111,7 @@ public class MyPanel extends JPanel {
         for (int i = 1; i <= numbersOfRectangles; i++) {
             int x = (this.getWidth() / 2) - radius * i;
             int y = (this.getHeight() / 2) - radius * i;
-            //System.out.println("oberster Punkt "+i+":"+x+"\t"+y);
-
             g2D.drawRect(x, y, diameter * i, diameter * i);
-            //Upper Line
-            /*g2D.fillOval(x - circleRadius, y - circleRadius, circleDiameter, circleDiameter);
-            g2D.fillOval(x + 1 * radius * i - circleRadius, y - circleRadius, circleDiameter, circleDiameter);
-            g2D.fillOval(x + 2 * radius * i - circleRadius, y - circleRadius, circleDiameter, circleDiameter);
-            //Middle Line
-            g2D.fillOval(x - circleRadius, y + radius * i- circleRadius, circleDiameter, circleDiameter);
-            g2D.fillOval(x + 2 * radius * i - circleRadius, y + radius * i - circleRadius, circleDiameter, circleDiameter);
-
-            //Last Line
-            g2D.fillOval(x - circleRadius, y + 2 * radius * i - circleRadius, circleDiameter, circleDiameter);
-            g2D.fillOval(x + 1 * radius * i - circleRadius, y + 2 * radius * i - circleRadius, circleDiameter, circleDiameter);
-            g2D.fillOval(x + 2 * radius * i - circleRadius, y + 2 * radius * i- circleRadius, circleDiameter, circleDiameter);*/
-
         }
 
         //Lines

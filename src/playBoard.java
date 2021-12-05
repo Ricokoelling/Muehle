@@ -1,11 +1,14 @@
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
-public class playBoard extends JFrame implements MouseInputListener {
+public class playBoard extends JFrame implements MouseInputListener , ActionListener {
     private     static      final   MyPanel pane  = new MyPanel();
     private     final               Master mst          = new Master();
+    private     static      final JMenuBar  menubar = new JMenuBar();
     private     int                 pos                 = 0;
     private     int                 pos2                = 0;
     private     int                 pos3                = 0;
@@ -19,8 +22,16 @@ public class playBoard extends JFrame implements MouseInputListener {
     private     int                 maxstones           = 17;
     private     boolean             playerJump;
     private     boolean             boothphase3         = false;
+    private     static      Color playerOne;
+    private     static      Color playerTwo;
+    private final JMenu optionsMenu;
+    private final JMenu colorMenu;
+    private final JMenuItem sizeItem;
+    private final JMenuItem resetItem;
+    private final JMenuItem plOneColor;
+    private final JMenuItem plTwoColor;
+    private final JMenuItem exitItem;
 
-    JButton reset = new JButton("Reset");
 
     /*WindowListener exitListener = new WindowAdapter() {
         @Override
@@ -52,6 +63,30 @@ public class playBoard extends JFrame implements MouseInputListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.add(pane);
+        playerOne = Color.BLACK;
+        playerOne = Color.GRAY;
+        optionsMenu = new JMenu("Options");
+        colorMenu    = new JMenu("Player Colors");
+        sizeItem = new JMenuItem("Size");
+        resetItem = new JMenuItem("Reset");
+        plOneColor = new JMenuItem("PlayerOne Color");
+        plTwoColor = new JMenuItem("PlayerTwo Color");
+        exitItem = new JMenuItem("Exit");
+
+        sizeItem.addActionListener(this);
+        exitItem.addActionListener(this);
+        resetItem.addActionListener(this);
+        plOneColor.addActionListener(this);
+        plTwoColor.addActionListener(this);
+
+        colorMenu.add(plOneColor);
+        colorMenu.add(plTwoColor);
+        optionsMenu.add(sizeItem);
+        optionsMenu.add(resetItem);
+        optionsMenu.add(exitItem);
+        menubar.add(optionsMenu);
+        menubar.add(colorMenu );
+        this.setJMenuBar(menubar);
         //this.addWindowListener(exitListener);
         this.setVisible(true);
     }
@@ -476,6 +511,7 @@ public class playBoard extends JFrame implements MouseInputListener {
                             System.out.println("pos2: " + pos2 + " pos: " + pos);
                             phase = 2;
                             playerChange();
+                            onlyOnce = false;
                         }
                     }
                 }
@@ -580,6 +616,20 @@ public class playBoard extends JFrame implements MouseInputListener {
     }
 
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == exitItem){
+            System.exit(0);
+        }else if(e.getSource() == sizeItem){
+
+        }else if(e.getSource() == resetItem){
+
+        }else if( e.getSource() == plOneColor){
+
+        }else if(e.getSource() == plTwoColor){
+
+        }
+    }
 }
 
 
