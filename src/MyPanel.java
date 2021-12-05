@@ -4,17 +4,16 @@ import java.util.HashMap;
 
 public class MyPanel extends JPanel {
     private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private final HashMap<Integer,Boolean> map = new HashMap<>();
-    protected static Label playerStatus = new Label("Player 1 place") ;
+    private final        HashMap<Integer,Boolean> map = new HashMap<>();
+    protected static     Label playerStatus = new Label("Player 1 place\t") ;
 
 
 
     public MyPanel() {
         this.setSize(1920,1080);
-
         //Define Font and Font Size with this function
         //Syntax : Label.setFont(new Font(Fontname(String), Font.PLAIN, Font Size in Pixel))
-        playerStatus.setFont(new Font("Arial", Font.PLAIN, 50));
+        playerStatus.setFont(new Font("Arial", Font.PLAIN, 40));
         playerStatus.setBackground(getWoodenColor());
         add(playerStatus);
     }
@@ -33,8 +32,13 @@ public class MyPanel extends JPanel {
         map.remove(pos1);
         repaint(pos2,playerNumb);
     }
-    public void setPlayerStatus(String playerStatus) {
-        MyPanel.playerStatus.setText(playerStatus);
+    //Changes String of the Label on the board to show what the Players have to do
+    public void setPlayerStatus(String playerStatus) {MyPanel.playerStatus.setText(playerStatus);}
+
+    //this version 1.1 of the setPlayerStatus Function it can also add a new color to the Label
+    public void setPlayerStatus(String playerStatus, Color c){
+        this.playerStatus.setForeground(c);
+        this.playerStatus.setText(playerStatus);
     }
 
     private void drawStone(Graphics2D g2D, int pos , boolean playerNumb){
@@ -92,7 +96,6 @@ public class MyPanel extends JPanel {
         Graphics2D g2D = (Graphics2D) g;
         g2D.clearRect(0, 0, this.getWidth(), this.getHeight());
     }
-
 
     public void paint(Graphics g) {
         int diameter = this.getWidth() / 7;
