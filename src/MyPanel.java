@@ -3,8 +3,11 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class MyPanel extends JPanel {
+    private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private final        HashMap<Integer,Boolean> map = new HashMap<>();
     protected static     Label playerStatus = new Label("Player 1 place\t") ;
+    private Color playerOne = Color.BLACK;
+    private Color playerTwo = Color.GRAY;
 
 
 
@@ -16,27 +19,34 @@ public class MyPanel extends JPanel {
         playerStatus.setBackground(getWoodenColor());
         add(playerStatus);
     }
-
-    public void repaint(int pos, boolean playerNumb) {
+    protected void setColor(boolean playerNumb, Color c){
+        if(playerNumb){
+            playerOne = c;
+        }
+        else {
+            playerTwo = c;
+        }
+    }
+    protected void repaint(int pos, boolean playerNumb) {
         map.put(pos,playerNumb);
         super.repaint();
     }
 
-    public void removeStone(int pos){
+    protected void removeStone(int pos){
         map.remove(pos);
         repaint();
     }
 
-    public void moveStone(int pos1,int pos2, boolean playerNumb){
+    protected void moveStone(int pos1,int pos2, boolean playerNumb){
         map.remove(pos1);
         repaint(pos2,playerNumb);
     }
-
-    public void setPlayerStatus(String playerStatus) {
-        MyPanel.playerStatus.setText(playerStatus);
+    protected void reset(){
+        map.clear();
+        repaint();
+        setPlayerStatus("Player 1 place", playerOne);
     }
-
-    public void setPlayerStatus(String playerStatus, Color c){
+    protected void setPlayerStatus(String playerStatus, Color c){
         this.playerStatus.setForeground(c);
         this.playerStatus.setText(playerStatus);
     }
@@ -44,13 +54,14 @@ public class MyPanel extends JPanel {
     private void drawStone(Graphics2D g2D, int pos , boolean playerNumb){
         int radius          = this.getWidth() / 14;
         if(playerNumb){
-            g2D.setColor(Color.BLACK);
+            g2D.setColor(playerOne);
         }
         else{
-            g2D.setColor(Color.GRAY);
+            g2D.setColor(playerTwo);
         }
         int circleDiameter = 50;
         int circleRadius = circleDiameter / 2;
+        System.out.println(this.getWidth() + "  " + this.getHeight());
         switch (pos) {
             case  1->  g2D.fillOval((this.getWidth() / 2) - radius * 3                  - circleRadius, (this.getHeight() / 2) - radius * 3                     - circleRadius, circleDiameter, circleDiameter);
             case  2->  g2D.fillOval((this.getWidth() / 2) - radius * 3 + radius * 3     - circleRadius, (this.getHeight() / 2) - radius * 3                     - circleRadius, circleDiameter, circleDiameter);
@@ -91,7 +102,7 @@ public class MyPanel extends JPanel {
      *
      * @param g Graphics Object
      */
-    protected void clearRect(Graphics g){
+    private void clearRect(Graphics g){
         Graphics2D g2D = (Graphics2D) g;
         g2D.clearRect(0, 0, this.getWidth(), this.getHeight());
     }
