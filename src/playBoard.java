@@ -4,9 +4,10 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class playBoard extends JFrame implements MouseInputListener , ActionListener {
-    private     static              final   MyPanel pane  = new MyPanel();
-    private     final                       Master mst          = new Master();
-    private     static              final   JMenuBar  menubar = new JMenuBar();
+    private     static              final   MyPanel     pane    = new MyPanel();
+    private     final                       Master      mst     = new Master();
+    private     static              final   JMenuBar    menubar = new JMenuBar();
+    private     static              final   Clientdata  data    = new Clientdata();
     private     int                 pos                 = 0;
     private     int                 pos2                = 0;
     private     int                 pos3                = 0;
@@ -139,6 +140,7 @@ public class playBoard extends JFrame implements MouseInputListener , ActionList
     private void reset(){
         phase = 1;
         maxstones = 17;
+        count = 0;
         pos = 0;
         pos2 = 0;
         pos3 = 0;

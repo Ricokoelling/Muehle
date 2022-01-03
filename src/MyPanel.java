@@ -38,6 +38,7 @@ public class MyPanel extends JPanel {
         map.remove(pos1);
         repaint(pos2,playerNumb);
     }
+
     protected void reset(){
         map.clear();
         repaint();
