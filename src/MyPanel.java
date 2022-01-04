@@ -3,10 +3,10 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class MyPanel extends JPanel {
-    private final        HashMap<Integer,Boolean> map = new HashMap<>();
-    protected static     Label playerStatus = new Label("Player 1 place\t") ;
-    private Color playerOne = Color.BLACK;
-    private Color playerTwo = Color.GRAY;
+    private             final   HashMap<Integer,Boolean>    map             = new HashMap<>();
+    protected   static          Label                       playerStatus    = new Label("Player 1 place\t") ;
+    private                     Color                       playerOne       = Color.BLACK;
+    private                     Color                       playerTwo       = Color.GRAY;
 
 
 

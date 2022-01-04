@@ -4,27 +4,26 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class playBoard extends JFrame implements MouseInputListener , ActionListener {
-    private     static              final   MyPanel     pane    = new MyPanel();
-    private     final                       Master      mst     = new Master();
-    private     static              final   JMenuBar    menubar = new JMenuBar();
-    private     static              final   Clientdata  data    = new Clientdata();
-    private     int                 pos                 = 0;
-    private     int                 pos2                = 0;
-    private     int                 pos3                = 0;
-    private     int                 count               = 0;
-    private     boolean             onlyOnce            = false;
-    private     boolean             phaseChange         = false;
-    protected   boolean             playerNumber        = true;  //true --> player 1 ----- false --> player 2
-    protected   int                 phase               = 1;
-    private     int                 maxstones           = 17;
-    private     boolean             playerJump;
-    private     boolean             boothphase3         = false;
-    private     static      Color playerOne;
-    private     static      Color playerTwo;
-    private final JMenuItem resetItem;
-    private final JMenuItem plOneColor;
-    private final JMenuItem plTwoColor;
-    private final JMenuItem exitItem;
+    private     static  final   MyPanel     pane                 = new MyPanel();
+    private     static  final   JMenuBar    menubar             = new JMenuBar();
+    private             final   Master      mst                 = new Master();
+    private                     int         pos                 = 0;
+    private                     int         pos2                = 0;
+    private                     int         pos3                = 0;
+    private                     int         count               = 0;
+    private                     boolean     onlyOnce            = false;
+    private                     boolean     phaseChange         = false;
+    private                     int         maxstones           = 17;
+    private                     boolean     boothphase3         = false;
+    private             final   JMenuItem   resetItem;
+    private             final   JMenuItem   plOneColor;
+    private             final   JMenuItem   plTwoColor;
+    private             final   JMenuItem   exitItem;
+    private                     boolean     playerJump;
+    private     static          Color       playerOne;
+    private     static          Color       playerTwo;
+    protected                   boolean     playerNumber        = true;  //true --> player 1 ----- false --> player 2
+    protected                   int         phase               = 1;
 
 
     WindowListener exitListener = new WindowAdapter() {

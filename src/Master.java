@@ -2,10 +2,10 @@ import java.util.ArrayList;
 
 public class Master {
 
-    private final ArrayList<Stones> playerOne = new ArrayList<>();
-    private final ArrayList<Stones> playerTwo = new ArrayList<>();
-    private final ArrayList<Stones[]> muehlenPlayerOne = new ArrayList<>();
-    private final ArrayList<Stones[]> muehlenPlayerTwo = new ArrayList<>();
+    private final ArrayList<Stones>     playerOne           = new ArrayList<>();
+    private final ArrayList<Stones>     playerTwo           = new ArrayList<>();
+    private final ArrayList<Stones[]>   muehlenPlayerOne    = new ArrayList<>();
+    private final ArrayList<Stones[]>   muehlenPlayerTwo    = new ArrayList<>();
 
     public Master() {
     }

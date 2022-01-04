@@ -19,10 +19,5 @@ Meilenstein 2:
 
     --> Clientdata bekommt alle relevanten informationen und schickt diese an
 
-
-
-
-
-
  */
 
