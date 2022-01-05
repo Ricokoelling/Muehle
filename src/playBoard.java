@@ -2,11 +2,18 @@ import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.reflect.Proxy;
 
 public class playBoard extends JFrame implements MouseInputListener , ActionListener {
-    private     static  final   MyPanel     pane                 = new MyPanel();
+    private     static          Color       playerOne;
+    private     static          Color       playerTwo;
+    private     static  final   MyPanel     pane                = new MyPanel();
     private     static  final   JMenuBar    menubar             = new JMenuBar();
     private             final   Master      mst                 = new Master();
+    private             final   JMenuItem   resetItem;
+    private             final   JMenuItem   plOneColor;
+    private             final   JMenuItem   plTwoColor;
+    private             final   JMenuItem   exitItem;
     private                     int         pos                 = 0;
     private                     int         pos2                = 0;
     private                     int         pos3                = 0;
@@ -15,16 +22,12 @@ public class playBoard extends JFrame implements MouseInputListener , ActionList
     private                     boolean     phaseChange         = false;
     private                     int         maxstones           = 17;
     private                     boolean     boothphase3         = false;
-    private             final   JMenuItem   resetItem;
-    private             final   JMenuItem   plOneColor;
-    private             final   JMenuItem   plTwoColor;
-    private             final   JMenuItem   exitItem;
     private                     boolean     playerJump;
-    private     static          Color       playerOne;
-    private     static          Color       playerTwo;
     protected                   boolean     playerNumber        = true;  //true --> player 1 ----- false --> player 2
     protected                   int         phase               = 1;
 
+    //Testing Variables
+    Client test;
 
     WindowListener exitListener = new WindowAdapter() {
         @Override
@@ -41,7 +44,6 @@ public class playBoard extends JFrame implements MouseInputListener , ActionList
 
     public playBoard() {
         this.setSize(1920,1080);
-
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
 
@@ -72,6 +74,12 @@ public class playBoard extends JFrame implements MouseInputListener , ActionList
         this.setJMenuBar(menubar);
         this.addWindowListener(exitListener);
         this.setVisible(true);
+
+        //-------------------------------------Testing Area-------------------------------------\\
+        test = new Client();
+        test.sendInt(12);
+        test.sendString("Banana/Banane/Banenenverkostung");
+        test.sendTwoInts(12, 171);
     }
 
     /**
@@ -599,6 +607,7 @@ public class playBoard extends JFrame implements MouseInputListener , ActionList
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == exitItem){
+            test.endConnection();
             System.exit(0);
         }
         else if(e.getSource() == resetItem){

@@ -7,26 +7,31 @@ import java.util.Scanner;
 public class server {
     public static void main(String[] args) {
         try {
-            ServerSocket    servs   = new ServerSocket(4999);
-            Socket          s       = servs.accept();
-            //If connected says sp
+            ServerSocket    servs   = new ServerSocket(6221);
+            Socket          p1      = servs.accept();
+
+            //If connected says so
             System.out.println("client connected");
 
-
-            //Incoming Package
-            InputStreamReader in = new InputStreamReader(s.getInputStream());
-            BufferedReader bf = new BufferedReader(in);
+            InputStreamReader in;
+            BufferedReader bf;
+            //Incoming Package Server <-- Client
+            in = new InputStreamReader(p1.getInputStream());
+            bf = new BufferedReader(in);
 
             String str = bf.readLine();
             System.out.println("client: "+str);
 
-            //Outgoing Package
-            PrintWriter pr = new PrintWriter(s.getOutputStream());
-            Scanner sc = new Scanner(System.in);
-            pr.println(sc);
+            PrintWriter pr;
+
+            //Outgoing Package Server --> Client
+            pr = new PrintWriter(p1.getOutputStream());
+            pr.println("success");
             pr.flush();
 
 
+            //Close InputStream
+            in.close();
 
         }
         catch (IOException e) {
