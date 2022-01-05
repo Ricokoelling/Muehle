@@ -2,7 +2,6 @@ import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.Proxy;
 
 public class playBoard extends JFrame implements MouseInputListener , ActionListener {
     private     static          Color       playerOne;
@@ -618,13 +617,32 @@ public class playBoard extends JFrame implements MouseInputListener , ActionList
         }
         else if(count == 0) {
             if (e.getSource() == plOneColor) {
+
                 playerOne = JColorChooser.showDialog(null, "Pick Player 1 Color", Color.BLACK);
-                pane.setColor(true, playerOne);
-                changeStatus(1);
+                if(!playerOne.equals(playerTwo)) {
+                    pane.setColor(true, playerOne);
+                    changeStatus(1);
+                }
+                else{
+                    JOptionPane.showMessageDialog(null,"This Color is already taken!");
+                    playerOne = Color.BLACK;
+                    if(playerOne.equals(playerTwo)){
+                        playerTwo = Color.GRAY;
+                    }
+                }
             } else if (e.getSource() == plTwoColor) {
                 playerTwo = JColorChooser.showDialog(null, "Pick Player 2 Color", Color.GRAY);
-                pane.setColor(false, playerTwo);
-                changeStatus(1);
+                if(!playerTwo.equals(playerOne)) {
+                    pane.setColor(false, playerTwo);
+                    changeStatus(1);
+                }
+                else{
+                    JOptionPane.showMessageDialog(null,"This Color is already taken!");
+                    playerTwo = Color.GRAY;
+                    if(playerTwo.equals(playerOne)){
+                        playerOne = Color.BLACK;
+                    }
+                }
             }
         }
     }

@@ -18,10 +18,20 @@ public class MyPanel extends JPanel {
     }
     protected void setColor(boolean playerNumb, Color c){
         if(playerNumb){
-            playerOne = c;
+            if(!playerTwo.equals(c)) {
+                playerOne = c;
+            }
+            else{
+                playerOne = Color.BLACK;
+            }
         }
         else {
-            playerTwo = c;
+            if(!playerOne.equals(c)) {
+                playerTwo = c;
+            }
+            else{
+                playerTwo = Color.GRAY;
+            }
         }
     }
     protected void repaint(int pos, boolean playerNumb) {

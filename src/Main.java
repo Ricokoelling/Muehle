@@ -17,7 +17,6 @@ Meilenstein 2:
     --> loopback, also local auf dem selben PC (sachen von der UNI sind sinnlos, yt is the way to go imo)
 
 
-    --> Clientdata bekommt alle relevanten informationen und schickt diese an
 
  */
 
