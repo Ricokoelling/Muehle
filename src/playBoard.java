@@ -115,6 +115,7 @@ public class playBoard extends JFrame implements MouseInputListener , ActionList
         } else {
             changeStatus(5);
         }
+
     }
 
     /**
