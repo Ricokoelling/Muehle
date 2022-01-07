@@ -2,8 +2,9 @@ import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Scanner;
 
-    public class playBoardClient extends JFrame implements MouseInputListener, ActionListener {
+public class playBoardClient extends JFrame implements MouseInputListener, ActionListener {
         private     static Color playerOne;
         private     static          Color       playerTwo;
         private     static  final   MyPanel     pane                = new MyPanel();
@@ -37,6 +38,7 @@ import java.awt.event.*;
                         "Exit Confirmation", JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE, null, null, null);
                 if (confirm == 0) {
+                    test.endConnection();
                     System.exit(0);
                 }
             }
@@ -77,9 +79,6 @@ import java.awt.event.*;
 
             //-------------------------------------Testing Area-------------------------------------\\
             test = new Client();
-            test.sendInt(12);
-            test.sendString("Banana/Banane/Banenenverkostung");
-            test.sendTwoInts(12, 171);
         }
 
         /**

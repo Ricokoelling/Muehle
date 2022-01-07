@@ -25,8 +25,6 @@ public class playBoard extends JFrame implements MouseInputListener , ActionList
     protected                   boolean     playerNumber        = true;  //true --> player 1 ----- false --> player 2
     protected                   int         phase               = 1;
 
-    //Testing Variables
-    Client test;
 
     WindowListener exitListener = new WindowAdapter() {
         @Override
@@ -74,11 +72,7 @@ public class playBoard extends JFrame implements MouseInputListener , ActionList
         this.addWindowListener(exitListener);
         this.setVisible(true);
 
-        //-------------------------------------Testing Area-------------------------------------\\
-        test = new Client();
-        test.sendInt(12);
-        test.sendString("Banana/Banane/Banenenverkostung");
-        test.sendTwoInts(12, 171);
+
     }
 
     /**
@@ -607,7 +601,6 @@ public class playBoard extends JFrame implements MouseInputListener , ActionList
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == exitItem){
-            test.endConnection();
             System.exit(0);
         }
         else if(e.getSource() == resetItem){

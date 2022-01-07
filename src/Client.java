@@ -78,6 +78,7 @@ public class Client {
         }
     }
 
+
     public void sendTwoInts(int n, int n2){//hehe variable names go brrrr
         try {
             DataOutputStream ds = new DataOutputStream(client.getOutputStream());
@@ -99,7 +100,9 @@ public class Client {
         }
     }
 
-
+    /***
+     *      This function safely disconnects from the server
+     */
     public void endConnection(){
         try{
             client.close();
