@@ -27,15 +27,31 @@ public class Client {
 
     }
 
+    public Client( int port){
+        try{
+            client = new Socket("localhost", port);
+        }catch(IOException e){
+            System.out.println("Beim Erstellen des Clients* ist ein Fehler aufgetreten");
+            e.printStackTrace();
+        }
+
+    }
+
+
 
     public void sendInt(int n){
         try {
             DataOutputStream ds = new DataOutputStream(client.getOutputStream());
 
             //Outgoing Package Client --> Server
+            //writes the byte that has the information what the server has to do with the package
             ds.writeByte(00000000);
+            //writes the actual information that was send to the outputstream
             ds.writeInt(n);
+            //sends the information to the server
             ds.flush();
+            //closes the DataOutputStream NOT! the connection
+            ds.close();
 
         }catch(IOException e){
             System.out.println("Beim senden der Daten ist ein Fehler aufgetreten");
@@ -48,9 +64,14 @@ public class Client {
             DataOutputStream ds = new DataOutputStream(client.getOutputStream());
 
             //Outgoing Package Client --> Server
+            //writes the byte that has the information what the server has to do with the package
             ds.writeByte(00000001);
+            //writes string to the outputstream
             ds.writeUTF(n);
+            //sends the information to the server
             ds.flush();
+            //closes the DataOutputStream NOT! the connection
+            ds.close();
         }catch(IOException e){
             System.out.println("Beim senden der Daten ist ein Fehler aufgetreten");
             e.printStackTrace();
@@ -62,10 +83,16 @@ public class Client {
             DataOutputStream ds = new DataOutputStream(client.getOutputStream());
 
             //Outgoing Package Client --> Server
+            //writes the byte that has the information what the server has to do with the package
             ds.writeByte(00000010);
+            //writes the actual information that was send to the outputstream
             ds.writeInt(n);
+            //writes the second int that was send to the outputstream
             ds.writeInt(n2);
+            //sends the information to the server
             ds.flush();
+            //closes the DataOutputStream NOT! the connection
+            ds.close();
         }catch(IOException e){
             System.out.println("Beim senden der Daten ist ein Fehler aufgetreten");
             e.printStackTrace();
