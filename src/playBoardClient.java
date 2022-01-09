@@ -26,8 +26,6 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         protected                   boolean     playerNumber        = true;  //true --> player 1 ----- false --> player 2
         protected                   int         phase               = 1;
 
-        //Testing Variables
-        Client test;
 
         WindowListener exitListener = new WindowAdapter() {
             @Override
@@ -75,9 +73,6 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             this.setJMenuBar(menubar);
             this.addWindowListener(exitListener);
             this.setVisible(true);
-
-            //-------------------------------------Testing Area-------------------------------------\\
-            test = new Client();
         }
 
         /**
@@ -114,9 +109,6 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                 changeStatus(4);
             } else {
                 changeStatus(5);
-            }
-
-            if(phase == 1){
             }
 
             //sends pos(stone which should get removed) and playernumber to server in phase 0

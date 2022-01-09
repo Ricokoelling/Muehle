@@ -13,6 +13,10 @@ public class ServerConnection implements Runnable{
         phaseReader = new BufferedReader(new InputStreamReader(server.getInputStream()));
     }
 
+    /**
+     * while testing found out we dont have to use different parse etc. maybe we should do make sure its send corretly
+     * if we dont it only sends Strings
+     */
     @Override
     public void run() {
         try {

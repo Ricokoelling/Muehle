@@ -6,7 +6,7 @@ public class Client{
     private static Socket client;
     private int pos,pos2,pos3,phase;
     private boolean playerNumber;
-    private playBoard board = new playBoard();
+    private playBoardClient board = new playBoardClient();
 
 
 

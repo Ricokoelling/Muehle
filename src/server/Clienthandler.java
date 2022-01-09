@@ -6,9 +6,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Clienthandler implements Runnable{
-    private Socket client;
+    private final Socket client;
     private BufferedReader input;
     private PrintWriter output;
     private ArrayList<Clienthandler> clients;
@@ -22,6 +23,10 @@ public class Clienthandler implements Runnable{
         this.playerNumber = Boolean.parseBoolean(input.readLine());
     }
 
+    /**
+     * gets the output from each clint and sends it over: "outToDifferent" to the other client
+     * !!! has to be updated to send only important data according to the phase
+     */
     @Override
     public void run() {
         try {
@@ -30,8 +35,8 @@ public class Clienthandler implements Runnable{
                 outToDifferent(inputt);
             }
         }catch (IOException e){
-            System.err.println("Something Happend that shouldnt have happend!");
-            System.err.println(e.getStackTrace());
+            System.err.println("Something happened that shouldn't have happened!");
+            System.err.println(Arrays.toString(e.getStackTrace()));
         } finally{
             output.close();
             try {

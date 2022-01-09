@@ -31,6 +31,10 @@ public class server {
         }
     }
 
+    /**
+     * starts client search and if founded will start clienthandler to process every upcoming stream
+     * @throws IOException yee
+     */
     public static void start() throws IOException {
         while (true) {
             System.out.println("[SERVER] Waiting for client connection....");
