@@ -1,11 +1,15 @@
 import java.io.*;
-import java.net.*;
 import java.net.Socket;
-import java.io.*;
 
-public class Client {
+public class Client{
 
-    Socket client;
+    private static Socket client;
+    private int pos,pos2,pos3,phase;
+    private boolean playerNumber;
+    private playBoard board = new playBoard();
+
+
+
 
     public Client(){
         try{
@@ -27,7 +31,7 @@ public class Client {
 
     }
 
-    public Client( int port){
+    public Client( int port) {
         try{
             client = new Socket("localhost", port);
         }catch(IOException e){
@@ -38,92 +42,21 @@ public class Client {
     }
 
     /**
-     * sends Phase to Server to handle the other outputs
-     * @param phase phase
+     * Sends data when needed to Server and starts recive funktion
+     * @throws IOException yeee
      */
-    public void sendPhase(int phase) {
-        try {
-            DataOutputStream output = new DataOutputStream(client.getOutputStream());
-            output.writeInt(phase);
-            output.close();
-        } catch (IOException e) {
-            System.out.println("Beim senden der Daten ist ein Fehler aufgetreten p");
-            e.printStackTrace();
-        }
-    }
-    public void sendPlayerNumber(boolean playerNumber){
-        try{
-            DataOutputStream output = new DataOutputStream(client.getOutputStream());
-            output.writeBoolean(playerNumber);
-            output.close();
-
-        }
-        catch (IOException e){
-            System.out.println("Beim senden der Daten ist ein Fehler aufgetreten pn");
-            e.printStackTrace();
-        }
-    }
-    public void sendInt(int n){
-        try {
-            DataOutputStream ds = new DataOutputStream(client.getOutputStream());
-
-            System.out.println(n);
-            //Outgoing Package Client --> Server
-            //writes the byte that has the information what the server has to do with the package
-            //ds.writeByte(00000000);
-            //writes the actual information that was send to the outputstream
-            ds.writeInt(n);
-            //sends the information to the server
-            //ds.flush();
-            //closes the DataOutputStream NOT! the connection
-            ds.close();
-
-        }catch(IOException e){
-            System.out.println("Beim senden der Daten ist ein Fehler aufgetreten");
-            e.printStackTrace();
+    public void sendData() throws IOException {
+        ServerConnection serverConn = new ServerConnection(client);
+        PrintWriter output = new PrintWriter(client.getOutputStream(),true);
+        new Thread(serverConn).start();
+        output.println(playerNumber);
+        while (true){
+            if(board.getHeight() == 0){
+                //send shit to server
+            }
         }
     }
 
-    public void sendString(String n){
-        try {
-            DataOutputStream ds = new DataOutputStream(client.getOutputStream());
-
-            //Outgoing Package Client --> Server
-            //writes the byte that has the information what the server has to do with the package
-            ds.writeByte(00000001);
-            //writes string to the outputstream
-            ds.writeUTF(n);
-            //sends the information to the server
-            ds.flush();
-            //closes the DataOutputStream NOT! the connection
-            ds.close();
-        }catch(IOException e){
-            System.out.println("Beim senden der Daten ist ein Fehler aufgetreten");
-            e.printStackTrace();
-        }
-    }
-
-
-    public void sendTwoInts(int n, int n2){//hehe variable names go brrrr
-        try {
-            DataOutputStream ds = new DataOutputStream(client.getOutputStream());
-
-            //Outgoing Package Client --> Server
-            //writes the byte that has the information what the server has to do with the package
-            ds.writeByte(00000010);
-            //writes the actual information that was send to the outputstream
-            ds.writeInt(n);
-            //writes the second int that was send to the outputstream
-            ds.writeInt(n2);
-            //sends the information to the server
-            ds.flush();
-            //closes the DataOutputStream NOT! the connection
-            ds.close();
-        }catch(IOException e){
-            System.out.println("Beim senden der Daten ist ein Fehler aufgetreten");
-            e.printStackTrace();
-        }
-    }
 
     /***
      *      This function safely disconnects from the server
@@ -135,4 +68,6 @@ public class Client {
             e.printStackTrace();
         }
     }
+
+
 }

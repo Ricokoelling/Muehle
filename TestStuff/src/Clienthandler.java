@@ -11,6 +11,7 @@ public class Clienthandler implements Runnable{
     private ArrayList<Clienthandler> clients;
     private Integer clientName;
 
+
     public Clienthandler(Socket client, ArrayList<Clienthandler> clients) throws IOException {
         this.client = client;
         this.clients = clients;
@@ -23,8 +24,25 @@ public class Clienthandler implements Runnable{
     public void run() {
         try {
             while (true) {
-                String inputt = input.readLine();
-                outToDifferent(inputt);
+                int input1 = Integer.parseInt(input.readLine());
+                boolean input2 = Boolean.parseBoolean(input.readLine());
+                int input3 = Integer.parseInt(input.readLine());
+                if(input1 == 0){
+                    System.out.println("lol");
+                }
+                else if(input1 == 1){
+                    outToDifferent(input1);
+                    outToDifferent(input2);
+                    outToDifferent(input3);
+                }
+                else {
+                    outToDifferent("you shit");
+                    outToDifferent("you shit");
+                    outToDifferent("you shit");
+                    outToDifferent("hello");
+                    outToDifferent("gello");
+                }
+
             }
         }catch (IOException e){
             System.err.println("Something Happend that shouldnt have happend!");
@@ -47,5 +65,21 @@ public class Clienthandler implements Runnable{
             clients.get(0).output.println(inputt);
         }
     }
+    private void outToDifferent(int inputt) {
+
+        if (clients.get(0).clientName == this.clientName) {
+            clients.get(1).output.println(inputt);
+        } else {
+            clients.get(0).output.println(inputt);
+        }
+    }
+    private void outToDifferent(boolean inputt){
+        if (clients.get(0).clientName == this.clientName) {
+            clients.get(1).output.println(inputt);
+        } else {
+            clients.get(0).output.println(inputt);
+        }
+    }
+
 
 }

@@ -117,9 +117,6 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             }
 
             if(phase == 1){
-                test.sendPhase(phase);
-                test.sendPlayerNumber(playerNumber);
-                test.sendInt(pos);
             }
 
             //sends pos(stone which should get removed) and playernumber to server in phase 0

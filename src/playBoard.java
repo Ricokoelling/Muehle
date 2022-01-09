@@ -110,6 +110,34 @@ public class playBoard extends JFrame implements MouseInputListener , ActionList
             changeStatus(5);
         }
 
+        //sends pos(stone which should get removed) and playernumber to server in phase 0
+        //sends pos and playernumber to server in phase 1
+        // sends originpos (pos) and endpos (pos2) and playernumber to server in phase 2
+        // sends originpos (pos) and endpos (pos2) and playernumber to server in phase 3
+
+        //in each phase also change label relativ to phase and player
+
+
+            /*while(!thisplayerMove){
+                //waits for server answer also new pos and so on
+                //if he resives the answer
+                // --> thisplayerMove = true;
+                // thread.sleep(200); --> so he doesnt always asks for answer
+
+            }*/
+            /*
+            in phase 0:     pos from stone which should get removed and player who removes
+            in phase 1:     pos = otherclientpos;
+            in phase 2:     stone which should get moved from origin pos
+                            --> movestone(origin pos, new pos, otherplayernumber)
+            in phase 3:     same as before beside
+
+
+            müssen noch den Code anpassen sodass dieser nur das macht für was für einen Spieler nötig ist,
+            oder wir machen ne extra methode dafür und changen einfach den player nicht, sodass wir den code ansich nur für den einen player nehmen sodass playernumber hier gleich bleibt
+            maybe offlinemultiplayer and onlinemultiplayer in a sort of startscreen (onlinemutiplayer starts server)
+            */
+
     }
 
     /**

@@ -1,10 +1,8 @@
-package RicosTheorie;
-
 import java.io.IOException;
 
 public class ClientToo {
     public static void main(String[] args) throws IOException {
-        Client2 client = new Client2();
+        Client client = new Client();
         client.sendDudes(1);
     }
 }

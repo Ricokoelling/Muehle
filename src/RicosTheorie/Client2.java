@@ -1,10 +1,12 @@
+package RicosTheorie;
+
 import java.io.*;
 import java.net.*;
 
-public class Client {
+public class Client2 {
     private static Socket client;
 
-    public Client() {
+    public Client2() {
         try{
             client = new Socket("localhost",1337);
 
@@ -14,7 +16,7 @@ public class Client {
     }
 
     public void sendDudes(int clientName) throws IOException {
-        ServerConnection serverConn = new ServerConnection(client);
+        ServerConnection2 serverConn = new ServerConnection2(client);
         PrintWriter output = new PrintWriter(client.getOutputStream(),true);
         BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
         new Thread(serverConn).start();
