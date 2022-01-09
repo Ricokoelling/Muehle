@@ -25,7 +25,6 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         private                     boolean     playerJump;
         protected                   boolean     playerNumber        = true;  //true --> player 1 ----- false --> player 2
         protected                   int         phase               = 1;
-        private                     boolean     thisplayerMove      = true;
 
         //Testing Variables
         Client test;
@@ -38,7 +37,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                         "Exit Confirmation", JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE, null, null, null);
                 if (confirm == 0) {
-                    test.endConnection();
+                    //test.endConnection();
                     System.exit(0);
                 }
             }
@@ -103,6 +102,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
          * changes PlayerNumber and depending on phase the state
          */
         private void playerChange(){
+            boolean thisplayerMove = false;
             //playerNumber = !playerNumber;
             if(phase == 1) {
                 changeStatus(1);
@@ -116,6 +116,12 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                 changeStatus(5);
             }
 
+            if(phase == 1){
+                test.sendPhase(phase);
+                test.sendPlayerNumber(playerNumber);
+                test.sendInt(pos);
+            }
+
             //sends pos(stone which should get removed) and playernumber to server in phase 0
             //sends pos and playernumber to server in phase 1
             // sends originpos (pos) and endpos (pos2) and playernumber to server in phase 2
@@ -124,13 +130,13 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             //in each phase also change label relativ to phase and player
 
 
-
-            while(!thisplayerMove){
+            /*while(!thisplayerMove){
                 //waits for server answer also new pos and so on
                 //if he resives the answer
                 // --> thisplayerMove = true;
                 // thread.sleep(200); --> so he doesnt always asks for answer
-            }
+
+            }*/
             /*
             in phase 0:     pos from stone which should get removed and player who removes
             in phase 1:     pos = otherclientpos;
@@ -638,7 +644,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         @Override
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == exitItem){
-                test.endConnection();
+                //test.endConnection();
                 System.exit(0);
             }
             else if(e.getSource() == resetItem){

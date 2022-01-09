@@ -3,14 +3,12 @@ package server;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.SQLOutput;
-import java.util.Scanner;
 
 public class server {
 
-    ServerSocket    servs;
+    static ServerSocket    servs;
     Socket          p1, p2;
-    DataInputStream p1in, p2in;
+    static DataInputStream p1in, p2in;
     DataOutputStream p1out, p2out;
 
     public server(){
@@ -35,14 +33,14 @@ public class server {
     public server(int port){
         try{
             servs       = new ServerSocket(port);
-            p1          = servs.accept(); System.out.println("Player 1 connected");
+            /*p1          = servs.accept(); System.out.println("Player 1 connected");
             p2          = servs.accept(); System.out.println("Player 2 connected ");
 
             p1in        = new DataInputStream(p1.getInputStream());
             p1out       = new DataOutputStream(p1.getOutputStream()); System.out.println("Player 1 Streams created");
 
             p2in        = new DataInputStream(p1.getInputStream());
-            p2out       = new DataOutputStream(p2.getOutputStream()); System.out.println("Player 2 Streams created");
+            p2out       = new DataOutputStream(p2.getOutputStream()); System.out.println("Player 2 Streams created");*/
 
 
         }catch(IOException e){
@@ -51,7 +49,49 @@ public class server {
         }
     }
 
+    public static void phaseOne(int pos){
+        System.out.println(pos);
+    }
+    public static Integer Continue(int k){
+        if(k == 1){
+            return 1;
+        }
+        else if(k == 2){
+            return 2;
+        }
+        return -1;
+    }
+    public static void start() throws IOException {
+        System.out.println("waiting for player 1 place: " + servs.getLocalPort());
+        Socket client = servs.accept();
+        while(!client.isClosed()){
+           /*System.out.println("p1:"+p1.isClosed());
+           System.out.println("p2:"+p2.isClosed());*/
+            try{
+                DataInputStream streamPhase = new DataInputStream(client.getInputStream());
+                int phase = Continue((streamPhase.readInt()));
 
+
+
+
+                if(phase == 1){
+                    DataInputStream streamPlayerNumber = new DataInputStream(client.getInputStream());
+                    System.out.println(streamPlayerNumber.readBoolean());
+                    DataInputStream streamPos = new DataInputStream(client.getInputStream());
+                    System.out.println(streamPos.readInt());
+                }
+
+
+            }catch (Exception e){
+                e.printStackTrace();
+                break;
+            }
+        }
+    }
+    public static void main(String[] args) throws IOException {
+        server s = new server(6221);
+        s.start();
+    }
 /*
     public static void main(String[] args) {
         try {
@@ -114,14 +154,4 @@ public class server {
 
  */
 
-    public void start(){
-        try{
-            while(true){
-                System.out.println("p1:"+p1.isClosed());
-                System.out.println("p2:"+p2.isClosed());
-            }
-        } catch(IOException e){
-            e.printStackTrace();
-        }
-    }
 }
