@@ -1,10 +1,6 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Clienthandler implements Runnable{
     private Socket client;
@@ -25,7 +21,18 @@ public class Clienthandler implements Runnable{
 
     /**
      * gets the output from each clint and sends it over: "outToDifferent" to the other client
-     * !!! has to be updated to send only important data according to the phase
+     * !!! sends all Data otherwise it could send wrong data
+     * ⠄⠄⠄⣾⣿⠿⠿⠶⠿⢿⣿⣿⣿⣿⣦⣤⣄⢀⡅⢠⣾⣛⡉⠄⠄⠄⠸⢀⣿
+     * ⠄⠄⢀⡋⣡⣴⣶⣶⡀⠄⠄⠙⢿⣿⣿⣿⣿⣿⣴⣿⣿⣿⢃⣤⣄⣀⣥⣿⣿
+     * ⠄⠄⢸⣇⠻⣿⣿⣿⣧⣀⢀⣠⡌⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠿⠿⣿⣿⣿
+     * ⠄⢀⢸⣿⣷⣤⣤⣤⣬⣙⣛⢿⣿⣿⣿⣿⣿⣿⡿⣿⣿⡍⠄⠄⢀⣤⣄⠉⠋
+     * ⠄⣼⣖⣿⣿⣿⣿⣿⣿⣿⣿⣿⢿⣿⣿⣿⣿⣿⢇⣿⣿⡷⠶⠶⢿⣿⣿⠇⢀
+     * ⠘⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣽⣿⣿⣿⡇⣿⣿⣿⣿⣿⣿⣷⣶⣥⣴⣿
+     * ⢀⠈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟
+     * ⢸⣿⣦⣌⣛⣻⣿⣿⣧⠙⠛⠛⡭⠅⠒⠦⠭⣭⡻⣿⣿⣿⣿⣿⣿⣿⣿⡿⠃
+     * ⠘⣿⣿⣿⣿⣿⣿⣿⣿⡆⠄⠄⠄⠄⠄⠄⠄⠄⠹⠈⢋⣽⣿⣿⣿⣿⣵⣾⠃
+     * ⠄⠘⣿⣿⣿⣿⣿⣿⣿⣿⠄⣴⣿⣶⣄⠄⣴⣶⠄⢀⣾⣿⣿⣿⣿⣿⣿⠃⠄
+     * ⠄⠄⠈⠻⣿⣿⣿⣿⣿⣿⡄⢻⣿⣿⣿⠄⣿⣿⡀⣾⣿⣿⣿⣿⣛⠛⠁⠄⠄
      */
     @Override
     public void run() {
@@ -58,15 +65,30 @@ public class Clienthandler implements Runnable{
             }
         }
     }
+
+    /**
+     * sends data "currently" to both clients
+     * @param send  data
+     */
     private void outToclient(int send) {
         for(Clienthandler aClient : clients){
             aClient.output.println(send);
         }
+        /*if(clients.get(0).playerNumber == playerNumber){
+            clients.get(1).output.println(send);
+        }else {
+            clients.get(0).output.println(send);
+        }*/
     }
     private void outToclient() {
         for(Clienthandler aClient : clients){
             aClient.output.println(playerNumber);
         }
+        /*if(clients.get(0).playerNumber == playerNumber){
+            clients.get(1).output.println(playerNumber);
+        }else {
+            clients.get(0).output.println(playerNumber);
+        }*/
     }
 
         private void phaseOne(int pos1){

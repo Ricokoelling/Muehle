@@ -41,7 +41,6 @@ public class ServerConnection implements Runnable{
             while (true) {
                 playerNumber = Boolean.parseBoolean(reader.readLine());
                 phase = Integer.parseInt(reader.readLine());
-                System.out.println("[CLIENT] Phase: " + phase);
                 if (phase != -1) {
                     gotData = true;
                     if (phase == 1) {

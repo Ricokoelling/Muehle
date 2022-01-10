@@ -52,6 +52,10 @@ public class Client{
         this.playerNumber = playerNumber;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean waitforData(){
         if(serverConn.isGotData()){
             playerNumber = serverConn.isPlayerNumber();

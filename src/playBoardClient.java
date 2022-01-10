@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class playBoardClient extends JFrame implements MouseInputListener, ActionListener {
-        private     static Color playerOne;
+        private     static          Color       playerOne;
         private     static          Color       playerTwo;
         private     static  final   MyPanel     pane                = new MyPanel();
         private     static  final   JMenuBar    menubar             = new JMenuBar();
@@ -121,6 +121,12 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             }
         }
 
+    /**
+     * waits for answer and asks every 50 milliseconds if the answer got send from the Server
+     * after response will just update the GUI to fit
+     * @throws IOException              yee
+     * @throws InterruptedException     yee
+     */
         public void waitforAnswer() throws IOException, InterruptedException {
             thisplayerMove = false;
             System.out.println("[Client] Waiting for Server....");
@@ -130,7 +136,8 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                 }
                 Thread.sleep(50);
             }
-            System.out.println("[Client] Server Response!");
+            System.out.println("[Client] Server Response!" + client.getPhase());
+
             if(client.getPhase() == 1) {
                 playerNumber = client.isPlayerNumber();
                 pane.repaint(client.getPos1(), playerNumber);
@@ -398,8 +405,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
 
             if (phase == 1) {
                 if (pos != 0) {
-                    pane.repaint(pos, playerNumber);
-                    System.out.println("lol");
+                    pane.repaint(pos, playerNumber);        //idk why but it doesnt work
                     client.sendPhaseOne(phase,pos);
                     try {
                         waitforAnswer();
