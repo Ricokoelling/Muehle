@@ -130,20 +130,15 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         public void waitforAnswer() throws IOException, InterruptedException {
             thisplayerMove = false;
             System.out.println("[Client] Waiting for Server....");
-            while(true) {
-                if(client.waitforData()){
-                    break;
+            if(client.waitforData()){
+                System.out.println("[Client] Server Response! Phase: " + client.getPhase());
+                if (client.getPhase() == 1) {
+                    System.out.println("[CLIENT] PlayerNumber: " + client.isPlayerNumber());
+                    pane.repaint(client.getPos1(), client.isPlayerNumber());
                 }
-                Thread.sleep(50);
+                thisplayerMove = true;
+                System.out.println("[Client] Your Move!");
             }
-            System.out.println("[Client] Server Response!" + client.getPhase());
-
-            if(client.getPhase() == 1) {
-                playerNumber = client.isPlayerNumber();
-                pane.repaint(client.getPos1(), playerNumber);
-            }
-            thisplayerMove = true;
-            System.out.println("[Client] Your Move!");
         }
         /**
          * checks if a player has less then 4 stones so he can jump
@@ -406,9 +401,10 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             if (phase == 1) {
                 if (pos != 0) {
                     pane.repaint(pos, playerNumber);        //idk why but it doesnt work
+                    pane.paintComponents(pane.getGraphics());
                     client.sendPhaseOne(phase,pos);
                     try {
-                        waitforAnswer();
+                            waitforAnswer();
                     } catch (IOException | InterruptedException ex) {
                         ex.printStackTrace();
                     }

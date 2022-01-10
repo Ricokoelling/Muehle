@@ -71,27 +71,27 @@ public class Clienthandler implements Runnable{
      * @param send  data
      */
     private void outToclient(int send) {
-        for(Clienthandler aClient : clients){
+        /*for(Clienthandler aClient : clients){
             aClient.output.println(send);
-        }
-        /*if(clients.get(0).playerNumber == playerNumber){
+        }*/
+        if(clients.get(0).playerNumber == playerNumber){
             clients.get(1).output.println(send);
         }else {
             clients.get(0).output.println(send);
-        }*/
+        }
     }
     private void outToclient() {
-        for(Clienthandler aClient : clients){
+        /*for(Clienthandler aClient : clients){
             aClient.output.println(playerNumber);
-        }
-        /*if(clients.get(0).playerNumber == playerNumber){
+        }*/
+        if(clients.get(0).playerNumber == playerNumber){
             clients.get(1).output.println(playerNumber);
         }else {
             clients.get(0).output.println(playerNumber);
-        }*/
+        }
     }
 
-        private void phaseOne(int pos1){
+    private void phaseOne(int pos1){
         if(mst.posTaken(pos1)){
             mst.add(pos1,this.playerNumber);
         }

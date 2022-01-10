@@ -25,6 +25,7 @@ public class ServerConnection implements Runnable{
         return phase;
     }
     public int getPos1(){
+        gotData = false;
         return pos1;
     }
     public boolean isPlayerNumber() {

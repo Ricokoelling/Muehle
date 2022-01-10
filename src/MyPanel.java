@@ -41,12 +41,12 @@ GridBagConstraints
     }
     protected void repaint(int pos, boolean playerNumb) {
         map.put(pos,playerNumb);
-        super.repaint();
+        update(this.getGraphics());
     }
 
     protected void removeStone(int pos){
         map.remove(pos);
-        repaint();
+        update(this.getGraphics());
     }
 
     protected void moveStone(int pos1,int pos2, boolean playerNumb){
@@ -56,7 +56,7 @@ GridBagConstraints
 
     protected void reset(){
         map.clear();
-        repaint();
+        update(this.getGraphics());
         setPlayerStatus("Player 1 place", playerOne);
     }
     protected void setPlayerStatus(String playerStatus, Color c){
@@ -123,7 +123,6 @@ GridBagConstraints
         int diameter = this.getWidth() / 7;
         int radius = this.getWidth() / 14;
         int numbersOfRectangles = 3;
-
         Graphics2D g2D = (Graphics2D) g;
         clearRect(g);
         g2D.setColor(getWoodenColor());
@@ -151,6 +150,7 @@ GridBagConstraints
             drawStone(g2D,key, map.get(key));
         }
     }
+
 
 }
 

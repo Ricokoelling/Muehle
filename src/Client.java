@@ -7,6 +7,7 @@ public class Client{
     private int pos1 = 0,pos2 = 0,pos3 = 0,phase;
     ServerConnection serverConn;
     boolean playerNumber;
+    boolean playerNumberOr;
 
 
 
@@ -49,21 +50,24 @@ public class Client{
     public void sendData(boolean playerNumber) throws IOException {
         PrintWriter output = new PrintWriter(client.getOutputStream(),true);
         output.println(playerNumber);
-        this.playerNumber = playerNumber;
+        this.playerNumberOr = playerNumber;
     }
 
     /**
      *
      * @return
      */
-    public boolean waitforData(){
-        if(serverConn.isGotData()){
-            playerNumber = serverConn.isPlayerNumber();
-            pos1 = serverConn.getPos1();
-            phase = serverConn.getPhase();
-            return true;
+    public boolean waitforData() throws InterruptedException {
+        while (true) {
+            if (serverConn.isGotData()) {
+                    playerNumber = serverConn.isPlayerNumber();
+                    pos1 = serverConn.getPos1();
+                    phase = serverConn.getPhase();
+                    break;
+            }
+            Thread.sleep(50);
         }
-        return false;
+        return true;
     }
 
     public void sendPhaseOne(int phasee, int pos1){
