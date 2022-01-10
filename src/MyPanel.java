@@ -8,7 +8,12 @@ public class MyPanel extends JPanel {
     private                     Color                       playerOne       = Color.BLACK;
     private                     Color                       playerTwo       = Color.GRAY;
 
-
+/*
+this.setMinimumSize(new Dimension(width, height));
+this.setPreferredSize(new Dimension(width, height));
+this.setMaximumSize(new Dimension(width, height));
+GridBagConstraints
+ */
 
     public MyPanel() {
         this.setSize(1920,1080);

@@ -6,11 +6,29 @@ import java.net.Socket;
 public class ServerConnection implements Runnable{
 
     private Socket server;
-    private BufferedReader phaseReader;
+    private BufferedReader reader;
+    private int phase = -1;
+    private boolean gotData = false;
+    private int pos1;
+    private boolean playerNumber;
 
     public ServerConnection(Socket server) throws IOException {
         this.server = server;
-        phaseReader = new BufferedReader(new InputStreamReader(server.getInputStream()));
+        reader = new BufferedReader(new InputStreamReader(server.getInputStream()));
+    }
+
+    public boolean isGotData() {
+        return gotData;
+    }
+
+    public int getPhase() {
+        return phase;
+    }
+    public int getPos1(){
+        return pos1;
+    }
+    public boolean isPlayerNumber() {
+        return playerNumber;
     }
 
     /**
@@ -20,11 +38,30 @@ public class ServerConnection implements Runnable{
     @Override
     public void run() {
         try {
-            int phase = -1;
-            phase = Integer.parseInt(phaseReader.readLine());
+            while (true) {
+                playerNumber = Boolean.parseBoolean(reader.readLine());
+                phase = Integer.parseInt(reader.readLine());
+                System.out.println("[CLIENT] Phase: " + phase);
+                if (phase != -1) {
+                    gotData = true;
+                    if (phase == 1) {
+                        pos1 = Integer.parseInt(reader.readLine());
+                    }
+                }
+                else{
+                    break;
+                }
+
+            }
 
         }catch (IOException e){
             e.printStackTrace();
+        }finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

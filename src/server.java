@@ -1,5 +1,3 @@
-package server;
-
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -8,13 +6,13 @@ import java.util.concurrent.Executors;
 
 public class server {
 
-    static ServerSocket    server;
+    static ServerSocket    servs;
     private static ArrayList<Clienthandler> clients = new ArrayList<>();
     private static ExecutorService pool = Executors.newFixedThreadPool(2);
 
     public server(){
         try{
-            server = new ServerSocket(1337);
+            servs = new ServerSocket(1337);
 
         }catch(IOException e){
             System.err.println("Failed to create Server\nError:");
@@ -24,7 +22,7 @@ public class server {
 
     public server(int port){
         try{
-            server = new ServerSocket(port);
+            servs = new ServerSocket(port);
         }catch(IOException e){
             System.err.println("Failed to create Server\nError:");
             e.printStackTrace();
@@ -38,11 +36,10 @@ public class server {
     public static void start() throws IOException {
         while (true) {
             System.out.println("[SERVER] Waiting for client connection....");
-            Socket client = server.accept();
+            Socket client = servs.accept();
             System.out.println("[SERVER] Connected to " + client.getLocalPort());
             Clienthandler clienthandler = new Clienthandler(client,clients);
             clients.add(clienthandler);
-
 
             pool.execute(clienthandler);
         }

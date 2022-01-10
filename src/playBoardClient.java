@@ -2,6 +2,7 @@ import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class playBoardClient extends JFrame implements MouseInputListener, ActionListener {
@@ -10,6 +11,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         private     static  final   MyPanel     pane                = new MyPanel();
         private     static  final   JMenuBar    menubar             = new JMenuBar();
         private             final   Master      mst                 = new Master();
+        private             final   Client      client = new Client();
         private             final   JMenuItem   resetItem;
         private             final   JMenuItem   plOneColor;
         private             final   JMenuItem   plTwoColor;
@@ -23,8 +25,9 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         private                     int         maxstones           = 17;
         private                     boolean     boothphase3         = false;
         private                     boolean     playerJump;
-        protected                   boolean     playerNumber        = true;  //true --> player 1 ----- false --> player 2
+        protected                   boolean     playerNumber;  //true --> player 1 ----- false --> player 2
         protected                   int         phase               = 1;
+        private                     boolean     thisplayerMove      = true;
 
 
         WindowListener exitListener = new WindowAdapter() {
@@ -41,7 +44,9 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             }
         };
 
-        public playBoardClient() {
+        public playBoardClient(boolean playerNumber) throws IOException, InterruptedException {
+            this.playerNumber = playerNumber;
+            client.sendData(playerNumber);
             this.setSize(1920,1080);
             this.addMouseListener(this);
             this.addMouseMotionListener(this);
@@ -73,7 +78,11 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             this.setJMenuBar(menubar);
             this.addWindowListener(exitListener);
             this.setVisible(true);
+            if(!playerNumber ){
+                waitforAnswer();
+            }
         }
+
 
         /**
          * after every placement the player gets asked if he wants to do his move (currently disabled, if turned back on change for phase 2 and 3 etc.)
@@ -110,39 +119,25 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             } else {
                 changeStatus(5);
             }
-
-            //sends pos(stone which should get removed) and playernumber to server in phase 0
-            //sends pos and playernumber to server in phase 1
-            // sends originpos (pos) and endpos (pos2) and playernumber to server in phase 2
-            // sends originpos (pos) and endpos (pos2) and playernumber to server in phase 3
-
-            //in each phase also change label relativ to phase and player
-
-
-            /*while(!thisplayerMove){
-                //waits for server answer also new pos and so on
-                //if he resives the answer
-                // --> thisplayerMove = true;
-                // thread.sleep(200); --> so he doesnt always asks for answer
-
-            }*/
-            /*
-            in phase 0:     pos from stone which should get removed and player who removes
-            in phase 1:     pos = otherclientpos;
-            in phase 2:     stone which should get moved from origin pos
-                            --> movestone(origin pos, new pos, otherplayernumber)
-            in phase 3:     same as before beside
-
-
-            müssen noch den Code anpassen sodass dieser nur das macht für was für einen Spieler nötig ist,
-            oder wir machen ne extra methode dafür und changen einfach den player nicht, sodass wir den code ansich nur für den einen player nehmen sodass playernumber hier gleich bleibt
-            maybe offlinemultiplayer and onlinemultiplayer in a sort of startscreen (onlinemutiplayer starts server)
-            */
-
-
-
         }
 
+        public void waitforAnswer() throws IOException, InterruptedException {
+            thisplayerMove = false;
+            System.out.println("[Client] Waiting for Server....");
+            while(true) {
+                if(client.waitforData()){
+                    break;
+                }
+                Thread.sleep(50);
+            }
+            System.out.println("[Client] Server Response!");
+            if(client.getPhase() == 1) {
+                playerNumber = client.isPlayerNumber();
+                pane.repaint(client.getPos1(), playerNumber);
+            }
+            thisplayerMove = true;
+            System.out.println("[Client] Your Move!");
+        }
         /**
          * checks if a player has less then 4 stones so he can jump
          * @return true --> one player got less then 4 stones || false --> not one player got less then 4 stones
@@ -315,7 +310,6 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             int radius = pane.getWidth() / 14;
             int circleDiameter = 30;
             int circleRadius = circleDiameter / 2;
-            boolean poswasTaken = false;
             pos = 0;
             // biggest rect
             // pos 1 2 3
@@ -403,12 +397,15 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             }
 
             if (phase == 1) {
-                if (pos != 0 && mst.posTaken(pos)) {
-                    mst.add(pos,playerNumber);
+                if (pos != 0) {
                     pane.repaint(pos, playerNumber);
-                }
-                else{
-                    poswasTaken = true;
+                    System.out.println("lol");
+                    client.sendPhaseOne(phase,pos);
+                    try {
+                        waitforAnswer();
+                    } catch (IOException | InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
             if(phase == 0) {
@@ -447,7 +444,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                 playerNumber = !playerNumber; //
                 changeStatus(5);
             }
-            if(phase == 1 && !poswasTaken){
+            if(phase == 1){
                 playerChange();
                 takemove();
                 count++;

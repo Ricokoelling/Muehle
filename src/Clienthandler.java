@@ -1,5 +1,3 @@
-package server;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,11 +7,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Clienthandler implements Runnable{
-    private final Socket client;
+    private Socket client;
     private BufferedReader input;
     private PrintWriter output;
     private ArrayList<Clienthandler> clients;
     private Boolean playerNumber;
+    private Master mst = new Master();
+
 
     public Clienthandler(Socket client, ArrayList<Clienthandler> clients) throws IOException {
         this.client = client;
@@ -30,15 +30,27 @@ public class Clienthandler implements Runnable{
     @Override
     public void run() {
         try {
-            while (true) {
-                String inputt = input.readLine();
-                outToDifferent(inputt);
+            while (true){
+                int phase = Integer.parseInt(input.readLine());
+                int pos1 = Integer.parseInt(input.readLine());
+                int pos2 = Integer.parseInt(input.readLine());
+                int pos3 = Integer.parseInt(input.readLine());
+                if( phase == 1) {
+                    System.out.println("[SERVER] Pos1: " + pos1 + " Phase: " + phase);
+                    phaseOne(pos1);
+                    outToclient();
+                    outToclient(phase);
+                    outToclient(pos1);
+                }
+                else{
+                    break;
+                }
+
             }
         }catch (IOException e){
             System.err.println("Something happened that shouldn't have happened!");
-            System.err.println(Arrays.toString(e.getStackTrace()));
+            e.printStackTrace();
         } finally{
-            output.close();
             try {
                 input.close();
             } catch (IOException e) {
@@ -46,13 +58,20 @@ public class Clienthandler implements Runnable{
             }
         }
     }
-
-    private void outToDifferent(String inputt) {
-        if(clients.get(0).playerNumber == this.playerNumber){
-            clients.get(1).output.println(inputt);
+    private void outToclient(int send) {
+        for(Clienthandler aClient : clients){
+            aClient.output.println(send);
         }
-        else{
-            clients.get(0).output.println(inputt);
+    }
+    private void outToclient() {
+        for(Clienthandler aClient : clients){
+            aClient.output.println(playerNumber);
+        }
+    }
+
+        private void phaseOne(int pos1){
+        if(mst.posTaken(pos1)){
+            mst.add(pos1,this.playerNumber);
         }
     }
 
