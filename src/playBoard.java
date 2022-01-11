@@ -564,27 +564,27 @@ public class playBoard extends JFrame implements MouseInputListener , ActionList
     private void changeStatus(int state){
         if(state == 1) {
             if (!playerNumber) {
-                pane.setPlayerStatus("Player 2 place", playerTwo);
+                pane.setPlayerStatus("Player 2 place your Stone!", playerTwo);
             } else {
-                pane.setPlayerStatus("Player 1 place", playerOne);
+                pane.setPlayerStatus("Player 1 place your Stone!", playerOne);
             }
         }
         else if(state == 2){
-            if(!playerNumber)   pane.setPlayerStatus("remove", playerTwo);
-            else                pane.setPlayerStatus("remove", playerOne);
+            if(!playerNumber)   pane.setPlayerStatus("Player 2 remove a Stone!              k", playerTwo);
+            else                pane.setPlayerStatus("Player 1 remove a Stone!", playerOne);
         }
         else if(state == 3){
             if (!playerNumber) {
-                pane.setPlayerStatus("Player 2 move", playerTwo);
+                pane.setPlayerStatus("Player 2 move a Stone!", playerTwo);
             } else {
-                pane.setPlayerStatus("Player 1 move", playerOne);
+                pane.setPlayerStatus("Player 1 move a Stone!", playerOne);
             }
         }
         else if(state == 4){
             if (!playerNumber) {
-                pane.setPlayerStatus("Player 2 jump",playerTwo);
+                pane.setPlayerStatus("Player 2 jump with your Stone",playerTwo);
             } else {
-                pane.setPlayerStatus("Player 1 jump", playerOne);
+                pane.setPlayerStatus("Player 1 jump with your Stone!", playerOne);
             }
         }
         else if(state == 5){

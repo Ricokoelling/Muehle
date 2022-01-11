@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class MyPanel extends JPanel {
     private             final   HashMap<Integer,Boolean>    map             = new HashMap<>();
-    protected   static          Label                       playerStatus    = new Label("Player 1 place\t") ;
+    protected   static          Label                       playerStatus;
     private                     Color                       playerOne       = Color.BLACK;
     private                     Color                       playerTwo       = Color.GRAY;
 
@@ -17,9 +17,12 @@ GridBagConstraints
 
     public MyPanel() {
         this.setSize(1920,1080);
+        new GridBagLayout();
+        GridBagConstraints g = new GridBagConstraints();
+        playerStatus    = new Label("Player 1 place your first Stone\t");
         playerStatus.setFont(new Font("Arial", Font.PLAIN, 40));
         playerStatus.setBackground(getWoodenColor());
-        add(playerStatus);
+        add(playerStatus,g);
     }
     protected void setColor(boolean playerNumb, Color c){
         if(playerNumb){
@@ -57,7 +60,7 @@ GridBagConstraints
     protected void reset(){
         map.clear();
         update(this.getGraphics());
-        setPlayerStatus("Player 1 place", playerOne);
+        setPlayerStatus("Player 1 place your Stone", playerOne);
     }
     protected void setPlayerStatus(String playerStatus, Color c){
         MyPanel.playerStatus.setForeground(c);

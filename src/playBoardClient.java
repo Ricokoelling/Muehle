@@ -47,6 +47,11 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         public playBoardClient(boolean playerNumber) throws IOException, InterruptedException {
             this.playerNumber = playerNumber;
             client.sendData(playerNumber);
+            if(playerNumber){
+                pane.setPlayerStatus("Player 1 set Your first Stone!",playerOne);
+            }else {
+                pane.setPlayerStatus("Player 2 set Your first Stone!",playerTwo);
+            }
             this.setSize(1920,1080);
             this.addMouseListener(this);
             this.addMouseMotionListener(this);
@@ -400,7 +405,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
 
             if (phase == 1) {
                 if (pos != 0) {
-                    pane.repaint(pos, playerNumber);        //idk why but it doesnt work
+                    pane.repaint(pos, playerNumber);
                     pane.paintComponents(pane.getGraphics());
                     client.sendPhaseOne(phase,pos);
                     try {
@@ -414,7 +419,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                 if (!mst.posTaken(pos) && mst.sameplayerStone(pos, playerNumber) && mst.removeStones(pos, playerNumber)) {
                     pane.removeStone(pos);
                     maxstones--;
-                    if (mst.getPlayerStones(!playerNumber) < 3 && phaseChange) {         //checks if the player whos stone got removed has still enough stones to potentially place a mill
+                    if (mst.getPlayerStones(!playerNumber) < 3 && phaseChange){         //checks if the player whos stone got removed has still enough stones to potentially place a mill
                         changeStatus(5);
                         phase = 4;
                     }

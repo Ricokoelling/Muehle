@@ -39,10 +39,10 @@ public class Clienthandler implements Runnable{
         try {
             while (true){
                 int phase = Integer.parseInt(input.readLine());
-                int pos1 = Integer.parseInt(input.readLine());
-                int pos2 = Integer.parseInt(input.readLine());
-                int pos3 = Integer.parseInt(input.readLine());
                 if( phase == 1) {
+                    int pos1 = Integer.parseInt(input.readLine());
+                    int pos2 = Integer.parseInt(input.readLine());
+                    int pos3 = Integer.parseInt(input.readLine());
                     System.out.println("[SERVER] Pos1: " + pos1 + " Phase: " + phase);
                     phaseOne(pos1);
                     outToclient();

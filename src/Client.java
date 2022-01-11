@@ -40,7 +40,6 @@ public class Client{
             System.out.println("Beim Erstellen des Clients* ist ein Fehler aufgetreten");
             e.printStackTrace();
         }
-
     }
 
     /**

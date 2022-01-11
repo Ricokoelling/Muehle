@@ -41,6 +41,7 @@ public class server {
             Clienthandler clienthandler = new Clienthandler(client,clients);
             clients.add(clienthandler);
 
+
             pool.execute(clienthandler);
         }
     }
