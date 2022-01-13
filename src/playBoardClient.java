@@ -48,7 +48,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         public playBoardClient(boolean playerNumber) throws IOException, InterruptedException {
             this.playerNumber = playerNumber;
             client.sendData(playerNumber);
-            this.setSize(1920,1080);
+            this.setSize(1080,720);
             this.addMouseListener(this);
             this.addMouseMotionListener(this);
 
@@ -107,7 +107,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
          * changes PlayerNumber and depending on phase the state
          */
         private void playerChange(){
-            boolean thisplayerMove = false;
+            thisplayerMove = false;
             if(phase == 1) {
                 changeStatus(1,!playerNumber);
             }
@@ -127,6 +127,9 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                 System.out.println("[CLIENT] Allowed Move!");
                 state = client.getState();
                 System.out.println("[CLIENT] State: " + state);
+
+                //müsste hier nicht auch !client.isPlayerNumber() stehen?
+                //warum nicht phase und state in einer variable speichern damit alles einheitlich ist
                 if(state == 1) {
                     changeStatus(1, client.isPlayerNumber());
                     pane.repaint(pos, playerNumber);
@@ -396,10 +399,15 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                 } else if (e.getX() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 60) {   //point [18]
                     pos = 18;
                 }
+                if(count>=9) {
+                    takemove();
+                    client.sendState(3);
+                }
                 if (phase == 1) {
                     if (pos != 0) {
                         thisplayerMove = false;
                         client.sendData(1, pos);
+                        count++;
                         try {
                             waitforAllowed();
                         } catch (IOException | InterruptedException ex) {
@@ -425,9 +433,6 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                     phase = 4;
                     changeStatus(5, playerNumber);
                 }*/
-                if (phase == 1) {
-                    count++;
-                }
             }
         }
 

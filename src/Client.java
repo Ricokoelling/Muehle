@@ -108,8 +108,24 @@ public class Client{
         output.println(pos1);
         output.println(pos2);
         output.println(pos3);
-
     }
+
+    public void sendState(int statee){
+        this.state = statee;
+        PrintWriter output = null;
+        try {
+            output = new PrintWriter(client.getOutputStream(),true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assert output != null;
+        System.out.println(statee + " " + pos1);
+        output.println(statee);
+        output.println(pos1);
+        output.println(pos2);
+        output.println(pos3);
+    }
+
     /***
      *      This function safely disconnects from the server
      */

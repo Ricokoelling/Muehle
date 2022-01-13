@@ -13,7 +13,6 @@ public class server {
     public server(){
         try{
             servs = new ServerSocket(1337);
-
         }catch(IOException e){
             System.err.println("Failed to create Server\nError:");
             e.printStackTrace();

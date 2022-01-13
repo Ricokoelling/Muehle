@@ -55,8 +55,8 @@ public class ServerConnection implements Runnable{
     }
 
     /**
-     * while testing found out we dont have to use different parse etc. maybe we should do make sure its send corretly
-     * if we dont it only sends Strings
+     * while testing found out we don't have to use different parse etc. maybe we should do make sure its send corretly
+     * if we don't it only sends Strings
      */
     @Override
     public void run() {
@@ -69,6 +69,7 @@ public class ServerConnection implements Runnable{
                 playerNumber = Boolean.parseBoolean(reader.readLine());
                 System.out.println("state: " + state + " pl: " + playerNumber);
                 if (state != -1) {
+                    //versteh das if hier nicht ganz macht ja immer das gleiche :D (außer in state 2)
                     if (state == 1) {
                         pos1 = Integer.parseInt(reader.readLine());
                         gotData = true;

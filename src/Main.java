@@ -19,6 +19,8 @@ TODO:   logic beenden, also phase 2 und 3 und Gewinnzustände
             --> mit einer Variable blocken funktioniert nicht
             --> den mouselistener zu entfernen und dann wieder hinzuzufügen geht auch nicht
             --> ich habe keine Ahnung wie man das fixen kann
+        remove funktioniert leider auch nicht
+        übergang in phase 2 funktioniert nicht ordentlich
         Max: Bitte lass die Serververbindung erstmal so wie es ist, es funktioniert ohne fehler und die logic ist leicht hinzugefügt
 
 

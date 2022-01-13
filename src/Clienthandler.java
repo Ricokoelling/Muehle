@@ -8,23 +8,21 @@ import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class Clienthandler implements Runnable{
-
-    private final Socket                      client;
-    private final BufferedReader              input;
-    private final PrintWriter                 output;
-    private final ArrayList<Clienthandler>    clients;
-    private final boolean                     playerNumber;
-    private Color                       playerColor;
-    protected final Master                      mst                 =       new Master();
-    private boolean                     allowed             =       true;
-    private boolean                     onlyAnfang          =       true;
-    private int                         count               =       0;
-    private int                         maxstones           =       9;
-    private int                         Clientphase         =        1;
-    private boolean                     phaseChange         =       false;
-    private boolean                     playerJump;
-    private                     boolean     boothphase3         = false;
-
+    protected       final   Master                      mst                 =       new Master();
+    private                 boolean                     allowed             =       true;
+    private                 boolean                     onlyAnfang          =       true;
+    private                 int                         count               =       0;
+    private                 int                         maxstones           =       9;
+    private                 int                         Clientphase         =       1;
+    private                 boolean                     phaseChange         =       false;
+    private                 boolean                     boothphase3         =       false;
+    private         final   Socket                      client;
+    private         final   BufferedReader              input;
+    private         final   PrintWriter                 output;
+    private         final   ArrayList<Clienthandler>    clients;
+    private         final   boolean                     playerNumber;
+    private                 Color                       playerColor;
+    private                 boolean                     playerJump;
 
 
     public Clienthandler(Socket client, ArrayList<Clienthandler> clients) throws IOException {
@@ -59,10 +57,10 @@ public class Clienthandler implements Runnable{
                     onlyAnfang = false;
                 }
                 allowed = true;
-                int state = Integer.parseInt(input.readLine());
-                int pos1 = Integer.parseInt(input.readLine());
-                int pos2 = Integer.parseInt(input.readLine());
-                int pos3 = Integer.parseInt(input.readLine());
+                int state   = Integer.parseInt(input.readLine());
+                int pos1    = Integer.parseInt(input.readLine());
+                int pos2    = Integer.parseInt(input.readLine());
+                int pos3    = Integer.parseInt(input.readLine());
                 //System.out.println("[SERVER] plNumb: " + playerNumber + " state: " + state + " pos: " + pos1);
                 if(state == 1){
                         if (phaseOne(pos1,this.playerNumber) && phaseOneOtherPlayer(pos1)) {
@@ -117,7 +115,10 @@ public class Clienthandler implements Runnable{
                         }else {
                             allowed = false;
                         }
-                    }else {
+                    }else if(state == 3){
+                    System.out.println("Do i get here?");
+                        //TODO logic keine Ahnung was hier drin alles passieren soll ich bin massiv verwirrt
+                    }else{
                     break;
                 }
                 if(state != 2) {
