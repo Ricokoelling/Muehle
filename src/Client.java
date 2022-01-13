@@ -1,17 +1,20 @@
 import java.io.*;
 import java.net.Socket;
+import java.sql.SQLOutput;
 
 public class Client{
 
     private static Socket client;
-    private int pos1 = 0,pos2 = 0,pos3 = 0,phase;
+    private int pos1 = 0,pos2 = 0,pos3 = 0;
+    private int state = 1;
     ServerConnection serverConn;
-    boolean playerNumber;
-    boolean playerNumberOr;
+    private boolean playerNumber;
+    private boolean playerNumberOr;
+    private boolean allowed = true;
 
 
 
-    public Client() throws IOException {
+    public Client(){
         try{
             client = new Socket("localhost", 1337);
             serverConn = new ServerConnection(client);
@@ -21,9 +24,10 @@ public class Client{
             e.printStackTrace();
         }
         new Thread(serverConn).start();
+
     }
 
-    public Client(String ip, int port) throws IOException {
+    public Client(String ip, int port){
         try{
             client = new Socket(ip, port);
         }catch(IOException e){
@@ -33,7 +37,7 @@ public class Client{
 
     }
 
-    public Client( int port) throws IOException {
+    public Client( int port){
         try{
             client = new Socket("localhost", port);
         }catch(IOException e){
@@ -52,6 +56,18 @@ public class Client{
         this.playerNumberOr = playerNumber;
     }
 
+    public boolean waitForAllowed() throws InterruptedException {
+        while (true){
+            if(serverConn.isGotAllowed()) {
+                if (serverConn.isAllowed()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            Thread.sleep(50);
+        }
+    }
     /**
      *
      * @return
@@ -59,17 +75,27 @@ public class Client{
     public boolean waitforData() throws InterruptedException {
         while (true) {
             if (serverConn.isGotData()) {
-                    playerNumber = serverConn.isPlayerNumber();
+                playerNumber = serverConn.isPlayerNumber();
+                state = serverConn.getState();
+                System.out.println("[CLIENT] client.playernumber: " + playerNumber + " client.state: " + state);
+                if(state == 1) {
                     pos1 = serverConn.getPos1();
-                    phase = serverConn.getPhase();
-                    break;
+                }else if(state == 2){
+                    serverConn.setGotData(false);
+                }else if(state == 3){
+                    pos1 = serverConn.getPos1();
+                    serverConn.setGotData(false);
+                }else if(state == 4){
+                    pos1 = serverConn.getPos1();
+                }
+                break;
             }
             Thread.sleep(50);
         }
         return true;
     }
 
-    public void sendPhaseOne(int phasee, int pos1){
+    public void sendData(int state, int pos1){
         PrintWriter output = null;
         try {
             output = new PrintWriter(client.getOutputStream(),true);
@@ -77,8 +103,8 @@ public class Client{
             e.printStackTrace();
         }
         assert output != null;
-        System.out.println(phasee + " " + pos1 + " " + pos2 + " " + pos3);
-        output.println(phasee);
+        System.out.println(state + " " + pos1);
+        output.println(state);
         output.println(pos1);
         output.println(pos2);
         output.println(pos3);
@@ -95,8 +121,8 @@ public class Client{
         }
     }
 
-    public int getPhase() {
-        return phase;
+    public int getState() {
+        return state;
     }
 
     public int getPos1() {
@@ -105,5 +131,9 @@ public class Client{
 
     public boolean isPlayerNumber() {
         return playerNumber;
+    }
+
+    public boolean isAllowed() {
+        return allowed;
     }
 }

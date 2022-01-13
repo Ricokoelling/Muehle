@@ -7,8 +7,8 @@ import java.util.concurrent.Executors;
 public class server {
 
     static ServerSocket    servs;
-    private static ArrayList<Clienthandler> clients = new ArrayList<>();
-    private static ExecutorService pool = Executors.newFixedThreadPool(2);
+    private static final ArrayList<Clienthandler> clients = new ArrayList<>();
+    private static final ExecutorService pool = Executors.newFixedThreadPool(2);
 
     public server(){
         try{

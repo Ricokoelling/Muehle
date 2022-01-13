@@ -4,7 +4,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        playBoardClient pbC = new playBoardClient(true);
+        playBoardClient pbc = new playBoardClient(true);
+        //playerBoardClientTest pbct = new playerBoardClientTest(true);
     }
 
 }
@@ -12,10 +13,19 @@ public class Main {
 
 /*
 
-TODO:   nur phase 1 angefangen und diese funktioniert noch nicht ansatzweise, beide können immernoch gleichzeitig placen und die position ist egal.... -->
-        logic muss auf dem Server sein, steht so im Meilenstein also muss das auch noch gemacht werden (auch das wenn etwas passiert (zB gleicher stein) sollte eben halt der Server merken: yo is was falsch
-        panel fixen (Daniel E hat paar ansätze geliefert)
+TODO:   logic beenden, also phase 2 und 3 und Gewinnzustände
+        reset einfügen sodass man das jederzeit machen kann
+        Wichtig!!!! wenn ein Spieler wartet kann dieser auf eine Position klicken und dann wird der click gespeichert und wenn dieser wieder dran ausgeführt. Das kann man auch stacken....
+            --> mit einer Variable blocken funktioniert nicht
+            --> den mouselistener zu entfernen und dann wieder hinzuzufügen geht auch nicht
+            --> ich habe keine Ahnung wie man das fixen kann
+        Max: Bitte lass die Serververbindung erstmal so wie es ist, es funktioniert ohne fehler und die logic ist leicht hinzugefügt
 
+
+state´s:    1: do phase 1
+            2: do phase 0
+            3: know the other player does phase 0
+            4: remove in other player field
 
  */
 

@@ -17,6 +17,7 @@ public class Master {
      */
     protected void add(int position, boolean playerNumb) {
         Stones stone = new Stones(position);
+        System.out.println("pos: " + position + " pl: " + playerNumb);
         if (playerNumb) {
             playerOne.add(stone);
         } else {
@@ -226,6 +227,13 @@ public class Master {
      */
     private void muehle(Stones stone1, Stones stone2, Stones stone3, boolean playerNumb) {
         Stones[] temp = {stone1, stone2, stone3};
+        System.out.println(stone1.toString() + " " + stone2.toString() + " " + stone3.toString() );
+        for(Stones stones : playerOne){
+            System.out.println("1: " + stones.getPosition());
+        }
+        for(Stones value : playerTwo){
+            System.out.println("2: " + value.getPosition());
+        }
         if(playerNumb){
             muehlenPlayerOne.add(temp);
         }

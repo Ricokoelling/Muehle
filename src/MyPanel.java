@@ -60,11 +60,12 @@ GridBagConstraints
     protected void reset(){
         map.clear();
         update(this.getGraphics());
-        setPlayerStatus("Player 1 place your Stone", playerOne);
+        setPlayerStatus("Player 1 place your first Stone\t", playerOne);
     }
     protected void setPlayerStatus(String playerStatus, Color c){
         MyPanel.playerStatus.setForeground(c);
         MyPanel.playerStatus.setText(playerStatus);
+        update(this.getGraphics());
     }
 
     private void drawStone(Graphics2D g2D, int pos , boolean playerNumb){
