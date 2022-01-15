@@ -10,6 +10,14 @@ public class Master {
     public Master() {
     }
 
+    /*
+    for(Stones stones : playerOne){
+            System.out.println("player 1: " + stones.toString());
+        }
+        for(Stones value : playerTwo){
+            System.out.println("player 2: " + value.toString());
+        }
+     */
     /**
      * addes stones to player Arraylist for further use
      * @param position      pos where the stone is
@@ -17,7 +25,6 @@ public class Master {
      */
     protected void add(int position, boolean playerNumb) {
         Stones stone = new Stones(position);
-        System.out.println("pos: " + position + " pl: " + playerNumb);
         if (playerNumb) {
             playerOne.add(stone);
         } else {
@@ -94,6 +101,7 @@ public class Master {
         } else {
             testList = playerTwo;
         }
+
         for (int i = 0; i < testList.size(); i++) {
             int pos1 = testList.get(i).getPosition();
             for (int j = 0; j < testList.size(); j++) {
@@ -217,6 +225,8 @@ public class Master {
             muehlenPlayerOne.clear();
             checkMill(true);
             checkMill(false);
+
+        print();
         }
 
     /**
@@ -227,13 +237,7 @@ public class Master {
      */
     private void muehle(Stones stone1, Stones stone2, Stones stone3, boolean playerNumb) {
         Stones[] temp = {stone1, stone2, stone3};
-        System.out.println(stone1.toString() + " " + stone2.toString() + " " + stone3.toString() );
-        for(Stones stones : playerOne){
-            System.out.println("1: " + stones.getPosition());
-        }
-        for(Stones value : playerTwo){
-            System.out.println("2: " + value.getPosition());
-        }
+        //System.out.println(stone1.toString() + " 2: " + stone2.toString() + " 3: " + stone3.toString());
         if(playerNumb){
             muehlenPlayerOne.add(temp);
         }
@@ -536,6 +540,26 @@ public class Master {
         playerTwo.clear();
         muehlenPlayerOne.clear();
         muehlenPlayerTwo.clear();
+    }
+    protected void print(){
+        for(Stones[] yee: muehlenPlayerOne){
+            for(Stones ye : yee){
+                System.out.println("mill 1: " +  ye.toString());
+            }
+        }
+        for(Stones[] yee: muehlenPlayerTwo){
+            for(Stones ye : yee){
+                System.out.println("mill 2: " +  ye.toString());
+            }
+        }
+        System.out.println(" ");
+        for(Stones stones : playerOne){
+            System.out.println("player 1: " + stones.toString());
+        }
+        System.out.println(" ");
+        for(Stones value : playerTwo){
+            System.out.println("player 2: " + value.toString());
+        }
     }
 }
 

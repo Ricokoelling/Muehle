@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class Clienthandler implements Runnable{
@@ -12,8 +11,7 @@ public class Clienthandler implements Runnable{
     private                 boolean                     allowed             =       true;
     private                 boolean                     onlyAnfang          =       true;
     private                 int                         count               =       0;
-    private                 int                         maxstones           =       9;
-    private                 int                         Clientphase         =       1;
+    private                 int                         maxstones           =       18;
     private                 boolean                     phaseChange         =       false;
     private                 boolean                     boothphase3         =       false;
     private         final   Socket                      client;
@@ -23,6 +21,9 @@ public class Clienthandler implements Runnable{
     private         final   boolean                     playerNumber;
     private                 Color                       playerColor;
     private                 boolean                     playerJump;
+    private                 boolean                     poswasTaken = false;
+    private                 boolean                     phase3 = false;
+    private                 boolean                     win = false;
 
 
     public Clienthandler(Socket client, ArrayList<Clienthandler> clients) throws IOException {
@@ -48,6 +49,8 @@ public class Clienthandler implements Runnable{
      * ⠄⠘⣿⣿⣿⣿⣿⣿⣿⣿⠄⣴⣿⣶⣄⠄⣴⣶⠄⢀⣾⣿⣿⣿⣿⣿⣿⠃⠄
      * ⠄⠄⠈⠻⣿⣿⣿⣿⣿⣿⡄⢻⣿⣿⣿⠄⣿⣿⡀⣾⣿⣿⣿⣿⣛⠛⠁⠄⠄
      */
+
+
     @Override
     public void run() {
         try {
@@ -60,14 +63,39 @@ public class Clienthandler implements Runnable{
                 int state   = Integer.parseInt(input.readLine());
                 int pos1    = Integer.parseInt(input.readLine());
                 int pos2    = Integer.parseInt(input.readLine());
-                int pos3    = Integer.parseInt(input.readLine());
-                //System.out.println("[SERVER] plNumb: " + playerNumber + " state: " + state + " pos: " + pos1);
+                System.out.println("pl: " + playerNumber + " pos: " + pos1 + " count: " + count + " state: " + state);
                 if(state == 1){
-                        if (phaseOne(pos1,this.playerNumber) && phaseOneOtherPlayer(pos1)) {
-                            System.out.println("pl: " + playerNumber + " pos: " + pos1 + " count: " + count);
+                        if (phaseOne(pos1,this.playerNumber) && phaseOneOtherPlayer(pos1) && !phase3) {
                             if (!checkMill()) {
                                 System.out.println("[SERVER] No mill!");
-                                outToclient(1);
+                                if(maxstones == count){
+                                    if((mst.winConditionOne(true) || mst.winConditionOne(false)) && count == maxstones){
+                                        outTosameClient(true);
+                                        outTosameClient(23);
+                                    }else {
+                                        if(checkPhase3()){
+                                            outTosameClient(11);
+                                            outTosameClient(playerNumber);
+                                            outTosameClient(true);
+                                            outToclient(true);
+                                            outToclient(12);
+                                        }else {
+                                            phaseChange = true;
+                                            if (clients.get(0).playerNumber == playerNumber) {
+                                                clients.get(1).phaseChange = true;
+                                            } else {
+                                                clients.get(0).phaseChange = true;
+                                            }
+                                        }
+                                        outToclient(5);
+                                        outTosameClient(true);
+                                        outTosameClient(6);
+                                        outTosameClient(playerNumber);
+                                    }
+                                }else {
+                                    System.out.println("ye");
+                                    outToclient(1);
+                                }
                             } else {
                                 System.out.println("[SERVER] MILL!: " + playerNumber);
                                 outTosameClient(allowed);
@@ -77,49 +105,182 @@ public class Clienthandler implements Runnable{
                             }
                             outToclient();
                             outToclient(pos1);
-                        }
+                        }else {
+                            allowed = false;
+                    }
                         //System.out.println("[SERVER] Pos1: " + pos1 + " Phase: " + phase);
                     }else if(state == 2){
-                    System.out.println(playerNumber);
-                        if (!mst.posTaken(pos1) && mst.sameplayerStone(pos1, !playerNumber) && mst.removeStones(pos1, !playerNumber)) {
+                        if(win){
+                            outTosameClient(true);
+                            outTosameClient(23);
+                            outToclient(true);
+                            outToclient(24);
+                            outToclient();
+                            outToclient(pos1);
+                        }
+                        if (!mst.posTaken(pos1) && mst.sameplayerStone(pos1, playerNumber) && mst.removeStones(pos1, playerNumber)) {
                             boolean next = true;
                             if(clients.get(0).playerNumber == playerNumber){
                                 if(!clients.get(1).mst.removeStones(pos1,playerNumber)){
+                                    allowed = false;
                                     next = false;
                                 }
                             }else {
                                 if(!clients.get(0).mst.removeStones(pos1,playerNumber)){
+                                    allowed = false;
                                     next = false;
                                 }
                             }
-                            System.out.println(next);
                             if(next) {
                                 maxstones--;
+                                if(clients.get(0).playerNumber == playerNumber){
+                                    clients.get(1).maxstones--;
+                                }else {
+                                    clients.get(0).maxstones--;
+                                }
                                 if (mst.getPlayerStones(!playerNumber) < 3 && phaseChange) {         //checks if the player whos stone got removed has still enough stones to potentially place a mill
-                                    Clientphase = 4;
+                                    outTosameClient(true);
+                                    outTosameClient(23);
+                                    outToclient(true);
+                                    outToclient(24);
+                                    outToclient();
+                                    outToclient(pos1);
                                 } else {
-                                    if (!phaseChange) {
-                                        Clientphase = 1;
-                                        outToclient(true);
-                                        outToclient(4);
-                                        outToclient();
-                                        outToclient(pos1);
-                                    } else {
-                                        if (!checkPhase3()) {
-                                            Clientphase = 3;
+                                        if (!phaseChange) {
+                                            outToclient(true);
+                                            outToclient(4);
+                                            outToclient();
+                                            outToclient(pos1);
+                                        } else {
+                                            if (!checkPhase3()) {
+                                                outToclient(true);
+                                                outToclient(10);
+                                            } else {
+                                                if(!boothphase3) {
+                                                    outTosameClient(11);
+                                                    outTosameClient(playerNumber);
+                                                    outTosameClient(true);
+                                                    outToclient(true);
+                                                    outToclient(12);
+                                                }else {
+                                                    outTosameClient(18);
+                                                    outTosameClient(playerNumber);
+                                                    outTosameClient(true);
+                                                    outToclient(true);
+                                                    outToclient(19);
+                                                }
+                                            }
+                                            outToclient();
+                                            outToclient(pos1);
                                         }
                                     }
-                                }
                                 count--;
+                                if(clients.get(0).playerNumber == playerNumber){
+                                    clients.get(1).count--;
+                                }else {
+                                    clients.get(0).count--;
+                                }
                             }
                         }else {
                             allowed = false;
                         }
-                    }else if(state == 3){
-                    System.out.println("Do i get here?");
-                        //TODO logic keine Ahnung was hier drin alles passieren soll ich bin massiv verwirrt
-                    }else{
+                    }else if(state == 7){
+                        if (!mst.freeposNextto(pos2, pos1, playerNumber) && mst.sameplayerStone(pos1,playerNumber)){
+                            allowed = false;
+                            poswasTaken = true;
+                        }
+                        if(clients.get(0).playerNumber == playerNumber){
+                            if(!clients.get(1).mst.freeposNextto(pos2,pos1,playerNumber)){
+                                allowed = false;
+                                poswasTaken = true;
+                            }
+                        }else {
+                            if(!clients.get(0).mst.freeposNextto(pos2,pos1,playerNumber)){
+                                allowed = false;
+                                poswasTaken = true;
+                            }
+                        }
+                    if((mst.winConditionOne(true) || mst.winConditionOne(false)) && count == maxstones){
+                        outTosameClient(true);
+                        outTosameClient(23);
+                    }else {
+                        if (!poswasTaken) {
+                            if (playerNumber == !playerJump && phase3) {
+                                if(!checkMill()){
+                                    outToclient(14);
+                                }else {
+                                    win(pos1,pos2);
+                                    win = true;
+                                }
+                            } else if (!win){
+                                if (!checkMill()) {
+                                    System.out.println("[SERVER] No mill in phase 2!");
+                                    outToclient(7);
+
+                                } else {
+                                    System.out.println("[SERVER] Mill in phase 2! " + allowed);
+                                    outTosameClient(allowed);
+                                    outTosameClient(8);
+                                    outTosameClient(playerNumber);
+                                    outToclient(9);
+                                }
+                            }
+                            if(!win) {
+                                outToclient();
+                                outToclient(pos1);
+                                outToclient(pos2);
+                                stillMill();
+                            }
+                        } else {
+                            allowed = false;
+                        }
+                    }
+                }else if(state == 13){
+                    if(!boothphase3) {
+                        if (mst.posTaken(pos2) && playerJump == playerNumber) {
+                            moveStone(pos1,pos2);
+                            if (!checkMill()){
+                                outToclient(13);
+                            }else {
+                                outTosameClient(allowed);
+                                outTosameClient(15);
+                                outTosameClient(playerNumber);
+                                outToclient(16);
+                            }
+                            outToclient();
+                            outToclient(pos1);
+                            outToclient(pos2);
+                            stillMill();
+                        }else {
+                            allowed = false;
+                        }
+                    }
+                    else{
+                        if (mst.posTaken(pos2)) {
+                            moveStone(pos1,pos2);
+                            if (!checkMill()){
+                                outToclient(20);
+                                outToclient();
+                                outToclient(pos1);
+                                outToclient(pos2);
+                                stillMill();
+                            }else {
+                                win(pos1,pos2);
+                            }
+                        }else {
+                            allowed = false;
+                        }
+                    }
+
+                }else if(state == 1000){
+                    maxstones = 17;
+                    count = 0;
+                    pos2 = 0;
+                    phaseChange = false;
+                    boothphase3 = false;
+                }else {
                     break;
+
                 }
                 if(state != 2) {
                     outTosameClient(allowed);
@@ -219,26 +380,61 @@ public class Clienthandler implements Runnable{
         return true;
     }
     private boolean checkMill(){
-        if(count > 3 && mst.checkMill(playerNumber)){
-            Clientphase = 0;
-            return true;
-        }
-
-        return false;
+        return count > 3 && (mst.checkMill(true) || mst.checkMill(false));
     }
 
     private boolean checkPhase3(){
+        System.out.println("checkto: " + mst.getPlayerStones(!playerNumber) + " " + mst.getPlayerStones(playerNumber));
         if(mst.getPlayerStones(!playerNumber) == 3 && mst.getPlayerStones(playerNumber) == 3){
             boothphase3 = true;
-            Clientphase = 3;
+            if(clients.get(0).playerNumber == playerNumber){
+                clients.get(1).boothphase3 = true;
+            }else {
+                clients.get(0).boothphase3 = true;
+            }
             return true;
         }else {
-            if (mst.getPlayerStones(!playerNumber) == 3 && phaseChange) {
-                Clientphase = 3;
-                playerJump = !playerNumber;
+            if ((mst.getPlayerStones(!playerNumber) == 3 || mst.getPlayerStones(playerNumber) == 3 )&& phaseChange) {
+                if(mst.getPlayerStones(!playerNumber) == 3) {
+                    playerJump = !playerNumber;
+                    phase3 = true;
+                }else if(mst.getPlayerStones(playerNumber) == 3){
+                    phase3 = true;
+                    playerJump = playerNumber;
+                }
+                if (clients.get(0).playerNumber == playerNumber) {
+                    clients.get(1).phase3 = true;
+                } else {
+                    clients.get(0).phase3 = true;
+                }
                 return true;
             }
         }
         return false;
+    }
+
+    private void stillMill(){
+        mst.stillMill();
+        if(clients.get(0).playerNumber == playerNumber){
+            clients.get(1).mst.stillMill();
+        }else {
+            clients.get(0).mst.stillMill();
+        }
+    }
+    private void moveStone(int pos1, int pos2){
+        mst.moveStone(pos1, pos2, playerNumber);
+        if(clients.get(0).playerNumber == playerNumber){
+            clients.get(1).mst.moveStone(pos1,pos2,playerNumber);
+        }else {
+            clients.get(0).mst.moveStone(pos1,pos2,playerNumber);
+        }
+    }
+    private void win(int pos1, int pos2){
+        outToclient(21);
+        outToclient();
+        outToclient(pos1);
+        outToclient(pos2);
+        outTosameClient(true);
+        outTosameClient(22);
     }
 }

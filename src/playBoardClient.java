@@ -27,8 +27,11 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         private                     boolean     boothphase3         = false;
         protected                   boolean     playerNumber;  //true --> player 1 ----- false --> player 2
         protected                   int         phase               = 1;
-        private                     boolean     thisplayerMove      = true;
         private                     int         state               = -1;
+        protected boolean thisplayerMove = true;
+        protected boolean lethimwait = true;
+        protected boolean phase3 = false;
+        protected boolean reset = false;
 
 
         WindowListener exitListener = new WindowAdapter() {
@@ -45,7 +48,44 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             }
         };
 
-        public playBoardClient(boolean playerNumber) throws IOException, InterruptedException {
+    public boolean isThisplayerMove() {
+        return thisplayerMove;
+    }
+
+    public boolean isLethimwait() {
+        return lethimwait;
+    }
+
+    public void setLethimwait(boolean lethimwait) {
+        this.lethimwait = lethimwait;
+    }
+
+    public void setPhase3(boolean phase3) {
+        this.phase3 = phase3;
+    }
+
+    public boolean isPhase3() {
+        return phase3;
+    }
+
+    public void setBoothphase3(boolean boothphase3) {
+        this.boothphase3 = boothphase3;
+    }
+
+    public boolean isBoothphase3() {
+        return boothphase3;
+    }
+    public boolean askForReset(){
+        if(reset){
+            reset = false;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public playBoardClient(boolean playerNumber) throws IOException, InterruptedException {
             this.playerNumber = playerNumber;
             client.sendData(playerNumber);
             this.setSize(1080,720);
@@ -80,109 +120,17 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             this.addWindowListener(exitListener);
             this.setVisible(true);
             if(!playerNumber ){
-                waitforAnswer();
+                new WartenSwingWorker(this.client, false, pane,this).execute();
+            }else {
+                lethimwait = false;
             }
-        }
-
-
-        /**
-         * after every placement the player gets asked if he wants to do his move (currently disabled, if turned back on change for phase 2 and 3 etc.)
-         */
-        private void takemove(){
-            if(maxstones == count){
-                if(phase == 1) {
-                    //checkPhase3();
-                    phase = 2;
-                    phaseChange = true;
-                    if (!playerNumber) {
-                        MyPanel.playerStatus.setText("Player 2 move");
-                    } else {
-                        MyPanel.playerStatus.setText("Player 1 move");
-                    }
-                }
-            }
-        }
-
-        /**
-         * changes PlayerNumber and depending on phase the state
-         */
-        private void playerChange(){
-            thisplayerMove = false;
-            if(phase == 1) {
-                changeStatus(1,!playerNumber);
-            }
-            else if(phase == 2) {
-                changeStatus(3,!playerNumber);
-            }
-            else if(phase == 3){
-                changeStatus(4,!playerNumber);
-            } else {
-                changeStatus(5,!playerNumber);
-            }
-        }
-
-        private void waitforAllowed() throws IOException, InterruptedException {
-            System.out.println("[Client] Waiting if move was right....");
-            if(client.waitForAllowed()) {
-                System.out.println("[CLIENT] Allowed Move!");
-                state = client.getState();
-                System.out.println("[CLIENT] State: " + state);
-
-                //müsste hier nicht auch !client.isPlayerNumber() stehen?
-                //warum nicht phase und state in einer variable speichern damit alles einheitlich ist
-                if(state == 1) {
-                    changeStatus(1, client.isPlayerNumber());
-                    pane.repaint(pos, playerNumber);
-                }else if(state == 2){
-                    changeStatus(1, !client.isPlayerNumber());
-                    pane.removeStone(pos);
-                }else if(state == 3){
-                    changeStatus(2,!client.isPlayerNumber());
-                    pane.repaint(pos, playerNumber);
-                }else if(state == 4){
-                    changeStatus(1, !client.isPlayerNumber());
-                    pane.repaint(pos, playerNumber);
-                }
-                waitforAnswer();
-            }
-        }
-    /**
-     * waits for answer and asks every 50 milliseconds if the answer got send from the Server
-     * after response will just update the GUI to fit
-     * @throws InterruptedException     yee
-     */
-        public void waitforAnswer() throws InterruptedException {
-                System.out.println("[Client] Waiting for Server....");
-                if(client.waitforData()) {
-                    System.out.println("[Client] Server Response! State: " + client.getState());
-                    if (client.getState() == 1) {
-                        System.out.println("[CLIENT] PlayerNumber from the other client: " + client.isPlayerNumber());
-                        changeStatus(1, !client.isPlayerNumber());
-                        pane.repaint(client.getPos1(), client.isPlayerNumber());
-                        System.out.println("[Client] Your Move!");
-                    }else if(client.getState() == 2){
-                        phase = 0;
-                        changeStatus(2,client.isPlayerNumber());
-                        System.out.println("[CLIENT] Remove a Stone: ");
-                    }else if(client.getState() == 3){
-                        System.out.println("playBoardClient. state 3 ");
-                        changeStatus(2,client.isPlayerNumber());
-                        pane.repaint(client.getPos1(), client.isPlayerNumber());
-                        waitforAnswer();
-                    }else if(client.getState() == 4){
-                        pane.removeStone(client.getPos1());
-                        phase = 1;
-                        changeStatus(1,!client.isPlayerNumber());
-                        System.out.println("[Client] Your Move! ");
-                    }
-                }
-                thisplayerMove = true;
         }
 
         /**
          * reset the howl game
          */
         private void reset(){
+            reset = true;
             phase = 1;
             maxstones = 17;
             count = 0;
@@ -190,16 +138,14 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             pos2 = 0;
             pos3 = 0;
             onlyOnce = false;
-            phaseChange = false;
-            boothphase3 = false;
             changeStatus(1,playerNumber);
+            client.sendData(100,0);
         }
         @Override
         public void mouseDragged(MouseEvent e) {
             int radius = pane.getWidth() / 14;
             int circleDiameter = 30;
             int circleRadius = circleDiameter / 2;
-            boolean poswasTaken = false;
             if(phase == 2 && thisplayerMove){
                 // biggest rect
                 // pos 1 2 3
@@ -286,28 +232,11 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                     pos2 = 18;
                 }
 
-                if(pos2 != pos && !onlyOnce && !mst.sameplayerStone(pos,playerNumber)) { //changed sameplayer stone and solved the problem
+                if(pos2 != pos && !onlyOnce && pos != 0) { //changed sameplayer stone and solved the problem
                     onlyOnce = true;
-                    if (mst.freeposNextto(pos2, pos, playerNumber)) { //check if pos2 is free and if it is only one step away
-                        pane.moveStone(pos, pos2, playerNumber);
-                        changeStatus(3,playerNumber);
-                    } else
-                        poswasTaken = true;
-
-                    if (mst.checkMill(true) || mst.checkMill(false)){
-                        changeStatus(2,playerNumber);
-                        phase = 0;
-                    }
-                    if(mst.winConditionOne(playerNumber)){
-                        phase = 4;
-                        changeStatus(5,playerNumber);
-                    }
-                    if (phase == 2 && !poswasTaken) {
-                        mst.stillMill();
-                        /*if(!checkPhase3()) {
-                            playerChange();
-                        }*/
-                    }
+                    client.sendData(7, pos, pos2);
+                     new WartenSwingWorker(this.client, this.playerNumber, pane,this).execute();
+                    thisplayerMove = false;
                 }
             }
         }
@@ -330,8 +259,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             pos = 0;
             // biggest rect
             // pos 1 2 3
-            System.out.println(thisplayerMove);
-            if(thisplayerMove) {
+            if (thisplayerMove) {
                 if (e.getX() > ((this.getWidth() / 2) - radius * 3) - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 3) - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 3) - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius * 3) - circleRadius + 60) {   //point [1]
                     pos = 1;
                 } else if (e.getX() > ((this.getWidth() / 2) - radius * 3) + radius * 3 - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 3) + radius * 3 - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 3) - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius * 3) - circleRadius + 60) {   //point [2]
@@ -399,30 +327,18 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                 } else if (e.getX() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 60) {   //point [18]
                     pos = 18;
                 }
-                if(count>=9) {
-                    takemove();
-                    client.sendState(3);
-                }
                 if (phase == 1) {
                     if (pos != 0) {
-                        thisplayerMove = false;
                         client.sendData(1, pos);
-                        count++;
-                        try {
-                            waitforAllowed();
-                        } catch (IOException | InterruptedException ex) {
-                            ex.printStackTrace();
-                        }
+                        new WartenSwingWorker(this.client, playerNumber, pane,this).execute();
+                        thisplayerMove = false;
                     }
-                }else if (phase == 0) {
-                    System.out.println(pos);
+                } else if (phase == 0) {
                     if (pos != 0) {
-                        client.sendData(2, pos);
-                        try {
-                            waitforAllowed();
-                        } catch (IOException | InterruptedException ex) {
-                            ex.printStackTrace();
-                        }
+                            client.sendData(2, pos);
+                        phase = 1;
+                        new WartenSwingWorker(this.client, playerNumber, pane, this).execute();
+                        thisplayerMove = false;
                     }
                 }
                /* if ((mst.getPlayerStones(true) < 3 || mst.getPlayerStones(false) < 3) && phaseChange) {
@@ -435,6 +351,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                 }*/
             }
         }
+
 
         @Override
         public void mouseReleased(MouseEvent e) {
@@ -529,36 +446,13 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                 else if (e.getX() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 60) {   //point [18]
                     pos3 = 18;
                 }
-                if(!boothphase3) {
-                    if (pos != pos3 && mst.posTaken(pos3)) { //if (pos != pos3 && mst.posTaken(pos3) && playerJump == playerNumber)
-                        pane.moveStone(pos, pos3, playerNumber);
-                        mst.moveStone(pos, pos3, playerNumber);
+                    if (pos != pos3 && pos != 0) { //if (pos != pos3 && mst.posTaken(pos3) && playerJump == playerNumber)
+                        client.sendData(13,pos,pos3);
+                        onlyOnce = false;
+                        new WartenSwingWorker(this.client, playerNumber, pane,this).execute();
+                        thisplayerMove = false;
+                    }
 
-                        if (mst.checkMill(playerNumber)){
-                            changeStatus(2,playerNumber);
-                            phase = 0;
-                        }else {
-                            phase = 2;
-                            playerChange();
-                            mst.stillMill();
-                            onlyOnce = false;
-                        }
-                    }
-                }
-                else{
-                    if (pos != pos3 && mst.posTaken(pos3)) {
-                        pane.moveStone(pos, pos3, playerNumber);
-                        mst.moveStone(pos, pos3, playerNumber);
-                        if(mst.checkMill(playerNumber) || mst.checkMill(!playerNumber)){
-                            changeStatus(2,playerNumber);
-                            phase = 0;
-                        }
-                        else{
-                            mst.stillMill();
-                            playerChange();
-                        }
-                    }
-                }
             }
         }
 
@@ -621,7 +515,6 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             else if(e.getSource() == resetItem){
                 playerNumber = true;
                 pane.reset();
-                mst.reset();
                 reset();
             }
             else if(count == 0) {

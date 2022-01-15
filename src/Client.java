@@ -80,14 +80,16 @@ public class Client{
                 System.out.println("[CLIENT] client.playernumber: " + playerNumber + " client.state: " + state);
                 if(state == 1) {
                     pos1 = serverConn.getPos1();
-                }else if(state == 2){
-                    serverConn.setGotData(false);
+                }else if(state == 2 || state == 6 || state == 8 || state == 11  || state == 15 ||state == 18  || state == 22 || state == 23){
                 }else if(state == 3){
                     pos1 = serverConn.getPos1();
-                    serverConn.setGotData(false);
-                }else if(state == 4){
+                }else if(state == 4 || state == 5 || state == 10 || state == 12 || state == 17 || state == 19 || state == 24){
                     pos1 = serverConn.getPos1();
+                }else if(state == 7 || state == 9 || state == 13 || state == 14  || state == 16 || state == 20 || state == 21){
+                    pos1 = serverConn.getPos1();
+                    pos2 = serverConn.getPos2();
                 }
+                serverConn.setGotData(false);
                 break;
             }
             Thread.sleep(50);
@@ -95,7 +97,14 @@ public class Client{
         return true;
     }
 
+    public void reset(){
+
+    }
     public void sendData(int state, int pos1){
+        if(serverConn.getState() != 8 && serverConn.getState() != 7) {
+            this.state = state;
+        }
+        this.pos1 = pos1;
         PrintWriter output = null;
         try {
             output = new PrintWriter(client.getOutputStream(),true);
@@ -103,15 +112,16 @@ public class Client{
             e.printStackTrace();
         }
         assert output != null;
-        System.out.println(state + " " + pos1);
+        System.out.println("[CLIENT] state: " + state + " pos1: " + pos1 );
         output.println(state);
         output.println(pos1);
         output.println(pos2);
-        output.println(pos3);
     }
 
-    public void sendState(int statee){
-        this.state = statee;
+    public void sendData(int state, int pos1, int pos2){
+        this.state = state;
+        this.pos1 = pos1;
+        this.pos2 = pos2;
         PrintWriter output = null;
         try {
             output = new PrintWriter(client.getOutputStream(),true);
@@ -119,11 +129,10 @@ public class Client{
             e.printStackTrace();
         }
         assert output != null;
-        System.out.println(statee + " " + pos1);
-        output.println(statee);
+        System.out.println("state: " + state + " pos1: " + pos1 + " pos2: " + pos2);
+        output.println(state);
         output.println(pos1);
         output.println(pos2);
-        output.println(pos3);
     }
 
     /***
@@ -143,6 +152,14 @@ public class Client{
 
     public int getPos1() {
         return pos1;
+    }
+
+    public int getPos2() {
+        return pos2;
+    }
+
+    public int getPos3() {
+        return pos3;
     }
 
     public boolean isPlayerNumber() {
