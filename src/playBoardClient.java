@@ -235,8 +235,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                 if(pos2 != pos && !onlyOnce && pos != 0) { //changed sameplayer stone and solved the problem
                     onlyOnce = true;
                     client.sendData(7, pos, pos2);
-                     new WartenSwingWorker(this.client, this.playerNumber, pane,this).execute();
-                    thisplayerMove = false;
+                    new GUISwingWorker(this.client, this.playerNumber, pane,this).execute();
                 }
             }
         }
@@ -330,7 +329,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                 if (phase == 1) {
                     if (pos != 0) {
                         client.sendData(1, pos);
-                        new WartenSwingWorker(this.client, playerNumber, pane,this).execute();
+                        new GUISwingWorker(this.client, playerNumber, pane,this).execute();
                         thisplayerMove = false;
                     }
                 } else if (phase == 0) {
@@ -470,7 +469,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
          * Changes Status on label depending on phase and which state (condition for label) it is currently in
          * @param state represents the possibilities that happen
          */
-        private void changeStatus(int state, boolean plNumb){
+        void changeStatus(int state, boolean plNumb){
             if(state == 1) {
                 if (!plNumb) {
                     pane.setPlayerStatus("Player 2 place your Stone!", playerTwo);

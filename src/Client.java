@@ -5,12 +5,13 @@ import java.sql.SQLOutput;
 public class Client{
 
     private static Socket client;
-    private int pos1 = 0,pos2 = 0,pos3 = 0;
+    private int pos1 = 0,pos2 = 0;
     private int state = 1;
     ServerConnection serverConn;
     private boolean playerNumber;
     private boolean playerNumberOr;
     private boolean allowed = true;
+    private ObjectOutputStream objWriter;
 
 
 
@@ -18,6 +19,7 @@ public class Client{
         try{
             client = new Socket("localhost", 1337);
             serverConn = new ServerConnection(client);
+            objWriter = new ObjectOutputStream(client.getOutputStream());
             System.out.println("[Client] connected");
         }catch(IOException e){
             System.out.println("Beim Erstellen des Clients ist ein Fehler aufgetreten");
@@ -51,33 +53,27 @@ public class Client{
      * @throws IOException yeee
      */
     public void sendData(boolean playerNumber) throws IOException {
-        PrintWriter output = new PrintWriter(client.getOutputStream(),true);
-        output.println(playerNumber);
-        this.playerNumberOr = playerNumber;
+        LoginData loginData = new LoginData("0001","Kirito","Schule123",playerNumber);
+        objWriter.writeObject(loginData);
     }
 
     public boolean waitForAllowed() throws InterruptedException {
-        while (true){
             if(serverConn.isGotAllowed()) {
                 if (serverConn.isAllowed()) {
                     return true;
-                } else {
-                    return false;
                 }
             }
-            Thread.sleep(50);
-        }
+            return false;
     }
     /**
      *
      * @return
      */
     public boolean waitforData() throws InterruptedException {
-        while (true) {
             if (serverConn.isGotData()) {
                 playerNumber = serverConn.isPlayerNumber();
                 state = serverConn.getState();
-                System.out.println("[CLIENT] client.playernumber: " + playerNumber + " client.state: " + state);
+                System.out.println("[CLIENT] playernumber: " + playerNumber + " state: " + state);
                 if(state == 1) {
                     pos1 = serverConn.getPos1();
                 }else if(state == 2 || state == 6 || state == 8 || state == 11  || state == 15 ||state == 18  || state == 22 || state == 23){
@@ -90,11 +86,9 @@ public class Client{
                     pos2 = serverConn.getPos2();
                 }
                 serverConn.setGotData(false);
-                break;
+                return true;
             }
-            Thread.sleep(50);
-        }
-        return true;
+        return false;
     }
 
     public void reset(){
@@ -105,17 +99,13 @@ public class Client{
             this.state = state;
         }
         this.pos1 = pos1;
-        PrintWriter output = null;
+        Data data = new Data(state,pos1,0,"player1",false, playerNumber);
         try {
-            output = new PrintWriter(client.getOutputStream(),true);
+            objWriter.writeObject(data);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        assert output != null;
         System.out.println("[CLIENT] state: " + state + " pos1: " + pos1 );
-        output.println(state);
-        output.println(pos1);
-        output.println(pos2);
     }
 
     public void sendData(int state, int pos1, int pos2){
@@ -156,10 +146,6 @@ public class Client{
 
     public int getPos2() {
         return pos2;
-    }
-
-    public int getPos3() {
-        return pos3;
     }
 
     public boolean isPlayerNumber() {

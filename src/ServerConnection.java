@@ -1,13 +1,11 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.net.Socket;
-import java.sql.SQLOutput;
 
 public class ServerConnection implements Runnable{
 
     private Socket server;
-    private BufferedReader reader;
+    private ObjectInputStream objReader;
     private int state = -1;
     private boolean gotData = false, gotAllowed = false;
     private int pos1,pos2,pos3;
@@ -18,7 +16,7 @@ public class ServerConnection implements Runnable{
 
     public ServerConnection(Socket server) throws IOException {
         this.server = server;
-        reader = new BufferedReader(new InputStreamReader(server.getInputStream()));
+        objReader = new ObjectInputStream(server.getInputStream());
     }
 
     public void setGotData(boolean gotData) {
@@ -64,40 +62,26 @@ public class ServerConnection implements Runnable{
         try {
             while (true) {
                 do {
-                    allowed = Boolean.parseBoolean(reader.readLine());
+                    //allowed = Boolean.parseBoolean(reader.readLine());
                     gotAllowed = true;
                 }while (!allowed);
-                System.out.println("[CLIENT] allowed: " + allowed);
-                    state = Integer.parseInt(reader.readLine());
-                    playerNumber = Boolean.parseBoolean(reader.readLine());
-                    System.out.println("state: " + state + " pl: " + playerNumber);
+                    Data data = (Data)objReader.readObject();
+                    state = data.getState();
+                    playerNumber = data.isPlayer();
                     if (state != -1) {
-                        //versteh das if hier nicht ganz macht ja immer das gleiche :D (außer in state 2)
-                        if (state == 1) {
-                            pos1 = Integer.parseInt(reader.readLine());
-                        } else if (state == 2 || state == 6 || state == 8 || state == 11 || state == 15 || state == 18 || state == 22 || state == 23) {
-                        } else if (state == 3) {
-                            pos1 = Integer.parseInt(reader.readLine());
-                        } else if (state == 4) {
-                            pos1 = Integer.parseInt(reader.readLine());
-                        } else if (state == 5 || state == 10 || state == 12 || state == 17 || state == 19 || state == 24) {
-                            pos1 = Integer.parseInt(reader.readLine());
-                        } else if (state == 7 || state == 9 || state == 13 || state == 14 || state == 16 || state == 20 || state == 21) {
-                            pos1 = Integer.parseInt(reader.readLine());
-                            pos2 = Integer.parseInt(reader.readLine());
-                            System.out.println(pos1 + " " + pos2);
-                        }
+                        pos1 = data.getPos1();
+                        pos2 = data.getPos2();
                     } else {
                         break;
                     }
                 gotData = true;
                 gotAllowed = false;
             }
-        }catch (IOException e){
+        }catch (IOException | ClassNotFoundException e){
             e.printStackTrace();
         }finally {
             try {
-                reader.close();
+                objReader.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
