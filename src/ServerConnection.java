@@ -1,18 +1,19 @@
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.sql.SQLOutput;
 
 public class ServerConnection implements Runnable{
 
-    private Socket server;
-    private ObjectInputStream objReader;
+    private final Socket server;
+    private final ObjectInputStream objReader;
     private int state = -1;
     private boolean gotData = false, gotAllowed = false;
-    private int pos1,pos2,pos3;
+    private int pos1,pos2;
     private boolean playerNumber;
     private boolean allowed = true;
     private String str;
-    private boolean clear = true;
+    private boolean reset = false;
 
     public ServerConnection(Socket server) throws IOException {
         this.server = server;
@@ -38,8 +39,8 @@ public class ServerConnection implements Runnable{
         return pos2;
     }
 
-    public int getPos3() {
-        return pos3;
+    public boolean isReset() {
+        return reset;
     }
 
     public boolean isPlayerNumber() {
@@ -53,6 +54,10 @@ public class ServerConnection implements Runnable{
         return gotAllowed;
     }
 
+    public void setGotAllowed(boolean gotAllowed) {
+        this.gotAllowed = gotAllowed;
+    }
+
     /**
      * while testing found out we don't have to use different parse etc. maybe we should do make sure its send corretly
      * if we don't it only sends Strings
@@ -61,11 +66,20 @@ public class ServerConnection implements Runnable{
     public void run() {
         try {
             while (true) {
-                do {
-                    //allowed = Boolean.parseBoolean(reader.readLine());
-                    gotAllowed = true;
-                }while (!allowed);
-                    Data data = (Data)objReader.readObject();
+                    do {
+                        AcceptData acceptData = (AcceptData) objReader.readObject();
+                        allowed = acceptData.isAccept();
+                        if (allowed) {
+                            pos1 = acceptData.getPos1();
+                            pos2 = acceptData.getPos2();
+                            state = acceptData.getState();
+                            playerNumber = acceptData.isPlayerNumb();
+                            reset = acceptData.isReset();
+                            System.out.println("[CLIENT] playernumber: " + playerNumber + " state: " + state + " pos1: " + pos1);
+                        }
+                        gotAllowed = true;
+                    } while (!allowed);
+                    Data data = (Data) objReader.readObject();
                     state = data.getState();
                     playerNumber = data.isPlayer();
                     if (state != -1) {
@@ -75,7 +89,6 @@ public class ServerConnection implements Runnable{
                         break;
                     }
                 gotData = true;
-                gotAllowed = false;
             }
         }catch (IOException | ClassNotFoundException e){
             e.printStackTrace();

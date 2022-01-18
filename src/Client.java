@@ -53,13 +53,23 @@ public class Client{
      * @throws IOException yeee
      */
     public void sendData(boolean playerNumber) throws IOException {
-        LoginData loginData = new LoginData("0001","Kirito","Schule123",playerNumber);
+        LoginData loginData;
+        playerNumberOr = playerNumber;
+        if(playerNumber) {
+            loginData = new LoginData("0001", "Kirito", "Schule123", true);
+        }else {
+            loginData = new LoginData("0002", "Asuna", "Schule123", false);
+        }
         objWriter.writeObject(loginData);
     }
 
-    public boolean waitForAllowed() throws InterruptedException {
+    public boolean waitForAllowed(){
             if(serverConn.isGotAllowed()) {
                 if (serverConn.isAllowed()) {
+                    state = serverConn.getState();
+                    pos1 = serverConn.getPos1();
+                    pos2 = serverConn.getPos2();
+                    playerNumber = serverConn.isPlayerNumber();
                     return true;
                 }
             }
@@ -86,6 +96,8 @@ public class Client{
                     pos2 = serverConn.getPos2();
                 }
                 serverConn.setGotData(false);
+                serverConn.setGotAllowed(false);
+                System.out.println("hure");
                 return true;
             }
         return false;
@@ -95,11 +107,14 @@ public class Client{
 
     }
     public void sendData(int state, int pos1){
-        if(serverConn.getState() != 8 && serverConn.getState() != 7) {
-            this.state = state;
+        Data data;
+        if(playerNumberOr) {
+            data = new Data(state, pos1, 0, "0001", false, true);
+            System.out.println("hier");
+        }else {
+            data = new Data(state, pos1, 0, "0002", false, false);
+            System.out.println("hier2");
         }
-        this.pos1 = pos1;
-        Data data = new Data(state,pos1,0,"player1",false, playerNumber);
         try {
             objWriter.writeObject(data);
         } catch (IOException e) {
@@ -109,9 +124,6 @@ public class Client{
     }
 
     public void sendData(int state, int pos1, int pos2){
-        this.state = state;
-        this.pos1 = pos1;
-        this.pos2 = pos2;
         PrintWriter output = null;
         try {
             output = new PrintWriter(client.getOutputStream(),true);

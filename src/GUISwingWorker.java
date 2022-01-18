@@ -35,17 +35,16 @@ public class GUISwingWorker extends SwingWorker<Boolean,String> {
     protected void done() {
         System.out.println("[CLIENT] Allowed move!");
         if(!reset) {
+            playerNumber = client.isPlayerNumber();
             if (client.getState() == 1) {
                 pbC.changeStatus(1, !playerNumber);
                 pane.repaint(client.getPos1(), playerNumber);
 
             } else if (client.getState() == 2) {
-                pane.removeStone(client.getPos1());
-                if (!pbC.phase3) {
-                    pbC.changeStatus(1, !playerNumber);
-                } else {
-                    pbC.changeStatus(3, !playerNumber);
-                }
+                phase = 0;
+                pane.repaint(client.getPos1(), playerNumber);
+                pbC.changeStatus(2,playerNumber);
+                System.out.println("[CLIENT] Remove a Stone Player: " + playerNumber);
 
             } else if (client.getState() == 3) {
                 pbC.changeStatus(2, !client.isPlayerNumber());
@@ -53,7 +52,7 @@ public class GUISwingWorker extends SwingWorker<Boolean,String> {
 
             } else if (client.getState() == 4) {
                 pbC.changeStatus(1, client.isPlayerNumber());
-                pane.repaint(client.getPos1(), playerNumber);
+                pane.removeStone(client.getPos1());
 
             } else if (client.getState() == 5) {
                 pbC.changeStatus(3, client.isPlayerNumber());
@@ -113,7 +112,7 @@ public class GUISwingWorker extends SwingWorker<Boolean,String> {
             }
         }
         pbC.phase = phase;
-        new WartenSwingWorker(this.client, this.playerNumber, pane,this.pbC).execute();
+        new WartenSwingWorker(this.client, this.playerNumber, pane, this.pbC).execute();
         super.done();
     }
 

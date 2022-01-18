@@ -336,7 +336,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                     if (pos != 0) {
                             client.sendData(2, pos);
                         phase = 1;
-                        new WartenSwingWorker(this.client, playerNumber, pane, this).execute();
+                        new GUISwingWorker(this.client, playerNumber, pane,this).execute();
                         thisplayerMove = false;
                     }
                 }
@@ -448,7 +448,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                     if (pos != pos3 && pos != 0) { //if (pos != pos3 && mst.posTaken(pos3) && playerJump == playerNumber)
                         client.sendData(13,pos,pos3);
                         onlyOnce = false;
-                        new WartenSwingWorker(this.client, playerNumber, pane,this).execute();
+                        new GUISwingWorker(this.client, playerNumber, pane,this).execute();
                         thisplayerMove = false;
                     }
 

@@ -14,6 +14,7 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
     private boolean alllowed = true;
     private boolean phase3 = false;
     private boolean reset = false;
+    private int count = 0;
 
 
     public WartenSwingWorker(Client client, boolean playerNumber, MyPanel pane, playBoardClient pbC) {
@@ -35,14 +36,18 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
             }
             Thread.sleep(50);
         }
+        if(count > 0){
+            System.out.println("yes");
+            done();
+        }
         return false;
     }
 
     @Override
     protected void done() {
-        do {
             System.out.println("[Client] Server Response!");
             state = client.getState();
+        System.out.println("kekekekek:_ " + state);
             if (state == 1) {
                 pbC.changeStatus(1, !client.isPlayerNumber());
                 pane.repaint(client.getPos1(), client.isPlayerNumber());
@@ -54,8 +59,10 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
                 System.out.println("[CLIENT] Remove a Stone: ");
 
             } else if (state == 3) {
+                phase = 0;
                 pbC.changeStatus(2, client.isPlayerNumber());
                 pane.repaint(client.getPos1(), client.isPlayerNumber());
+
 
             } else if (state == 4) {
                 pane.removeStone(client.getPos1());
@@ -163,7 +170,15 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
                 pane.removeStone(client.getPos1());
                 pbC.changeStatus(5, !playerNumber);
             }
-        } while (state == 3 || state == 6 || state == 9 || state == 11 || state == 16 || state == 18);
+        if(state == 3 || state == 6 || state == 9 || state == 11 || state == 16 || state == 18) {
+            try {
+                count++;
+                doInBackground();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        count = 0;
         pbC.phase = phase;
         pbC.thisplayerMove = true;
         super.done();
