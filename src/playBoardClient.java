@@ -233,10 +233,11 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                     pos2 = 18;
                 }
 
-                if(pos2 != pos && !onlyOnce && pos != 0) { //changed sameplayer stone and solved the problem
+                if(pos2 != pos && !onlyOnce && pos != 0) {
                     onlyOnce = true;
                     client.sendData(7, pos, pos2);
                     new GUISwingWorker(this.client, this.playerNumber, pane,this).execute();
+                    thisplayerMove = false;
                 }
             }
         }

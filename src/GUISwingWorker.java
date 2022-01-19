@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class GUISwingWorker extends SwingWorker<Boolean,String> {
+public class GUISwingWorker extends SwingWorker<Boolean, String> {
 
     private final Client client;
     private int phase = 1;
@@ -18,28 +18,32 @@ public class GUISwingWorker extends SwingWorker<Boolean,String> {
         this.pane = pane;
         this.pbC = pbC;
     }
+
     @Override
     protected Boolean doInBackground() throws Exception {
         System.out.println("[CLIENT] Wait for allowed...");
-        while (true){
-            if(client.waitForAllowed()){
-                if(client.isAllowed()) {
+        while (true) {
+            Thread.sleep(20);
+            if (client.waitForAllowed()) {
+
+                if (client.isAllowed()) {
                     allowed = true;
-                }else{
+                } else {
                     allowed = false;
                 }
                 break;
             }
-            if(pbC.reset){
+            if (pbC.reset) {
                 reset = true;
             }
-            Thread.sleep(20);
         }
         return null;
     }
+
     @Override
     protected void done() {
-        if(!reset && allowed) {
+        System.out.println("allowed: " + allowed);
+        if (!reset && allowed) {
             System.out.println("[CLIENT] Allowed move! " + client.getState() + " p: " + client.getPos1());
             playerNumber = client.isPlayerNumber();
             if (client.getState() == 1) {
@@ -49,7 +53,7 @@ public class GUISwingWorker extends SwingWorker<Boolean,String> {
             } else if (client.getState() == 2) {
                 phase = 0;
                 pane.repaint(client.getPos1(), playerNumber);
-                pbC.changeStatus(2,playerNumber);
+                pbC.changeStatus(2, playerNumber);
                 System.out.println("[CLIENT] Remove a Stone Player: " + playerNumber);
 
             } else if (client.getState() == 3) {
@@ -70,7 +74,7 @@ public class GUISwingWorker extends SwingWorker<Boolean,String> {
                 pane.repaint(client.getPos1(), playerNumber);
 
             } else if (client.getState() == 7) {
-                pane.moveStone(client.getPos1(), client.getPos2(), !client.isPlayerNumber());
+                pane.moveStone(client.getPos1(), client.getPos2(), playerNumber);
                 if (pbC.phase3) {
                     pbC.changeStatus(4, !playerNumber);
                     phase = 3;
@@ -80,18 +84,17 @@ public class GUISwingWorker extends SwingWorker<Boolean,String> {
                 }
 
             } else if (client.getState() == 8) {
-                pbC.changeStatus(3, !playerNumber);
-                pane.removeStone(client.getPos1());
-                phase = 2;
+                pbC.changeStatus(2, !playerNumber);
+                pane.moveStone(client.getPos1(), client.getPos2(), playerNumber);
 
             } else if (client.getState() == 9) {
                 pane.removeStone(client.getPos1());
-                pbC.changeStatus(2, !playerNumber);
+                pbC.changeStatus(3, !playerNumber);
+                phase = 2;
 
             } else if (client.getState() == 10) {
-                pane.moveStone(client.getPos1(), client.getPos2(), !client.isPlayerNumber());
-                pbC.changeStatus(2, !playerNumber);
-                phase = 2;
+                pane.removeStone(client.getPos1());
+                pbC.changeStatus(3, !playerNumber);
 
             } else if (client.getState() == 11) {
                 pane.moveStone(client.getPos1(), client.getPos2(), !client.isPlayerNumber());
@@ -103,7 +106,7 @@ public class GUISwingWorker extends SwingWorker<Boolean,String> {
                 pbC.changeStatus(4, playerNumber);
 
             } else if (client.getState() == 13) {
-                pane.moveStone(client.getPos1(), client.getPos2(), !client.isPlayerNumber());
+                pane.moveStone(client.getPos1(), client.getPos2(), playerNumber);
 
                 if (pbC.isBoothphase3()) {
                     phase = 3;
@@ -112,18 +115,33 @@ public class GUISwingWorker extends SwingWorker<Boolean,String> {
                     phase = 2;
                     pbC.changeStatus(3, !playerNumber);
                 }
+            } else if (client.getState() == 14) {
+                pane.moveStone(client.getPos1(), client.getPos2(), playerNumber);
+                phase = 3;
+                pbC.changeStatus(4, !playerNumber);
+
+            }else if(client.getState() == 15){
+                pane.moveStone(client.getPos1(), client.getPos2(), playerNumber);
+                phase = 0;
+                pbC.changeStatus(2,playerNumber);
+
             } else if (client.getState() == 22) {
                 phase = 0;
                 pbC.changeStatus(2, !playerNumber);
-            }else if(client.getState() == 1000){
+
+            }else if(client.getState() == 23){
+                pane.moveStone(client.getPos1(), client.getPos2(), playerNumber);
+                phase = 4;
+                pbC.changeStatus(5,playerNumber);
+            } else if (client.getState() == 1000) {
                 System.out.println("reset accept");
                 pbC.reset();
             }
         }
-        if(allowed) {
+        if (allowed) {
             pbC.phase = phase;
             new WartenSwingWorker(this.client, this.playerNumber, pane, this.pbC).execute();
-        }else{
+        } else {
             System.out.println("[CLIENT] Do your move again!");
             pbC.setThisplayerMove();
         }

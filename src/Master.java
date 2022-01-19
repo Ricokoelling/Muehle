@@ -381,6 +381,10 @@ public class Master {
      * @return true ->stone will be moved to new pos || false ->stone cant move
      */
     protected boolean freeposNextto(int pos1, int pos2, boolean playerNumb){   //this.pos1 == playBoard.pos2 || pos2 ist ursprungspos
+
+        print();
+
+
         int stone = 0;  //zum überschreiben der pos des stones
         if (playerNumb) {
             for (int i = 0; i < playerOne.size(); i++) {
@@ -400,6 +404,7 @@ public class Master {
                 } else {
                     playerTwo.get(stone).setPosition(pos1);
                 }
+                System.out.println("[Why]");
                 return true;
             }
         }
@@ -541,8 +546,8 @@ public class Master {
         muehlenPlayerOne.clear();
         muehlenPlayerTwo.clear();
     }
-    /*protected void print(){
-        for(Stones[] yee: muehlenPlayerOne){
+    protected void print(){
+       /* for(Stones[] yee: muehlenPlayerOne){
             for(Stones ye : yee){
                 System.out.println("mill 1: " +  ye.toString());
             }
@@ -552,7 +557,7 @@ public class Master {
                 System.out.println("mill 2: " +  ye.toString());
             }
         }
-        System.out.println(" ");
+        System.out.println(" ");*/
         for(Stones stones : playerOne){
             System.out.println("player 1: " + stones.toString());
         }
@@ -560,6 +565,6 @@ public class Master {
         for(Stones value : playerTwo){
             System.out.println("player 2: " + value.toString());
         }
-    }*/
+    }
 }
 

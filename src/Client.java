@@ -128,9 +128,9 @@ public class Client{
     public void sendData(int state, int pos1){
         Data data;
         if(playerNumberOr) {
-            data = new Data(state, pos1, 0, "0001", false, true);
+            data = new Data(state, pos1, 0, "0001", reset, true);
         }else {
-            data = new Data(state, pos1, 0, "0002", false, false);
+            data = new Data(state, pos1, 0, "0002", reset, false);
         }
         try {
             objWriter.writeObject(data);
@@ -141,17 +141,18 @@ public class Client{
     }
 
     public void sendData(int state, int pos1, int pos2){
-        PrintWriter output = null;
+        Data data;
+        if(playerNumberOr) {
+            data = new Data(state, pos1, pos2, "0001", reset, true);
+        }else {
+            data = new Data(state, pos1, pos2, "0002", reset, false);
+        }
         try {
-            output = new PrintWriter(client.getOutputStream(),true);
+            objWriter.writeObject(data);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        assert output != null;
-        System.out.println("state: " + state + " pos1: " + pos1 + " pos2: " + pos2);
-        output.println(state);
-        output.println(pos1);
-        output.println(pos2);
+        System.out.println("[CLIENT] state: " + state + " pos1: " + pos1  + " pos2: " + pos2);
     }
 
     /***

@@ -28,16 +28,15 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
     protected Boolean doInBackground() throws Exception {
         System.out.println("[CLIENT] Wait for Data...");
         while (true){
+            Thread.sleep(20);
             if(client.waitforData()){
                 break;
             }
             if(pbC.reset){
                 reset = true;
             }
-            Thread.sleep(20);
         }
         if(count > 0){
-            System.out.println("yes");
             done();
         }
         return false;
@@ -81,6 +80,7 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
                 pbC.changeStatus(3, !client.isPlayerNumber());
 
             } else if (state == 7) {
+                phase = 2;
                 pane.moveStone(client.getPos1(), client.getPos2(), client.isPlayerNumber());
                 pbC.changeStatus(3, !client.isPlayerNumber());
                 System.out.println("[Client] Your Move! to move " + phase);
@@ -156,9 +156,9 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
                 phase = 3;
                 System.out.println("[Client] Your Move! boothphase3 ");
             } else if (state == 21) {
-                pane.moveStone(client.getPos1(), client.getPos2(), client.isPlayerNumber());
                 phase = 0;
-                pbC.changeStatus(2, !playerNumber);
+                pbC.changeStatus(2, client.isPlayerNumber());
+                System.out.println("[CLIENT] Remove a Stone: ");
             } else if (state == 22) {
                 phase = 0;
                 pbC.changeStatus(2, !playerNumber);
@@ -177,6 +177,7 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
         if(state == 3 || state == 6 || state == 9 || state == 11 || state == 16 || state == 18) {
             try {
                 count++;
+                System.out.println("fotze");
                 doInBackground();
             } catch (Exception e) {
                 e.printStackTrace();
