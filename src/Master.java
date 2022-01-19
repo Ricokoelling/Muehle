@@ -226,7 +226,7 @@ public class Master {
             checkMill(true);
             checkMill(false);
 
-        print();
+        //print();
         }
 
     /**
@@ -541,7 +541,7 @@ public class Master {
         muehlenPlayerOne.clear();
         muehlenPlayerTwo.clear();
     }
-    protected void print(){
+    /*protected void print(){
         for(Stones[] yee: muehlenPlayerOne){
             for(Stones ye : yee){
                 System.out.println("mill 1: " +  ye.toString());
@@ -560,6 +560,6 @@ public class Master {
         for(Stones value : playerTwo){
             System.out.println("player 2: " + value.toString());
         }
-    }
+    }*/
 }
 

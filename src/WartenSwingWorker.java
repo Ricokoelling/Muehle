@@ -34,7 +34,7 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
             if(pbC.reset){
                 reset = true;
             }
-            Thread.sleep(50);
+            Thread.sleep(20);
         }
         if(count > 0){
             System.out.println("yes");
@@ -47,7 +47,6 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
     protected void done() {
             System.out.println("[Client] Server Response!");
             state = client.getState();
-        System.out.println("kekekekek:_ " + state);
             if (state == 1) {
                 pbC.changeStatus(1, !client.isPlayerNumber());
                 pane.repaint(client.getPos1(), client.isPlayerNumber());
@@ -60,6 +59,7 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
 
             } else if (state == 3) {
                 phase = 0;
+                System.out.println("pos1: " + client.getPos1());
                 pbC.changeStatus(2, client.isPlayerNumber());
                 pane.repaint(client.getPos1(), client.isPlayerNumber());
 
@@ -169,6 +169,10 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
                 phase = 5;
                 pane.removeStone(client.getPos1());
                 pbC.changeStatus(5, !playerNumber);
+            }else if(state == 1000){
+                System.out.println("reset data");
+                System.out.println("[CLIENT] Your move!");
+                pbC.reset();
             }
         if(state == 3 || state == 6 || state == 9 || state == 11 || state == 16 || state == 18) {
             try {
@@ -180,7 +184,7 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
         }
         count = 0;
         pbC.phase = phase;
-        pbC.thisplayerMove = true;
+        pbC.setThisplayerMove();
         super.done();
     }
 

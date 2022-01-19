@@ -9,6 +9,7 @@ public class GUISwingWorker extends SwingWorker<Boolean,String> {
     private final MyPanel pane;
     private final playBoardClient pbC;
     private boolean reset = false;
+    private boolean allowed = true;
 
 
     public GUISwingWorker(Client client, boolean playerNumber, MyPanel pane, playBoardClient pbC) {
@@ -22,19 +23,24 @@ public class GUISwingWorker extends SwingWorker<Boolean,String> {
         System.out.println("[CLIENT] Wait for allowed...");
         while (true){
             if(client.waitForAllowed()){
+                if(client.isAllowed()) {
+                    allowed = true;
+                }else{
+                    allowed = false;
+                }
                 break;
             }
             if(pbC.reset){
                 reset = true;
             }
-            Thread.sleep(50);
+            Thread.sleep(20);
         }
         return null;
     }
     @Override
     protected void done() {
-        System.out.println("[CLIENT] Allowed move!");
-        if(!reset) {
+        if(!reset && allowed) {
+            System.out.println("[CLIENT] Allowed move! " + client.getState() + " p: " + client.getPos1());
             playerNumber = client.isPlayerNumber();
             if (client.getState() == 1) {
                 pbC.changeStatus(1, !playerNumber);
@@ -51,11 +57,11 @@ public class GUISwingWorker extends SwingWorker<Boolean,String> {
                 pane.repaint(client.getPos1(), playerNumber);
 
             } else if (client.getState() == 4) {
-                pbC.changeStatus(1, client.isPlayerNumber());
+                pbC.changeStatus(1, !playerNumber);
                 pane.removeStone(client.getPos1());
 
             } else if (client.getState() == 5) {
-                pbC.changeStatus(3, client.isPlayerNumber());
+                pbC.changeStatus(3, playerNumber);
                 pane.repaint(client.getPos1(), playerNumber);
 
             } else if (client.getState() == 6) {
@@ -109,10 +115,18 @@ public class GUISwingWorker extends SwingWorker<Boolean,String> {
             } else if (client.getState() == 22) {
                 phase = 0;
                 pbC.changeStatus(2, !playerNumber);
+            }else if(client.getState() == 1000){
+                System.out.println("reset accept");
+                pbC.reset();
             }
         }
-        pbC.phase = phase;
-        new WartenSwingWorker(this.client, this.playerNumber, pane, this.pbC).execute();
+        if(allowed) {
+            pbC.phase = phase;
+            new WartenSwingWorker(this.client, this.playerNumber, pane, this.pbC).execute();
+        }else{
+            System.out.println("[CLIENT] Do your move again!");
+            pbC.setThisplayerMove();
+        }
         super.done();
     }
 

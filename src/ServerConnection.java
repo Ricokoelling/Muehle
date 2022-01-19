@@ -51,11 +51,16 @@ public class ServerConnection implements Runnable{
     }
 
     public boolean isGotAllowed() {
+        System.out.println("got: " + gotAllowed) ;
         return gotAllowed;
     }
 
     public void setGotAllowed(boolean gotAllowed) {
         this.gotAllowed = gotAllowed;
+    }
+
+    public void setReset(boolean reset) {
+        this.reset = reset;
     }
 
     /**
@@ -79,6 +84,7 @@ public class ServerConnection implements Runnable{
                         }
                         gotAllowed = true;
                     } while (!allowed);
+                System.out.println("imout");
                     Data data = (Data) objReader.readObject();
                     state = data.getState();
                     playerNumber = data.isPlayer();

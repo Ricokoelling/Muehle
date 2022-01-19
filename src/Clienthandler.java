@@ -55,7 +55,7 @@ public class Clienthandler implements Runnable{
                 int pos1 = data.getPos1();
                 int pos2 = data.getPos2();
                 //System.out.println("pl: " + playerNumber + " pos: " + pos1 + " count: " + count + " state: " + state);
-                System.out.println("[SERVER] state: " + state + " pos1: " + pos1 + " pos2: " + pos2 + " PlayerID " + data.getPlayerID() + " reset: "+ data.isReset());
+                System.out.println("[SERVER] state: " + state + " pos1: " + pos1 + " pos2: " + pos2 + " PlayerID " + data.getPlayerID() + "plNumber: " + playerNumber + " reset: "+ data.isReset());
 
                 if(state == 1){
                     if (phaseOne(pos1,this.playerNumber) && phaseOneOtherPlayer(pos1) && !phase3) {
@@ -67,6 +67,8 @@ public class Clienthandler implements Runnable{
                                 }else {
                                     if(checkPhase3()){
                                         outTosameClient(11,true,playerNumber,pos1);
+                                        outTosameClientData(11,playerNumber,pos1);
+                                        dummy();
                                         outToclient(12,playerNumber,pos1);
                                     }else {
                                         phaseChange = true;
@@ -98,6 +100,7 @@ public class Clienthandler implements Runnable{
                         outTosameClient(23,true,playerNumber,pos1);
                         outToclient(24,playerNumber,pos1);
                     }
+                    System.out.println("pos1: " + pos1);
                     if (!mst.posTaken(pos1) && mst.sameplayerStone(pos1, playerNumber) && mst.removeStones(pos1, playerNumber)) {
                         boolean next = true;
                         if(clients.get(0).playerNumber == playerNumber){
@@ -149,6 +152,7 @@ public class Clienthandler implements Runnable{
                             }
                         }
                     }else {
+                        System.out.println("yeee");
                         outTosameClient(0,false,playerNumber,0);
                     }
                 }else if(state == 7){
@@ -230,11 +234,7 @@ public class Clienthandler implements Runnable{
                     }
 
                 }else if(state == 1000){
-                    maxstones = 17;
-                    count = 0;
-                    pos2 = 0;
-                    phaseChange = false;
-                    boothphase3 = false;
+                    reset();
                 }else {
                     break;
                 }
@@ -394,5 +394,37 @@ public class Clienthandler implements Runnable{
         }
     }
     private void win(int pos1, int pos2){
+    }
+
+    private void reset() throws IOException {
+        maxstones = 17;
+        count = 0;
+        phaseChange = false;
+        boothphase3 = false;
+        mst.reset();
+        if(clients.get(0).playerNumber == playerNumber){
+            clients.get(1).resetOther();
+        }else {
+            clients.get(0).resetOther();
+        }
+        AcceptData acceptData = new AcceptData(true,1000,0,0,null,playerNumber,true);
+        if(clients.get(0).playerNumber == playerNumber){
+            clients.get(1).objWriter.writeObject(acceptData);
+        }else {
+            clients.get(0).objWriter.writeObject(acceptData);
+        }
+        Data data = new Data(1000,0,0,null,true,playerNumber);
+        if(clients.get(0).playerNumber == playerNumber){
+            clients.get(0).objWriter.writeObject(data);
+        }else {
+            clients.get(1).objWriter.writeObject(data);
+        }
+    }
+    protected void resetOther(){
+        maxstones = 17;
+        count = 0;
+        phaseChange = false;
+        boothphase3 = false;
+        mst.reset();
     }
 }

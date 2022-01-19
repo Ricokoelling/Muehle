@@ -11,6 +11,7 @@ public class Client{
     private boolean playerNumber;
     private boolean playerNumberOr;
     private boolean allowed = true;
+    private boolean reset;
     private ObjectOutputStream objWriter;
 
 
@@ -66,12 +67,15 @@ public class Client{
     public boolean waitForAllowed(){
             if(serverConn.isGotAllowed()) {
                 if (serverConn.isAllowed()) {
+                    allowed = true;
                     state = serverConn.getState();
                     pos1 = serverConn.getPos1();
                     pos2 = serverConn.getPos2();
                     playerNumber = serverConn.isPlayerNumber();
-                    return true;
+                }else {
+                    allowed = false;
                 }
+                return true;
             }
             return false;
     }
@@ -97,7 +101,22 @@ public class Client{
                 }
                 serverConn.setGotData(false);
                 serverConn.setGotAllowed(false);
-                System.out.println("hure");
+                new Thread(){
+                    public void run(){
+                        while (true) {
+                            if (serverConn.isReset()) {
+                                serverConn.setReset(false);
+                                reset = true;
+                                break;
+                            }
+                            try {
+                                Thread.sleep(50);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }.start();
                 return true;
             }
         return false;
@@ -110,10 +129,8 @@ public class Client{
         Data data;
         if(playerNumberOr) {
             data = new Data(state, pos1, 0, "0001", false, true);
-            System.out.println("hier");
         }else {
             data = new Data(state, pos1, 0, "0002", false, false);
-            System.out.println("hier2");
         }
         try {
             objWriter.writeObject(data);
@@ -166,5 +183,17 @@ public class Client{
 
     public boolean isAllowed() {
         return allowed;
+    }
+
+    public boolean isReset() {
+        return reset;
+    }
+
+    public boolean isPlayerNumberOr() {
+        return playerNumberOr;
+    }
+
+    public void setReset(boolean reset) {
+        this.reset = reset;
     }
 }

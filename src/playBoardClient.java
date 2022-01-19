@@ -48,24 +48,27 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             }
         };
 
-    public boolean isThisplayerMove() {
-        return thisplayerMove;
-    }
-
-    public boolean isLethimwait() {
-        return lethimwait;
-    }
-
-    public void setLethimwait(boolean lethimwait) {
-        this.lethimwait = lethimwait;
+    public void setThisplayerMove() {
+        this.thisplayerMove = true;
+        new Thread(){
+           public void run(){
+               while (true) {
+                   if (client.isReset()) {
+                       reset();
+                       break;
+                   }
+                   try {
+                       Thread.sleep(50);
+                   } catch (InterruptedException e) {
+                       e.printStackTrace();
+                   }
+               }
+           }
+        }.start();
     }
 
     public void setPhase3(boolean phase3) {
         this.phase3 = phase3;
-    }
-
-    public boolean isPhase3() {
-        return phase3;
     }
 
     public void setBoothphase3(boolean boothphase3) {
@@ -74,15 +77,6 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
 
     public boolean isBoothphase3() {
         return boothphase3;
-    }
-    public boolean askForReset(){
-        if(reset){
-            reset = false;
-            return true;
-        }
-        else {
-            return false;
-        }
     }
 
     public playBoardClient(boolean playerNumber) throws IOException, InterruptedException {
@@ -129,8 +123,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         /**
          * reset the howl game
          */
-        private void reset(){
-            reset = true;
+        protected void reset(){
             phase = 1;
             maxstones = 17;
             count = 0;
@@ -139,7 +132,15 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             pos3 = 0;
             onlyOnce = false;
             changeStatus(1,playerNumber);
-            client.sendData(100,0);
+            pane.reset();
+            if(!playerNumber ){
+                new WartenSwingWorker(this.client, false, pane,this).execute();
+            }else {
+                lethimwait = false;
+                thisplayerMove = true;
+            }
+            client.setReset(false);
+
         }
         @Override
         public void mouseDragged(MouseEvent e) {
@@ -335,7 +336,6 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                 } else if (phase == 0) {
                     if (pos != 0) {
                             client.sendData(2, pos);
-                        phase = 1;
                         new GUISwingWorker(this.client, playerNumber, pane,this).execute();
                         thisplayerMove = false;
                     }
@@ -512,8 +512,9 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                 System.exit(0);
             }
             else if(e.getSource() == resetItem){
-                playerNumber = true;
+                playerNumber = client.isPlayerNumberOr();
                 pane.reset();
+                client.sendData(1000,0);
                 reset();
             }
             else if(count == 0) {
