@@ -53,7 +53,6 @@ GridBagConstraints
     }
 
     protected void moveStone(int pos1,int pos2, boolean playerNumb){
-        System.out.println(pos1 + " " + pos2);
         map.remove(pos1);
         repaint(pos2,playerNumb);
     }

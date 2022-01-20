@@ -1,6 +1,7 @@
-import java.io.*;
+import java.awt.*;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.sql.SQLOutput;
 
 public class Client{
 
@@ -13,6 +14,8 @@ public class Client{
     private boolean allowed = true;
     private boolean reset;
     private ObjectOutputStream objWriter;
+    private Color PlayerOne;
+    private Color PlayerTwo;
 
 
 
@@ -87,36 +90,38 @@ public class Client{
             if (serverConn.isGotData()) {
                 playerNumber = serverConn.isPlayerNumber();
                 state = serverConn.getState();
-                System.out.println("[CLIENT] playernumber: " + playerNumber + " state: " + state);
+                if(playerNumberOr){
+                    PlayerTwo = serverConn.getColorTwo();
+                }else {
+                    PlayerOne = serverConn.getColorOne();
+                }
                 if(state == 1) {
                     pos1 = serverConn.getPos1();
-                }else if(state == 2 || state == 6 || state == 8 || state == 11  || state == 15 ||state == 18  || state == 22 || state == 23){
+                }else if(state == 2 || state == 6 || state == 8 || state == 11  ||state == 18  || state == 22){
                 }else if(state == 3){
                     pos1 = serverConn.getPos1();
-                }else if(state == 4 || state == 5 || state == 10 || state == 12 || state == 17 || state == 19 || state == 24){
+                }else if(state == 4 || state == 5 || state == 10 || state == 12 || state == 17 || state == 19 || state == 24 || state == 27){
                     pos1 = serverConn.getPos1();
-                }else if(state == 7 || state == 9 || state == 13 || state == 14  || state == 16 || state == 20 || state == 21){
+                }else if(state == 7 || state == 9 || state == 13 || state == 14  || state == 15|| state == 16 || state == 20 || state == 21 || state == 25 || state == 23){
                     pos1 = serverConn.getPos1();
                     pos2 = serverConn.getPos2();
                 }
                 serverConn.setGotData(false);
                 serverConn.setGotAllowed(false);
-                new Thread(){
-                    public void run(){
-                        while (true) {
-                            if (serverConn.isReset()) {
-                                serverConn.setReset(false);
-                                reset = true;
-                                break;
-                            }
-                            try {
-                                Thread.sleep(50);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+                new Thread(() -> {
+                    while (true) {
+                        if (serverConn.isReset()) {
+                            serverConn.setReset(false);
+                            reset = true;
+                            break;
+                        }
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
                     }
-                }.start();
+                }).start();
                 return true;
             }
         return false;
@@ -129,30 +134,32 @@ public class Client{
         Data data;
         if(playerNumberOr) {
             data = new Data(state, pos1, 0, "0001", reset, true);
+            data.setPlayerOne(PlayerOne);
         }else {
             data = new Data(state, pos1, 0, "0002", reset, false);
+            data.setPlayerTwo(PlayerTwo);
         }
         try {
             objWriter.writeObject(data);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("[CLIENT] state: " + state + " pos1: " + pos1 );
     }
 
     public void sendData(int state, int pos1, int pos2){
         Data data;
         if(playerNumberOr) {
             data = new Data(state, pos1, pos2, "0001", reset, true);
+            data.setPlayerOne(PlayerOne);
         }else {
             data = new Data(state, pos1, pos2, "0002", reset, false);
+            data.setPlayerTwo(PlayerTwo);
         }
         try {
             objWriter.writeObject(data);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("[CLIENT] state: " + state + " pos1: " + pos1  + " pos2: " + pos2);
     }
 
     /***
@@ -196,5 +203,21 @@ public class Client{
 
     public void setReset(boolean reset) {
         this.reset = reset;
+    }
+
+    public void setPlayerOne(Color playerOne) {
+        PlayerOne = playerOne;
+    }
+
+    public void setPlayerTwo(Color playerTwo) {
+        PlayerTwo = playerTwo;
+    }
+
+    public Color getPlayerOne() {
+        return PlayerOne;
+    }
+
+    public Color getPlayerTwo() {
+        return PlayerTwo;
     }
 }

@@ -382,9 +382,6 @@ public class Master {
      */
     protected boolean freeposNextto(int pos1, int pos2, boolean playerNumb){   //this.pos1 == playBoard.pos2 || pos2 ist ursprungspos
 
-        print();
-
-
         int stone = 0;  //zum überschreiben der pos des stones
         if (playerNumb) {
             for (int i = 0; i < playerOne.size(); i++) {
@@ -404,7 +401,6 @@ public class Master {
                 } else {
                     playerTwo.get(stone).setPosition(pos1);
                 }
-                System.out.println("[Why]");
                 return true;
             }
         }

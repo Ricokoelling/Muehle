@@ -1,7 +1,7 @@
+import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
-import java.sql.SQLOutput;
 
 public class ServerConnection implements Runnable{
 
@@ -14,6 +14,8 @@ public class ServerConnection implements Runnable{
     private boolean allowed = true;
     private String str;
     private boolean reset = false;
+    private Color colorOne;
+    private Color colorTwo;
 
     public ServerConnection(Socket server) throws IOException {
         this.server = server;
@@ -51,7 +53,6 @@ public class ServerConnection implements Runnable{
     }
 
     public boolean isGotAllowed() {
-        System.out.println("got: " + gotAllowed) ;
         return gotAllowed;
     }
 
@@ -61,6 +62,14 @@ public class ServerConnection implements Runnable{
 
     public void setReset(boolean reset) {
         this.reset = reset;
+    }
+
+    public Color getColorOne() {
+        return colorOne;
+    }
+
+    public Color getColorTwo() {
+        return colorTwo;
     }
 
     /**
@@ -80,14 +89,14 @@ public class ServerConnection implements Runnable{
                             state = acceptData.getState();
                             playerNumber = acceptData.isPlayerNumb();
                             reset = acceptData.isReset();
-                            System.out.println("[CLIENT] playernumber: " + playerNumber + " state: " + state + " pos1: " + pos1);
                         }
                         gotAllowed = true;
                     } while (!allowed);
-                System.out.println("imout");
                     Data data = (Data) objReader.readObject();
                     state = data.getState();
                     playerNumber = data.isPlayer();
+                    colorOne = data.getPlayerOne();
+                    colorTwo = data.getPlayerTwo();
                     if (state != -1) {
                         pos1 = data.getPos1();
                         pos2 = data.getPos2();

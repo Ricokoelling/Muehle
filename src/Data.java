@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.io.Serializable;
 
 /**
@@ -12,6 +13,8 @@ public class Data implements Serializable {
     private String PlayerID;
     private boolean reset;
     private boolean Player;
+    private Color PlayerOne;
+    private Color PlayerTwo;
 
     public Data(int state, int pos1, int pos2, String PlayerID, boolean reset, boolean player) {
         this.state = state;
@@ -44,5 +47,21 @@ public class Data implements Serializable {
 
     public boolean isPlayer() {
         return Player;
+    }
+
+    public void setPlayerOne(Color playerOne) {
+        PlayerOne = playerOne;
+    }
+
+    public void setPlayerTwo(Color plaxerTwo) {
+        PlayerTwo = plaxerTwo;
+    }
+
+    public Color getPlayerOne() {
+        return PlayerOne;
+    }
+
+    public Color getPlayerTwo() {
+        return PlayerTwo;
     }
 }
