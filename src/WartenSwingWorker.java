@@ -178,16 +178,16 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
             phase = 2;
             pane.removeStone(client.getPos1());
             pbC.changeStatus(3, playerNumber);
-        }else if(state == 26){
+        } else if (state == 26) {
             phase = 3;
             pane.repaint(client.getPos1(), client.isPlayerNumber());
-            pbC.changeStatus(4,client.isPlayerNumber());
+            pbC.changeStatus(4, client.isPlayerNumber());
             System.out.println("[CLIENT] Your move to jumpp");
 
-        }else if(state == 27){
+        } else if (state == 27) {
             phase = 2;
             pane.repaint(client.getPos1(), client.isPlayerNumber());
-            pbC.changeStatus(3,!client.isPlayerNumber());
+            pbC.changeStatus(3, !client.isPlayerNumber());
             System.out.println("[CLIENT] Your move to move after place!");
 
         } else if (state == 1000) {
@@ -203,9 +203,9 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
                 e.printStackTrace();
             }
         }
-        if(pbC.playerNumber){
+        if (pbC.playerNumber) {
             pbC.setPlayerTwo(client.getPlayerTwo());
-        }else {
+        } else {
             pbC.setPlayerTwo(client.getPlayerOne());
         }
         count = 0;

@@ -114,6 +114,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         this.addWindowListener(exitListener);
         this.setVisible(true);
         if (!playerNumber) {
+            thisplayerMove = false;
             new WartenSwingWorker(this.client, false, pane, this).execute();
         } else {
             lethimwait = false;

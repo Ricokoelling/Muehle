@@ -455,7 +455,7 @@ public class Clienthandler implements Runnable {
         System.out.println("[SERVER] Client: " + playerNumber + " Won the Game!");
     }
 
-    private void reset() throws IOException {
+    private void reset() throws IOException {           //only in one direction
         maxstones = 17;
         count = 0;
         phaseChange = false;
