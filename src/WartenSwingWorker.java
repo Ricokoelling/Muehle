@@ -9,8 +9,6 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
     private boolean playerNumber;
     private final MyPanel pane;
     private final playBoardClient pbC;
-    private static final Color playerOne = Color.BLACK;
-    private static final Color playerTwo = Color.GRAY;
     private boolean alllowed = true;
     private boolean phase3 = false;
     private boolean reset = false;
@@ -202,11 +200,6 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        if (pbC.playerNumber) {
-            pbC.setPlayerTwo(client.getPlayerTwo());
-        } else {
-            pbC.setPlayerTwo(client.getPlayerOne());
         }
         count = 0;
         pbC.phase = phase;

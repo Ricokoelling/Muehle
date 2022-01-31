@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.io.Serializable;
 
 /**
@@ -8,10 +9,12 @@ public class LoginData implements Serializable {
 
     private String PlayerID;
     private String PlayerAlias;
-    private String Password;
+    private char[] Password;
     private Boolean Player;
+    private Color thisColor;
+    private boolean register = false;
 
-    public LoginData(String playerID, String playerAlias, String password, Boolean player) {
+    public LoginData(String playerID, String playerAlias, char[] password, Boolean player) {
         this.PlayerID = playerID;
         this.PlayerAlias = playerAlias;
         this.Password = password;
@@ -26,11 +29,15 @@ public class LoginData implements Serializable {
         return PlayerAlias;
     }
 
-    public String getPassword() {
-        return Password;
-    }
-
     public Boolean getPlayer() {
         return Player;
+    }
+
+    public Color getThisColor() {
+        return thisColor;
+    }
+
+    public void setThisColor(Color thisColor) {
+        this.thisColor = thisColor;
     }
 }

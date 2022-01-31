@@ -18,6 +18,7 @@ public class Clienthandler implements Runnable {
     private final ArrayList<Clienthandler> clients;
     private boolean playerNumber = true;
     private String playerID;
+    private String playerName;
     private Color playerColor;
     private boolean playerJump;
     private boolean poswasTaken = false;
@@ -40,9 +41,10 @@ public class Clienthandler implements Runnable {
     public void run() {
         try {   //surround with do-while loop later
             LoginData loginData = (LoginData) objReader.readObject();
-            System.out.println("ID: " + loginData.getPlayerID() + " Alias: " + loginData.getPlayerAlias() + " PW: " + loginData.getPassword() + " pl: " + loginData.getPlayer());
-            playerID = loginData.getPlayerID();
-            playerNumber = loginData.getPlayer();
+            /*
+            Schauen ob die daten auf dem Server vorhanden sind
+            sonst return false (das macht rico dann)
+             */
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

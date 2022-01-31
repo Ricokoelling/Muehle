@@ -14,8 +14,8 @@ public class Client{
     private boolean allowed = true;
     private boolean reset;
     private ObjectOutputStream objWriter;
-    private Color PlayerOne;
-    private Color PlayerTwo;
+    private Color thisColor;
+    private Color otherColor;
 
 
 
@@ -56,15 +56,13 @@ public class Client{
      * Sends data when needed to Server and starts recive funktion
      * @throws IOException yeee
      */
-    public void sendData(boolean playerNumber) throws IOException {
-        LoginData loginData;
-        playerNumberOr = playerNumber;
-        if(playerNumber) {
-            loginData = new LoginData("0001", "Kirito", "Schule123", true);
-        }else {
-            loginData = new LoginData("0002", "Asuna", "Schule123", false);
+    public void sendData(String username , char[] password) {
+        LoginData logData = new LoginData(username,null,  password, false);
+        try {
+            objWriter.writeObject(logData);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        objWriter.writeObject(loginData);
     }
 
     public boolean waitForAllowed(){
@@ -90,11 +88,6 @@ public class Client{
             if (serverConn.isGotData()) {
                 playerNumber = serverConn.isPlayerNumber();
                 state = serverConn.getState();
-                if(playerNumberOr){
-                    PlayerTwo = serverConn.getColorTwo();
-                }else {
-                    PlayerOne = serverConn.getColorOne();
-                }
                 if(state == 1) {
                     pos1 = serverConn.getPos1();
                 }else if(state == 2 || state == 6 || state == 8 || state == 11  ||state == 18  || state == 22){
@@ -134,10 +127,8 @@ public class Client{
         Data data;
         if(playerNumberOr) {
             data = new Data(state, pos1, 0, "0001", reset, true);
-            data.setPlayerOne(PlayerOne);
         }else {
             data = new Data(state, pos1, 0, "0002", reset, false);
-            data.setPlayerTwo(PlayerTwo);
         }
         try {
             objWriter.writeObject(data);
@@ -150,10 +141,8 @@ public class Client{
         Data data;
         if(playerNumberOr) {
             data = new Data(state, pos1, pos2, "0001", reset, true);
-            data.setPlayerOne(PlayerOne);
         }else {
             data = new Data(state, pos1, pos2, "0002", reset, false);
-            data.setPlayerTwo(PlayerTwo);
         }
         try {
             objWriter.writeObject(data);
@@ -205,19 +194,8 @@ public class Client{
         this.reset = reset;
     }
 
-    public void setPlayerOne(Color playerOne) {
-        PlayerOne = playerOne;
+    public void setPlayerOne(Color thisColor) {
+        this.thisColor = thisColor;
     }
 
-    public void setPlayerTwo(Color playerTwo) {
-        PlayerTwo = playerTwo;
-    }
-
-    public Color getPlayerOne() {
-        return PlayerOne;
-    }
-
-    public Color getPlayerTwo() {
-        return PlayerTwo;
-    }
 }

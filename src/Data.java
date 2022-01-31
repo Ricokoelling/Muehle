@@ -11,6 +11,7 @@ public class Data implements Serializable {
     private int pos1;
     private int pos2;
     private String PlayerID;
+    private String PlayerName;
     private boolean reset;
     private boolean Player;
     private Color PlayerOne;
@@ -23,6 +24,15 @@ public class Data implements Serializable {
         this.PlayerID = PlayerID;
         this.reset = reset;
         this.Player = player;
+    }
+
+    public Data(int state, int pos1, int pos2, String PlayerID, boolean reset, String playerName) {
+        this.state = state;
+        this.pos1 = pos1;
+        this.pos2 = pos2;
+        this.PlayerID = PlayerID;
+        this.reset = reset;
+        this.PlayerName = playerName;
     }
 
     public int getState() {

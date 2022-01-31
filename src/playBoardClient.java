@@ -3,18 +3,18 @@ import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.sql.Array;
 import java.sql.SQLOutput;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class playBoardClient extends JFrame implements MouseInputListener, ActionListener {
-    private Color playerOne;
-    private Color playerTwo;
+    private Color thisColor;
+    private Color otherColor;
     private static final MyPanel pane = new MyPanel();
     private static final JMenuBar menubar = new JMenuBar();
-    private final Master mst = new Master();
     private final Client client = new Client();
     private final JMenuItem resetItem;
-    private final JMenuItem plOneColor;
     private final JMenuItem exitItem;
     private int pos = 0;
     private int pos2 = 0;
@@ -24,7 +24,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
     private boolean phaseChange = false;
     private int maxstones = 17;
     private boolean boothphase3 = false;
-    protected boolean playerNumber;  //true --> player 1 ----- false --> player 2
+    protected boolean playerNumber;
     protected int phase = 1;
     private int state = -1;
     protected boolean thisplayerMove = true;
@@ -47,6 +47,13 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         }
     };
 
+    public void Login(String username, char[] password){
+        client.sendData(username,password);
+        thisplayerMove = false;
+    }
+    public void Register(String username, char[] password, String alias){
+
+    }
     public void setThisplayerMove() {
         this.thisplayerMove = true;
         new Thread() {
@@ -78,13 +85,11 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         return boothphase3;
     }
 
-    public void setPlayerTwo(Color playerTwo) {
-        this.playerTwo = playerTwo;
+    public void setOtherColor(Color otherColor) {
+        this.otherColor = otherColor;
     }
 
-    public playBoardClient(boolean playerNumber) throws IOException, InterruptedException {
-        this.playerNumber = playerNumber;
-        client.sendData(playerNumber);
+    public playBoardClient() throws IOException, InterruptedException {
         this.setSize(1080, 720);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
@@ -93,32 +98,22 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.add(pane);
-        playerOne = Color.BLACK;
-        playerTwo = Color.GRAY;
+        thisColor = Color.BLACK;
+        otherColor = Color.GRAY;
         JMenu optionsMenu = new JMenu("Options");
-        JMenu colorMenu = new JMenu("Player Colors");
         resetItem = new JMenuItem("Reset");
-        plOneColor = new JMenuItem("PlayerOne Color");
         exitItem = new JMenuItem("Exit");
 
         exitItem.addActionListener(this);
         resetItem.addActionListener(this);
-        plOneColor.addActionListener(this);
 
-        colorMenu.add(plOneColor);
         optionsMenu.add(resetItem);
         optionsMenu.add(exitItem);
         menubar.add(optionsMenu);
-        menubar.add(colorMenu);
         this.setJMenuBar(menubar);
         this.addWindowListener(exitListener);
         this.setVisible(true);
-        if (!playerNumber) {
-            thisplayerMove = false;
-            new WartenSwingWorker(this.client, false, pane, this).execute();
-        } else {
-            lethimwait = false;
-        }
+
     }
 
     /**
@@ -450,30 +445,30 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
     void changeStatus(int state, boolean plNumb) {
         if (state == 1) {
             if (!plNumb) {
-                pane.setPlayerStatus("Player 2 place your Stone!", playerTwo);
+                pane.setPlayerStatus("Player 2 place your Stone!", otherColor);
             } else {
-                pane.setPlayerStatus("Player 1 place your Stone", playerOne);
+                pane.setPlayerStatus("Player 1 place your Stone", thisColor);
             }
         } else if (state == 2) {
-            if (!plNumb) pane.setPlayerStatus("Player 2 remove a Stone!", playerTwo);
-            else pane.setPlayerStatus("Player 1 remove a Stone!", playerOne);
+            if (!plNumb) pane.setPlayerStatus("Player 2 remove a Stone!", otherColor);
+            else pane.setPlayerStatus("Player 1 remove a Stone!", thisColor);
         } else if (state == 3) {
             if (!plNumb) {
-                pane.setPlayerStatus("Player 2 move your Stone!", playerTwo);
+                pane.setPlayerStatus("Player 2 move your Stone!", otherColor);
             } else {
-                pane.setPlayerStatus("Player 1 move your Stone!", playerOne);
+                pane.setPlayerStatus("Player 1 move your Stone!", thisColor);
             }
         } else if (state == 4) {
             if (!plNumb) {
-                pane.setPlayerStatus("Player 2 jump", playerTwo);
+                pane.setPlayerStatus("Player 2 jump", otherColor);
             } else {
-                pane.setPlayerStatus("Player 1 jump", playerOne);
+                pane.setPlayerStatus("Player 1 jump", thisColor);
             }
         } else if (state == 5) {
             if (plNumb) {
-                pane.setPlayerStatus("!!!Player 1 Won!!!", playerOne);
+                pane.setPlayerStatus("!!!Player 1 Won!!!", otherColor);
             } else {
-                pane.setPlayerStatus("!!!Player 2 Won!!!", playerTwo);
+                pane.setPlayerStatus("!!!Player 2 Won!!!", thisColor);
             }
         }
     }
@@ -489,26 +484,6 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             pane.reset();
             client.sendData(1000, 0);
             reset();
-        } else if (count == 0) {
-            if (e.getSource() == plOneColor) {
-                if(playerNumber) {
-                    playerOne = JColorChooser.showDialog(null, "Pick Player 1 Color", Color.BLACK);
-                    client.setPlayerOne(playerOne);
-                }else {
-                    playerTwo = JColorChooser.showDialog(null, "Pick Player 1 Color", Color.GRAY);
-                    client.setPlayerTwo(playerTwo);
-                }
-                if (!playerOne.equals(playerTwo)) {
-                    pane.setColor(true, playerOne);
-                    changeStatus(1, playerNumber);
-                } else {
-                    JOptionPane.showMessageDialog(null, "This Color is already taken!");
-                    playerOne = Color.BLACK;
-                    if (playerOne.equals(playerTwo)) {
-                        playerTwo = Color.GRAY;
-                    }
-                }
-            }
         }
     }
 }

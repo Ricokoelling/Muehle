@@ -46,8 +46,6 @@ public class playerBoardClientTest extends JFrame implements MouseInputListener,
     };
 
     public playerBoardClientTest(boolean playerNumber) throws IOException, InterruptedException {
-        this.playerNumber = playerNumber;
-        client.sendData(playerNumber);
         this.setSize(1920,1080);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
@@ -79,9 +77,6 @@ public class playerBoardClientTest extends JFrame implements MouseInputListener,
         this.setJMenuBar(menubar);
         this.addWindowListener(exitListener);
         this.setVisible(true);
-        if(!playerNumber ){
-            //waitforAnswer();
-        }
     }
 
     /**
