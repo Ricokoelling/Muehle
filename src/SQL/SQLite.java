@@ -1,6 +1,5 @@
 package SQL;
 
-import java.io.File;
 import java.sql.*;
 
 public class SQLite {
@@ -10,7 +9,7 @@ public class SQLite {
     private Statement stat;
 
 
-    SQLite() {
+    public SQLite() {
         connect();
     }
 
@@ -36,6 +35,7 @@ public class SQLite {
         }
         }catch (SQLException e){
             e.printStackTrace();
+            System.out.println("duhurensohn");
         }
         return false;
     }

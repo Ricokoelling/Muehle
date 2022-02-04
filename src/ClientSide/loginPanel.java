@@ -1,3 +1,5 @@
+package ClientSide;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -85,20 +87,20 @@ public class loginPanel extends JPanel implements ActionListener {
             this.add(this.createButton);
     }
 
+    private void CheckPW(){
+
+    }
     public void actionPerformed(ActionEvent e) {
         Window s = SwingUtilities.getWindowAncestor(this);
         if(e.getSource()==login){
             //control login credentials
             //TODO Server stuff
-            System.out.println("Login: " + userText.getText());
-            System.out.println("Passwort: " + Arrays.toString(passwordField.getPassword()));
             if(true){
                 success.setForeground(successGreen());
                 success.setText("Success");
-                new roomSelectionFrame();
                 try {
                     playBoardClient pbC = new playBoardClient();
-                    pbC.Login(userText.getText(), passwordField.getPassword());
+                    pbC.Login(userText.getText(), passwordField.getPassword().hashCode());
                 } catch (IOException | InterruptedException ex) {
                     ex.printStackTrace();
                 }
@@ -109,6 +111,7 @@ public class loginPanel extends JPanel implements ActionListener {
             }
         }
         if(e.getSource()== createButton){
+            System.out.println("Passwort: " + Arrays.toString(passwordField.getPassword()));
             new createFrame();
             s.dispose();
         }
@@ -134,5 +137,6 @@ public class loginPanel extends JPanel implements ActionListener {
 
     //Color
     private Color successGreen(){ return new Color(64, 255, 0);}
+
 
 }

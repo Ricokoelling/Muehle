@@ -1,3 +1,5 @@
+package ServerSide;
+
 public class Stones {
 
     private int position;
@@ -15,7 +17,7 @@ public class Stones {
 
     @Override
     public String toString() {
-        return "Stones{" +
+        return "ServerSide.Stones{" +
                 "position=" + position +
                 '}';
     }

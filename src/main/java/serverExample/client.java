@@ -10,11 +10,11 @@ public class client {
             DataOutputStream ds = new DataOutputStream(s.getOutputStream());
 
 
-            //Outgoing Package Client --> Server
+            //Outgoing Package ClientSide.Client --> Server
             ds.writeInt(12);
             ds.flush();
             /*
-            //Incoming Package Client <-- Server
+            //Incoming Package ClientSide.Client <-- Server
             InputStreamReader in = new InputStreamReader(s.getInputStream());
             BufferedReader bf = new BufferedReader(in);
 

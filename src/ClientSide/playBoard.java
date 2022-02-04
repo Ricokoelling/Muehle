@@ -1,17 +1,17 @@
+package ClientSide;
+
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
-import java.util.Scanner;
+import ServerSide.Master;
 
-public class playerBoardClientTest extends JFrame implements MouseInputListener, ActionListener {
+public class playBoard extends JFrame implements MouseInputListener , ActionListener {
     private     static          Color       playerOne;
     private     static          Color       playerTwo;
-    private     static  final   MyPanel     pane                = new MyPanel();
+    private     static  final MyPanel pane                = new MyPanel();
     private     static  final   JMenuBar    menubar             = new JMenuBar();
-    private             final   Master      mst                 = new Master();
-    private             final   Client      client = new Client();
+    private             final Master mst                 = new Master();
     private             final   JMenuItem   resetItem;
     private             final   JMenuItem   plOneColor;
     private             final   JMenuItem   plTwoColor;
@@ -25,10 +25,8 @@ public class playerBoardClientTest extends JFrame implements MouseInputListener,
     private                     int         maxstones           = 17;
     private                     boolean     boothphase3         = false;
     private                     boolean     playerJump;
-    protected                   boolean     playerNumber;  //true --> player 1 ----- false --> player 2
+    protected                   boolean     playerNumber        = true;  //true --> player 1 ----- false --> player 2
     protected                   int         phase               = 1;
-    private                     boolean     thisplayerMove      = true;
-    private                     int         mousepressed        = 0;
 
 
     WindowListener exitListener = new WindowAdapter() {
@@ -39,13 +37,12 @@ public class playerBoardClientTest extends JFrame implements MouseInputListener,
                     "Exit Confirmation", JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE, null, null, null);
             if (confirm == 0) {
-                //test.endConnection();
                 System.exit(0);
             }
         }
     };
 
-    public playerBoardClientTest(boolean playerNumber) throws IOException, InterruptedException {
+    public playBoard() {
         this.setSize(1920,1080);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
@@ -77,6 +74,8 @@ public class playerBoardClientTest extends JFrame implements MouseInputListener,
         this.setJMenuBar(menubar);
         this.addWindowListener(exitListener);
         this.setVisible(true);
+
+
     }
 
     /**
@@ -101,56 +100,20 @@ public class playerBoardClientTest extends JFrame implements MouseInputListener,
      * changes PlayerNumber and depending on phase the state
      */
     private void playerChange(){
-        boolean thisplayerMove = false;
+        playerNumber = !playerNumber;
         if(phase == 1) {
-            changeStatus(1,!playerNumber);
+            changeStatus(1);
         }
         else if(phase == 2) {
-            changeStatus(3,!playerNumber);
+            changeStatus(3);
         }
         else if(phase == 3){
-            changeStatus(4,!playerNumber);
+            changeStatus(4);
         } else {
-            changeStatus(5,!playerNumber);
+            changeStatus(5);
         }
     }
 
-    private void waitforAllowed() throws IOException, InterruptedException {
-        System.out.println("[Client] Waiting if move was right....");
-        while (true) {
-            if (client.waitForAllowed()) {
-                System.out.println("[CLIENT] Allowed Move!");
-                pane.repaint(pos, playerNumber);
-                playerChange();
-                //waitforAnswer();
-                break;
-            }
-            Thread.sleep(50);
-        }
-    }
-    /**
-     * waits for answer and asks every 50 milliseconds if the answer got send from the Server
-     * after response will just update the GUI to fit
-     * @throws InterruptedException     yee
-     */
-   /* public void waitforAnswer() throws InterruptedException {
-        System.out.println("[Client] Waiting for Server....");
-        while (true) {
-            thisplayerMove = false;
-            if (client.waitforData()) {
-                System.out.println("[Client] Server Response! Phase: " + client.getPhase());
-                if (client.getPhase() == 1) {
-                    System.out.println("[CLIENT] PlayerNumber from the other client: " + client.isPlayerNumber());
-                    changeStatus(1, client.isPlayerNumber());
-                    pane.repaint(client.getPos1(), client.isPlayerNumber());
-                }
-                break;
-            }
-            Thread.sleep(50);
-        }
-        System.out.println("[Client] Your Move!");
-    }
-*/
     /**
      * checks if a player has less then 4 stones so he can jump
      * @return true --> one player got less then 4 stones || false --> not one player got less then 4 stones
@@ -159,12 +122,12 @@ public class playerBoardClientTest extends JFrame implements MouseInputListener,
         if(mst.getPlayerStones(!playerNumber) == 3 && mst.getPlayerStones(playerNumber) == 3){
             boothphase3 = true;
             phase = 3;
-            changeStatus(4,playerNumber);
+            changeStatus(4);
             playerChange();
             return true;
         }else {
             if (mst.getPlayerStones(!playerNumber) == 3 && phaseChange) {
-                changeStatus(4,playerNumber);
+                changeStatus(4);
                 phase = 3;
                 playerJump = !playerNumber;
                 playerChange();
@@ -187,7 +150,7 @@ public class playerBoardClientTest extends JFrame implements MouseInputListener,
         onlyOnce = false;
         phaseChange = false;
         boothphase3 = false;
-        changeStatus(1,playerNumber);
+        changeStatus(1);
     }
     @Override
     public void mouseDragged(MouseEvent e) {
@@ -195,7 +158,7 @@ public class playerBoardClientTest extends JFrame implements MouseInputListener,
         int circleDiameter = 30;
         int circleRadius = circleDiameter / 2;
         boolean poswasTaken = false;
-        if(phase == 2 && thisplayerMove){
+        if(phase == 2){
             // biggest rect
             // pos 1 2 3
             if (e.getX() > ((this.getWidth() / 2) - radius * 3) - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 3) - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 3) - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius * 3) - circleRadius + 60) {   //point [1]
@@ -285,17 +248,17 @@ public class playerBoardClientTest extends JFrame implements MouseInputListener,
                 onlyOnce = true;
                 if (mst.freeposNextto(pos2, pos, playerNumber)) { //check if pos2 is free and if it is only one step away
                     pane.moveStone(pos, pos2, playerNumber);
-                    changeStatus(3,playerNumber);
+                    changeStatus(3);
                 } else
                     poswasTaken = true;
 
                 if (mst.checkMill(true) || mst.checkMill(false)){
-                    changeStatus(2,playerNumber);
+                    changeStatus(2);
                     phase = 0;
                 }
                 if(mst.winConditionOne(playerNumber)){
                     phase = 4;
-                    changeStatus(5,playerNumber);
+                    changeStatus(5);
                 }
                 if (phase == 2 && !poswasTaken) {
                     mst.stillMill();
@@ -309,6 +272,7 @@ public class playerBoardClientTest extends JFrame implements MouseInputListener,
 
     @Override
     public void mouseMoved(MouseEvent e) {
+
         //use later for 4 fade
     }
 
@@ -322,125 +286,143 @@ public class playerBoardClientTest extends JFrame implements MouseInputListener,
         int radius = pane.getWidth() / 14;
         int circleDiameter = 30;
         int circleRadius = circleDiameter / 2;
+        boolean poswasTaken = false;
         pos = 0;
         // biggest rect
         // pos 1 2 3
-            if (e.getX() > ((this.getWidth() / 2) - radius * 3) - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 3) - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 3) - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius * 3) - circleRadius + 60) {   //point [1]
-                pos = 1;
-            } else if (e.getX() > ((this.getWidth() / 2) - radius * 3) + radius * 3 - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 3) + radius * 3 - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 3) - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius * 3) - circleRadius + 60) {   //point [2]
-                pos = 2;
-            } else if (e.getX() > ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 3) - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius * 3) - circleRadius + 60) {   //point [3]
-                pos = 3;
+        if (e.getX() > ((this.getWidth() / 2) - radius * 3) - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 3) - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 3) - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius * 3) - circleRadius + 60) {   //point [1]
+            pos = 1;
+        }
+        else if (e.getX() > ((this.getWidth() / 2) - radius * 3) + radius * 3 - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 3) + radius * 3 - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 3) - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius * 3) - circleRadius + 60) {   //point [2]
+            pos = 2;
+        }
+        else if (e.getX() > ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 3) - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius * 3) - circleRadius + 60) {   //point [3]
+            pos = 3;
+        }
+        // pos 10 & 15
+        else if (e.getX() > ((this.getWidth() / 2) - radius * 3) - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 3) - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius + 60) {   //point [10]
+            pos = 10;
+        }
+        else if (e.getX() > ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius + 60) {   //point [15]
+            pos = 15;
+        }
+        //pos 22 23 24
+        else if (e.getX() > ((this.getWidth() / 2) - radius * 3) - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 3) - circleRadius + 10 && e.getY() > ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 60) {   //point [22]
+            pos = 22;
+        }
+        else if (e.getX() > ((this.getWidth() / 2) - radius * 3) + 1 + radius * 3 - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 3) + 1 + radius * 3 - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 60) {   //point [23]
+            pos = 23;
+        }
+        else if (e.getX() > ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 60) {   //point [24]
+            pos = 24;
+        }
+        // middle rect
+        //pos 4 5 6
+        else if (e.getX() > ((this.getWidth() / 2) - radius * 2) - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 2) - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 2) - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius * 2) - circleRadius + 60) {   //point [4]
+            pos = 4;
+        }
+        else if (e.getX() > ((this.getWidth() / 2) - radius * 2) + radius * 2 - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 2) + radius * 2 - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 2) - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius * 2) - circleRadius + 60) {   //point [5]
+            pos = 5;
+        }
+        else if (e.getX() > ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 2) - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius * 2) - circleRadius + 60) {   //point [6]
+            pos = 6;
+        }
+        // pos 11 14
+        else if (e.getX() > ((this.getWidth() / 2) - radius * 2) - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 2) - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 2) + radius * 2 - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius * 2) + radius * 2 - circleRadius + 60) {   //point [11]
+            pos = 11;
+        }
+        else if (e.getX() > ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 2) + radius * 2 - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius * 2) + radius * 2 - circleRadius + 60) {   //point [14]
+            pos = 14;
+        }
+        //pos 19 20 21
+        else if (e.getX() > ((this.getWidth() / 2) - radius * 2) - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 2) - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 60) {   //point [19]
+            pos = 19;
+        }
+        else if (e.getX() > ((this.getWidth() / 2) - radius * 2) + radius * 2 - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 2) + 1 + radius * 2 - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 60) {   //point [20]
+            pos = 20;
+        }
+        else if (e.getX() > ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 60) {   //point [21]
+            pos = 21;
+        }
+        //small rect
+        //pos 7 8 9
+        else if (e.getX() > ((this.getWidth() / 2) - radius) - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius) - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius) - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius) - circleRadius + 60) {   //point [4]
+            pos = 7;
+        }
+        else if (e.getX() > ((this.getWidth() / 2) - radius) + radius - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius) + radius - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius) - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius) - circleRadius + 60) {   //point [5]
+            pos = 8;
+        }
+        else if (e.getX() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius) - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius) - circleRadius + 60) {   //point [6]
+            pos = 9;
+        }
+        // pos 12 13
+        else if (e.getX() > ((this.getWidth() / 2) - radius) - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius) - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius) + radius - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius) + radius - circleRadius + 60) {   //point [12]
+            pos = 12;
+        }
+        else if (e.getX() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius) + radius - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius) + radius - circleRadius + 60) {   //point [13]
+            pos = 13;
+        }
+        //pos 16 17 18
+        else if (e.getX() > ((this.getWidth() / 2) - radius) - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius) - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 60) {   //point [16]
+            pos = 16;
+        }
+        else if (e.getX() > ((this.getWidth() / 2) - radius) + 1 + radius - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius) + 1 + radius - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 60) {   //point [17]
+            pos = 17;
+        }
+        else if (e.getX() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 60) {   //point [18]
+            pos = 18;
+        }
+        if (phase == 1) {
+            if (pos != 0 && mst.posTaken(pos)) {
+                mst.add(pos,playerNumber);
+                pane.repaint(pos, playerNumber);
             }
-            // pos 10 & 15
-            else if (e.getX() > ((this.getWidth() / 2) - radius * 3) - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 3) - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius + 60) {   //point [10]
-                pos = 10;
-            } else if (e.getX() > ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius * 3) + radius * 3 - circleRadius + 60) {   //point [15]
-                pos = 15;
-            }
-            //pos 22 23 24
-            else if (e.getX() > ((this.getWidth() / 2) - radius * 3) - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 3) - circleRadius + 10 && e.getY() > ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 60) {   //point [22]
-                pos = 22;
-            } else if (e.getX() > ((this.getWidth() / 2) - radius * 3) + 1 + radius * 3 - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 3) + 1 + radius * 3 - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 60) {   //point [23]
-                pos = 23;
-            } else if (e.getX() > ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius * 3) + 2 * radius * 3 - circleRadius + 60) {   //point [24]
-                pos = 24;
-            }
-            // middle rect
-            //pos 4 5 6
-            else if (e.getX() > ((this.getWidth() / 2) - radius * 2) - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 2) - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 2) - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius * 2) - circleRadius + 60) {   //point [4]
-                pos = 4;
-            } else if (e.getX() > ((this.getWidth() / 2) - radius * 2) + radius * 2 - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 2) + radius * 2 - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 2) - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius * 2) - circleRadius + 60) {   //point [5]
-                pos = 5;
-            } else if (e.getX() > ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 2) - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius * 2) - circleRadius + 60) {   //point [6]
-                pos = 6;
-            }
-            // pos 11 14
-            else if (e.getX() > ((this.getWidth() / 2) - radius * 2) - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 2) - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 2) + radius * 2 - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius * 2) + radius * 2 - circleRadius + 60) {   //point [11]
-                pos = 11;
-            } else if (e.getX() > ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 2) + radius * 2 - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius * 2) + radius * 2 - circleRadius + 60) {   //point [14]
-                pos = 14;
-            }
-            //pos 19 20 21
-            else if (e.getX() > ((this.getWidth() / 2) - radius * 2) - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 2) - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 60) {   //point [19]
-                pos = 19;
-            } else if (e.getX() > ((this.getWidth() / 2) - radius * 2) + radius * 2 - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 2) + 1 + radius * 2 - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 60) {   //point [20]
-                pos = 20;
-            } else if (e.getX() > ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius * 2) + 2 * radius * 2 - circleRadius + 60) {   //point [21]
-                pos = 21;
-            }
-            //small rect
-            //pos 7 8 9
-            else if (e.getX() > ((this.getWidth() / 2) - radius) - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius) - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius) - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius) - circleRadius + 60) {   //point [4]
-                pos = 7;
-            } else if (e.getX() > ((this.getWidth() / 2) - radius) + radius - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius) + radius - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius) - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius) - circleRadius + 60) {   //point [5]
-                pos = 8;
-            } else if (e.getX() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius) - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius) - circleRadius + 60) {   //point [6]
-                pos = 9;
-            }
-            // pos 12 13
-            else if (e.getX() > ((this.getWidth() / 2) - radius) - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius) - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius) + radius - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius) + radius - circleRadius + 60) {   //point [12]
-                pos = 12;
-            } else if (e.getX() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius) + radius - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius) + radius - circleRadius + 60) {   //point [13]
-                pos = 13;
-            }
-            //pos 16 17 18
-            else if (e.getX() > ((this.getWidth() / 2) - radius) - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius) - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 60) {   //point [16]
-                pos = 16;
-            } else if (e.getX() > ((this.getWidth() / 2) - radius) + 1 + radius - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius) + 1 + radius - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 60) {   //point [17]
-                pos = 17;
-            } else if (e.getX() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 60) {   //point [18]
-                pos = 18;
-            }
-        System.out.println("hahahah");
-            if (phase == 1) {
-                if (pos != 0) {
-                    //client.sendPhaseOne(phase, pos);
-                    try {
-                        waitforAllowed();
-                    } catch (IOException | InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            }
-            if (phase == 0) {
-                if (!mst.posTaken(pos) && mst.sameplayerStone(pos, playerNumber) && mst.removeStones(pos, playerNumber)) {
-                    pane.removeStone(pos);
-                    maxstones--;
-                    if (mst.getPlayerStones(!playerNumber) < 3 && phaseChange) {         //checks if the player whos stone got removed has still enough stones to potentially place a mill
-                        changeStatus(5, playerNumber);
-                        phase = 4;
-                    } else {
-                        if (!phaseChange) {
-                            changeStatus(1, playerNumber);
-                            phase = 1;
-                        } else {
-                            if (!checkPhase3()) {
-                                changeStatus(3, playerNumber);
-                                phase = 2;
-                                playerChange();
-                            }
-                        }
-                    }
-                    count--;
-                }
-            }
-            if (count > 3 && (mst.checkMill(true) || mst.checkMill(false)) && phase == 1) {
-                changeStatus(2, playerNumber);
-                phase = 0;
-            }
-            if ((mst.getPlayerStones(true) < 3 || mst.getPlayerStones(false) < 3) && phaseChange) {
-                phase = 4;
-                changeStatus(5, playerNumber);
-            }
-            if ((mst.winConditionOne(true) || mst.winConditionOne(false)) && count == maxstones) {
-                phase = 4;
-                changeStatus(5, playerNumber);
-            }
-            if (phase == 1) {
-                count++;
+            else{
+                poswasTaken = true;
             }
         }
+        if(phase == 0) {
+            if (!mst.posTaken(pos) && mst.sameplayerStone(pos, playerNumber) && mst.removeStones(pos, playerNumber)) {
+                pane.removeStone(pos);
+                maxstones--;
+                if (mst.getPlayerStones(!playerNumber) < 3 && phaseChange) {         //checks if the player whos stone got removed has still enough stones to potentially place a mill
+                    changeStatus(5);
+                    phase = 4;
+                }
+                else {
+                    if (!phaseChange) {
+                        changeStatus(1);
+                        phase = 1;
+                    } else {
+                        if (!checkPhase3()) {
+                            changeStatus(3);
+                            phase = 2;
+                            playerChange();
+                        }
+                    }
+                }
+                count--;
+            }
+        }
+        if(count > 3 && (mst.checkMill(true) || mst.checkMill(false)) && phase == 1){
+            changeStatus(2);
+            phase = 0;
+        }
+        if((mst.getPlayerStones(true) < 3 || mst.getPlayerStones(false) < 3) && phaseChange){
+            phase = 4;
+            changeStatus(5);
+        }
+        if((mst.winConditionOne(true) || mst.winConditionOne(false)) && count == maxstones){
+            phase = 4;
+            playerNumber = !playerNumber;
+            changeStatus(5);
+        }
+        if(phase == 1 && !poswasTaken){
+            playerChange();
+            takemove();
+            count++;
+        }
+    }
 
     @Override
     public void mouseReleased(MouseEvent e) {
@@ -450,7 +432,7 @@ public class playerBoardClientTest extends JFrame implements MouseInputListener,
         if(phase == 2){
             onlyOnce = false;
         }
-        if(phase == 3 && thisplayerMove){
+        if(phase == 3){
             // biggest rect
             // pos 1 2 3
             if (e.getX() > ((this.getWidth() / 2) - radius * 3) - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius * 3) - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius * 3) - circleRadius + 10 && e.getY() < ((this.getHeight() / 2) - radius * 3) - circleRadius + 60) {   //point [1]
@@ -535,37 +517,37 @@ public class playerBoardClientTest extends JFrame implements MouseInputListener,
             else if (e.getX() > ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius - 10 && e.getX() < ((this.getWidth() / 2) - radius) + 2 * radius - circleRadius + 40 && e.getY() > ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius  + 10 && e.getY() < ((this.getHeight() / 2) - radius) + 2 * radius - circleRadius + 60) {   //point [18]
                 pos3 = 18;
             }
-            if(!boothphase3) {
-                if (pos != pos3 && mst.posTaken(pos3) && playerJump == playerNumber) {
-                    pane.moveStone(pos, pos3, playerNumber);
-                    mst.moveStone(pos, pos3, playerNumber);
+                if(!boothphase3) {
+                    if (pos != pos3 && mst.posTaken(pos3) && playerJump == playerNumber) {
+                        pane.moveStone(pos, pos3, playerNumber);
+                        mst.moveStone(pos, pos3, playerNumber);
 
-                    if (mst.checkMill(playerNumber)){
-                        changeStatus(2,playerNumber);
-                        phase = 0;
-                    }else {
-                        phase = 2;
-                        playerChange();
-                        mst.stillMill();
-                        onlyOnce = false;
+                        if (mst.checkMill(playerNumber)){
+                            changeStatus(2);
+                            phase = 0;
+                        }else {
+                            phase = 2;
+                            playerChange();
+                            mst.stillMill();
+                            onlyOnce = false;
+                        }
+                    }
+                }
+                else{
+                    if (pos != pos3 && mst.posTaken(pos3)) {
+                        pane.moveStone(pos, pos3, playerNumber);
+                        mst.moveStone(pos, pos3, playerNumber);
+                        if(mst.checkMill(playerNumber) || mst.checkMill(!playerNumber)){
+                            changeStatus(2);
+                            phase = 0;
+                        }
+                        else{
+                            mst.stillMill();
+                            playerChange();
+                        }
                     }
                 }
             }
-            else{
-                if (pos != pos3 && mst.posTaken(pos3)) {
-                    pane.moveStone(pos, pos3, playerNumber);
-                    mst.moveStone(pos, pos3, playerNumber);
-                    if(mst.checkMill(playerNumber) || mst.checkMill(!playerNumber)){
-                        changeStatus(2,playerNumber);
-                        phase = 0;
-                    }
-                    else{
-                        mst.stillMill();
-                        playerChange();
-                    }
-                }
-            }
-        }
     }
 
     @Override
@@ -582,34 +564,34 @@ public class playerBoardClientTest extends JFrame implements MouseInputListener,
      * Changes Status on label depending on phase and which state (condition for label) it is currently in
      * @param state represents the possibilities that happen
      */
-    private void changeStatus(int state, boolean plNumb){
+    private void changeStatus(int state){
         if(state == 1) {
-            if (!plNumb) {
-                pane.setPlayerStatus("Player 2 place your Stone", playerTwo);
+            if (!playerNumber) {
+                pane.setPlayerStatus("Player 2 place your Stone!", playerTwo);
             } else {
-                pane.setPlayerStatus("Player 1 place your Stone", playerOne);
+                pane.setPlayerStatus("Player 1 place your Stone!", playerOne);
             }
         }
         else if(state == 2){
-            if(!plNumb)   pane.setPlayerStatus("remove", playerTwo);
-            else                pane.setPlayerStatus("remove", playerOne);
+            if(!playerNumber)   pane.setPlayerStatus("Player 2 remove a Stone!              k", playerTwo);
+            else                pane.setPlayerStatus("Player 1 remove a Stone!", playerOne);
         }
         else if(state == 3){
-            if (!plNumb) {
-                pane.setPlayerStatus("Player 2 move", playerTwo);
+            if (!playerNumber) {
+                pane.setPlayerStatus("Player 2 move a Stone!", playerTwo);
             } else {
-                pane.setPlayerStatus("Player 1 move", playerOne);
+                pane.setPlayerStatus("Player 1 move a Stone!", playerOne);
             }
         }
         else if(state == 4){
-            if (!plNumb) {
-                pane.setPlayerStatus("Player 2 jump",playerTwo);
+            if (!playerNumber) {
+                pane.setPlayerStatus("Player 2 jump with your Stone",playerTwo);
             } else {
-                pane.setPlayerStatus("Player 1 jump", playerOne);
+                pane.setPlayerStatus("Player 1 jump with your Stone!", playerOne);
             }
         }
         else if(state == 5){
-            if (plNumb) {
+            if (playerNumber) {
                 pane.setPlayerStatus("Player 1 won",playerOne);
             } else {
                 pane.setPlayerStatus("Player 2 won",playerTwo);
@@ -621,7 +603,6 @@ public class playerBoardClientTest extends JFrame implements MouseInputListener,
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == exitItem){
-            //test.endConnection();
             System.exit(0);
         }
         else if(e.getSource() == resetItem){
@@ -636,7 +617,7 @@ public class playerBoardClientTest extends JFrame implements MouseInputListener,
                 playerOne = JColorChooser.showDialog(null, "Pick Player 1 Color", Color.BLACK);
                 if(!playerOne.equals(playerTwo)) {
                     pane.setColor(true, playerOne);
-                    changeStatus(1,playerNumber);
+                    changeStatus(1);
                 }
                 else{
                     JOptionPane.showMessageDialog(null,"This Color is already taken!");
@@ -649,7 +630,7 @@ public class playerBoardClientTest extends JFrame implements MouseInputListener,
                 playerTwo = JColorChooser.showDialog(null, "Pick Player 2 Color", Color.GRAY);
                 if(!playerTwo.equals(playerOne)) {
                     pane.setColor(false, playerTwo);
-                    changeStatus(1,playerNumber);
+                    changeStatus(1);
                 }
                 else{
                     JOptionPane.showMessageDialog(null,"This Color is already taken!");
@@ -662,3 +643,6 @@ public class playerBoardClientTest extends JFrame implements MouseInputListener,
         }
     }
 }
+
+
+

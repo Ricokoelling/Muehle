@@ -1,3 +1,5 @@
+package ClientSide;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -36,11 +38,17 @@ public class roomSelectionPanel extends JPanel implements ActionListener {
             this.add(duell);
 
         //looks for online Players
-            //TODO needs to connect to the server to do that
+            //TODO needs to connect to the ServerSide.server to do that
             //refreshOnlinePlayers();
     }
 
     private void refreshOnlinePlayers(String[] arr){
+        /*
+        while(servconn doesnt have list){
+        }
+        for(int i=0;i!=arr.length;i++) model.addElement(arr[i]);
+        set serverconn list = null;
+         */
         model.removeAllElements();
         for(int i=0;i!=arr.length;i++) model.addElement(arr[i]);
     }
@@ -51,7 +59,7 @@ public class roomSelectionPanel extends JPanel implements ActionListener {
         if(e.getSource()==refresh){
             //refreshOnlinePlayers();
         }if(e.getSource()==duell){
-            //TODO request to the server for a 1v1
+            //TODO request to the ServerSide.server for a 1v1
             String enemyName = (String) playerOnlineJList.getSelectedValue();
         }
     }

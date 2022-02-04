@@ -1,3 +1,5 @@
+package ServerSide;
+
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -8,7 +10,7 @@ public class server {
 
     static ServerSocket    servs;
     private static final ArrayList<Clienthandler> clients = new ArrayList<>();
-    private static final ExecutorService pool = Executors.newFixedThreadPool(2);
+    private static final ExecutorService pool = Executors.newFixedThreadPool(10);
 
     public server(){
         try{

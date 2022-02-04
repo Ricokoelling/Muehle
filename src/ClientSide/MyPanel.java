@@ -1,3 +1,5 @@
+package ClientSide;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;

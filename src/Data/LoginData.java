@@ -1,36 +1,26 @@
+package Data;
+
 import java.awt.*;
 import java.io.Serializable;
 
 /**
- * is for sending USER-Data to the Server
+ * is for sending USER-Data.Data to the Server
  * Version: 0.01
  */
 public class LoginData implements Serializable {
 
     private String PlayerID;
-    private String PlayerAlias;
-    private char[] Password;
-    private Boolean Player;
+    private int Password;
     private Color thisColor;
     private boolean register = false;
 
-    public LoginData(String playerID, String playerAlias, char[] password, Boolean player) {
+    public LoginData(String playerID, int password, boolean register) {
         this.PlayerID = playerID;
-        this.PlayerAlias = playerAlias;
         this.Password = password;
-        this.Player = player;
     }
 
     public String getPlayerID() {
         return PlayerID;
-    }
-
-    public String getPlayerAlias() {
-        return PlayerAlias;
-    }
-
-    public Boolean getPlayer() {
-        return Player;
     }
 
     public Color getThisColor() {
@@ -39,5 +29,13 @@ public class LoginData implements Serializable {
 
     public void setThisColor(Color thisColor) {
         this.thisColor = thisColor;
+    }
+
+    public boolean isRegister() {
+        return register;
+    }
+
+    public int getPassword() {
+        return Password;
     }
 }

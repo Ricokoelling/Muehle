@@ -1,8 +1,10 @@
+package ClientSide;
+
 import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-
+import Data.*;
 public class Client{
 
     private static Socket client;
@@ -24,7 +26,7 @@ public class Client{
             client = new Socket("localhost", 1337);
             serverConn = new ServerConnection(client);
             objWriter = new ObjectOutputStream(client.getOutputStream());
-            System.out.println("[Client] connected");
+            System.out.println("[ClientSide.Client] connected");
         }catch(IOException e){
             System.out.println("Beim Erstellen des Clients ist ein Fehler aufgetreten");
             e.printStackTrace();
@@ -56,8 +58,8 @@ public class Client{
      * Sends data when needed to Server and starts recive funktion
      * @throws IOException yeee
      */
-    public void sendData(String username , char[] password) {
-        LoginData logData = new LoginData(username,null,  password, false);
+    public void sendData(String username , int password, boolean register) {
+        LoginData logData = new LoginData(username,  password,register);
         try {
             objWriter.writeObject(logData);
         } catch (IOException e) {
@@ -152,7 +154,7 @@ public class Client{
     }
 
     /***
-     *      This function safely disconnects from the server
+     *      This function safely disconnects from the ServerSide.server
      */
     public void endConnection(){
         try{

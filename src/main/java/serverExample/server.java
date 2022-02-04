@@ -15,7 +15,7 @@ public class server {
 
             InputStreamReader in;
             BufferedReader bf;
-            //Incoming Package Server <-- Client
+            //Incoming Package Server <-- ClientSide.Client
             in = new InputStreamReader(p1.getInputStream());
             bf = new BufferedReader(in);
 
@@ -24,7 +24,7 @@ public class server {
 
             PrintWriter pr;
 
-            //Outgoing Package Server --> Client
+            //Outgoing Package Server --> ClientSide.Client
             pr = new PrintWriter(p1.getOutputStream());
             pr.println("success");
             pr.flush();

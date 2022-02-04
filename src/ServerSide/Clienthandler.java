@@ -1,9 +1,15 @@
+package ServerSide;
+
+import Data.Data;
+
 import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import Data.*;
+import SQL.*;
 
 public class Clienthandler implements Runnable {
     protected final Master mst = new Master();
@@ -24,6 +30,7 @@ public class Clienthandler implements Runnable {
     private boolean poswasTaken = false;
     private boolean phase3 = false;
     private boolean win = false;
+    SQLite sql = new SQLite();
 
 
     public Clienthandler(Socket client, ArrayList<Clienthandler> clients) throws IOException {
@@ -35,16 +42,37 @@ public class Clienthandler implements Runnable {
 
     /**
      * gets the output from each clint and sends it over: "outToDifferent" to the other client
-     * !!! sends all Data otherwise it could send wrong data
+     * !!! sends all Data.Data otherwise it could send wrong data
      */
     @Override
     public void run() {
         try {   //surround with do-while loop later
-            LoginData loginData = (LoginData) objReader.readObject();
-            /*
-            Schauen ob die daten auf dem Server vorhanden sind
-            sonst return false (das macht rico dann)
-             */
+            while (true) {
+                LoginData loginData = (LoginData) objReader.readObject();
+                if(loginData.isRegister()){
+                    if(sql.queryUsername(loginData.getPlayerID()) == null) {
+                        if(sql.create(loginData.getPlayerID(), loginData.getPassword())){
+                            //return playerlist
+                            break;
+                        }else {
+                            //that creation failed
+                        }
+                    }else {
+                        //return that this user already exisits
+                    }
+                }else{
+                    if(sql.queryUsername(loginData.getPlayerID()) != null){
+                        if(sql.login(loginData.getPlayerID(),loginData.getPassword())){
+                            //return playerlist
+                            break;
+                        }else {
+                            //return that pw or name was wrong
+                        }
+                    }else {
+                        //return that the player doesnt exits, same as above
+                    }
+                }
+            }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -292,7 +320,7 @@ public class Clienthandler implements Runnable {
         }
     }
 
-    /*for(Clienthandler aClient : clients){
+    /*for(ServerSide.Clienthandler aClient : clients){
             aClient.output.println(playerNumber);
         }*/
     private void outToclient(int state, boolean playerNumber, int pos1) throws IOException {
@@ -454,7 +482,7 @@ public class Clienthandler implements Runnable {
     private void win(int pos1, int pos2) throws IOException {
         outTosameClient(23, true, playerNumber, pos1, pos2);
         outToclient(23, playerNumber, pos1, pos2);
-        System.out.println("[SERVER] Client: " + playerNumber + " Won the Game!");
+        System.out.println("[SERVER] ClientSide.Client: " + playerNumber + " Won the Game!");
     }
 
     private void reset() throws IOException {           //only in one direction

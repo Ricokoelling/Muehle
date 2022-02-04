@@ -1,7 +1,10 @@
+package ClientSide;
+
 import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import Data.*;
 
 public class ServerConnection implements Runnable{
 
@@ -79,6 +82,12 @@ public class ServerConnection implements Runnable{
     @Override
     public void run() {
         try {
+            /*while (true){
+                if(return from server == true){
+                    make playerlist....
+                }
+
+            }*/
             while (true) {
                     do {
                         AcceptData acceptData = (AcceptData) objReader.readObject();

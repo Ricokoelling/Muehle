@@ -1,3 +1,5 @@
+package ClientSide;
+
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
@@ -21,12 +23,10 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
     private int pos3 = 0;
     private int count = 0;
     private boolean onlyOnce = false;
-    private boolean phaseChange = false;
     private int maxstones = 17;
     private boolean boothphase3 = false;
     protected boolean playerNumber;
     protected int phase = 1;
-    private int state = -1;
     protected boolean thisplayerMove = true;
     protected boolean lethimwait = true;
     protected boolean phase3 = false;
@@ -47,30 +47,41 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         }
     };
 
-    public void Login(String username, char[] password){
-        client.sendData(username,password);
+    public void Login(String username, int password){
+        client.sendData(username,password,false);
         thisplayerMove = false;
+        /*
+        if(client.getplayerlist != null)
+            new roomSelectionFrame(); + liste
+            client.playerlist = null;
+         */
     }
-    public void Register(String username, char[] password, String alias){
+    public void Register(String username, int password){
+        client.sendData(username,password,true);
+        thisplayerMove = false;
+        /*
+        if(client.getplayerlist != null)
+            new roomSelectionFrame(); + liste + client
+            client.playerlist = null;
+         */
+        new roomSelectionFrame();
+    }
 
-    }
     public void setThisplayerMove() {
         this.thisplayerMove = true;
-        new Thread() {
-            public void run() {
-                while (true) {
-                    if (client.isReset()) {
-                        reset();
-                        break;
-                    }
-                    try {
-                        Thread.sleep(50);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+        new Thread(() -> {
+            while (true) {
+                if (client.isReset()) {
+                    reset();
+                    break;
+                }
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
-        }.start();
+        }).start();
     }
 
     public void setPhase3(boolean phase3) {

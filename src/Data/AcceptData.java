@@ -1,3 +1,5 @@
+package Data;
+
 import java.io.Serializable;
 
 public class AcceptData implements Serializable {

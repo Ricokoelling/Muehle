@@ -1,3 +1,5 @@
+package ServerSide;
+
 import java.util.ArrayList;
 
 public class Master {
@@ -11,10 +13,10 @@ public class Master {
     }
 
     /*
-    for(Stones stones : playerOne){
+    for(ServerSide.Stones stones : playerOne){
             System.out.println("player 1: " + stones.toString());
         }
-        for(Stones value : playerTwo){
+        for(ServerSide.Stones value : playerTwo){
             System.out.println("player 2: " + value.toString());
         }
      */
@@ -23,7 +25,7 @@ public class Master {
      * @param position      pos where the stone is
      * @param playerNumb    Player
      */
-    protected void add(int position, boolean playerNumb) {
+    public void add(int position, boolean playerNumb) {
         Stones stone = new Stones(position);
         if (playerNumb) {
             playerOne.add(stone);
@@ -93,7 +95,7 @@ public class Master {
      * @param playerNumb player who placed the last stone
      * @return true -> if the player placed a mill || false -> player didnt place a mill
      */
-    protected boolean checkMill(boolean playerNumb) {
+    public boolean checkMill(boolean playerNumb) {
         boolean checkreturn = false;
         ArrayList<Stones> testList;
         if (playerNumb) {
@@ -220,7 +222,7 @@ public class Master {
     /**
      * checks if the mills still exits
      */
-    protected void stillMill() {
+    public void stillMill() {
             muehlenPlayerTwo.clear();
             muehlenPlayerOne.clear();
             checkMill(true);
@@ -246,7 +248,7 @@ public class Master {
         }
     }
     /**
-     * checks if two Stones already build a mill
+     * checks if two ServerSide.Stones already build a mill
      * @param pos1 position from stone one
      * @param pos2 position from stone two
      * @return true -> isn´t in a mill || false -> is in a mill
@@ -306,9 +308,9 @@ public class Master {
      * @param playerNumb player who removes the stone
      * @return true -> if stone is found, will be removed || false -> stone couldnt be found so he doesnt get removed
      */
-    protected boolean removeStones(int pos, boolean playerNumb) {
+    public boolean removeStones(int pos, boolean playerNumb) {
         //checks if there are only mills and if it is so the player is able to take stones from the mill
-        //only mills should check in playBoard otherwise cant remove stone here
+        //only mills should check in ClientSide.playBoard otherwise cant remove stone here
         if (onlyMills(playerNumb) || inMill(pos)) {
             if (playerNumb) {
                 for (int i = 0; i < playerTwo.size(); i++) {
@@ -337,7 +339,7 @@ public class Master {
      * @param playerNumb player who removes the stone
      * @return true -> stone can be removed ||false -> stone can't be removed
      */
-    protected boolean sameplayerStone(int pos, boolean playerNumb) {
+    public boolean sameplayerStone(int pos, boolean playerNumb) {
         if(playerNumb) {
             for (Stones stones : playerOne) {
                 if (stones.getPosition() == pos) {
@@ -359,7 +361,7 @@ public class Master {
      * @param pos phase1 stoneplace
      * @return true -> pos isnt taken || false -> pos is taken
      */
-    protected boolean posTaken(int pos){
+    public boolean posTaken(int pos){
         for (Stones stones : playerOne) {
             if (stones.getPosition() == pos) {
                 return false;
@@ -380,7 +382,7 @@ public class Master {
      * @param playerNumb playerNumber
      * @return true ->stone will be moved to new pos || false ->stone cant move
      */
-    protected boolean freeposNextto(int pos1, int pos2, boolean playerNumb){   //this.pos1 == playBoard.pos2 || pos2 ist ursprungspos
+    public boolean freeposNextto(int pos1, int pos2, boolean playerNumb){   //this.pos1 == ClientSide.playBoard.pos2 || pos2 ist ursprungspos
 
         int stone = 0;  //zum überschreiben der pos des stones
         if (playerNumb) {
@@ -481,7 +483,7 @@ public class Master {
      * @param playerNumb player who last moved
      * @return true -> playerWon || false -> player didn't win so match continues
      */
-    protected boolean winConditionOne(boolean playerNumb){
+    public boolean winConditionOne(boolean playerNumb){
 
         if(playerNumb) {
             for (Stones stone : playerTwo) {
@@ -505,7 +507,7 @@ public class Master {
      * @param playerNumb from which player
      * @return  player stones left
      */
-    protected int getPlayerStones(boolean playerNumb){
+    public int getPlayerStones(boolean playerNumb){
         if(playerNumb){
             return playerOne.size();
         }
@@ -515,12 +517,12 @@ public class Master {
     }
 
     /**
-     * moves stone to a new position, doesnt check here (check in playBoard)
+     * moves stone to a new position, doesnt check here (check in ClientSide.playBoard)
      * @param pos1  origin pos
      * @param pos2  new pos
      * @param playerNumb  player
      */
-    protected void moveStone(int pos1, int pos2, boolean playerNumb){
+    public void moveStone(int pos1, int pos2, boolean playerNumb){
         if(playerNumb) {
             for (Stones stone : playerOne) {
                 if(stone.getPosition() == pos1){
@@ -536,20 +538,20 @@ public class Master {
             }
         }
     }
-    protected void reset(){
+    public void reset(){
         playerOne.clear();
         playerTwo.clear();
         muehlenPlayerOne.clear();
         muehlenPlayerTwo.clear();
     }
     protected void print(){
-       /* for(Stones[] yee: muehlenPlayerOne){
-            for(Stones ye : yee){
+       /* for(ServerSide.Stones[] yee: muehlenPlayerOne){
+            for(ServerSide.Stones ye : yee){
                 System.out.println("mill 1: " +  ye.toString());
             }
         }
-        for(Stones[] yee: muehlenPlayerTwo){
-            for(Stones ye : yee){
+        for(ServerSide.Stones[] yee: muehlenPlayerTwo){
+            for(ServerSide.Stones ye : yee){
                 System.out.println("mill 2: " +  ye.toString());
             }
         }

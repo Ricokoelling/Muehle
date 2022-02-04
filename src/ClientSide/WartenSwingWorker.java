@@ -1,5 +1,10 @@
+package ClientSide;
+
+import ClientSide.Client;
+import ClientSide.MyPanel;
+import ClientSide.playBoardClient;
+
 import javax.swing.*;
-import java.awt.*;
 import java.util.List;
 
 public class WartenSwingWorker extends SwingWorker<Boolean, String> {
@@ -24,7 +29,7 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
 
     @Override
     protected Boolean doInBackground() throws Exception {
-        System.out.println("[CLIENT] Wait for Data...");
+        System.out.println("[CLIENT] Wait for Data.Data...");
         while (true) {
             Thread.sleep(20);
             if (client.waitforData()) {
@@ -42,13 +47,13 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
 
     @Override
     protected void done() {
-        System.out.println("[Client] Server Response!");
+        System.out.println("[ClientSide.Client] Server Response!");
         state = client.getState();
-        System.out.println("[CLIENT] WartenSwingWorker: state " + state + " pos1: " + client.getPos1() + " pos2: " + client.getPos2() + " playnumber: " + client.isPlayerNumber());
+        System.out.println("[CLIENT] ClientSide.WartenSwingWorker: state " + state + " pos1: " + client.getPos1() + " pos2: " + client.getPos2() + " playnumber: " + client.isPlayerNumber());
         if (state == 1) {
             pbC.changeStatus(1, !client.isPlayerNumber());
             pane.repaint(client.getPos1(), client.isPlayerNumber());
-            System.out.println("[Client] Your Move! to place ");
+            System.out.println("[ClientSide.Client] Your Move! to place ");
 
         } else if (state == 2) {
             phase = 0;
@@ -65,13 +70,13 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
             pane.removeStone(client.getPos1());
             phase = 1;
             pbC.changeStatus(1, !client.isPlayerNumber());
-            System.out.println("[Client] Your Move! to place again");
+            System.out.println("[ClientSide.Client] Your Move! to place again");
 
         } else if (state == 5) {
             pane.repaint(client.getPos1(), client.isPlayerNumber());
             phase = 2;
             pbC.changeStatus(3, !client.isPlayerNumber());
-            System.out.println("[Client] Your Move! to move ");
+            System.out.println("[ClientSide.Client] Your Move! to move ");
 
         } else if (state == 6) {
             phase = 2;
@@ -81,7 +86,7 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
             phase = 2;
             pane.moveStone(client.getPos1(), client.getPos2(), client.isPlayerNumber());
             pbC.changeStatus(3, !client.isPlayerNumber());
-            System.out.println("[Client] Your Move! to move " + phase);
+            System.out.println("[ClientSide.Client] Your Move! to move " + phase);
 
         } else if (state == 8) {
             phase = 0;
@@ -97,7 +102,7 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
             pbC.changeStatus(3, !client.isPlayerNumber());
             pane.removeStone(client.getPos1());
             phase = 2;
-            System.out.println("[Client] Your Move! to move again ");
+            System.out.println("[ClientSide.Client] Your Move! to move again ");
 
         } else if (state == 11) {
             pbC.setPhase3(true);
@@ -109,20 +114,20 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
             pbC.changeStatus(4, !client.isPlayerNumber());
             pane.removeStone(client.getPos1());
             phase = 3;
-            System.out.println("[Client] Your Move! to jump ");
+            System.out.println("[ClientSide.Client] Your Move! to jump ");
 
         } else if (state == 13) {
             pbC.setPhase3(true);
             pane.moveStone(client.getPos1(), client.getPos2(), client.isPlayerNumber());
             pbC.changeStatus(3, !client.isPlayerNumber());
             phase = 2;
-            System.out.println("[Client] Your Move! after jump ");
+            System.out.println("[ClientSide.Client] Your Move! after jump ");
 
         } else if (state == 14) {
             pane.moveStone(client.getPos1(), client.getPos2(), client.isPlayerNumber());
             pbC.changeStatus(4, !client.isPlayerNumber());
             phase = 3;
-            System.out.println("[Client] Your Move! to jump ");
+            System.out.println("[ClientSide.Client] Your Move! to jump ");
         } else if (state == 15) {
             phase = 0;
             pbC.changeStatus(2, client.isPlayerNumber());
@@ -137,7 +142,7 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
             pbC.changeStatus(4, !client.isPlayerNumber());
             pane.removeStone(client.getPos1());
             phase = 3;
-            System.out.println("[Client] Your Move! ");
+            System.out.println("[ClientSide.Client] Your Move! ");
         } else if (state == 18) {
             pbC.changeStatus(4, !client.isPlayerNumber());
             phase = 3;
@@ -146,13 +151,13 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
             pbC.changeStatus(4, !client.isPlayerNumber());
             pane.removeStone(client.getPos1());
             phase = 3;
-            System.out.println("[Client] Your Move! ");
+            System.out.println("[ClientSide.Client] Your Move! ");
         } else if (state == 20) {
             pbC.setBoothphase3(true);
             pane.moveStone(client.getPos1(), client.getPos2(), client.isPlayerNumber());
             pbC.changeStatus(4, !client.isPlayerNumber());
             phase = 3;
-            System.out.println("[Client] Your Move! boothphase3 ");
+            System.out.println("[ClientSide.Client] Your Move! boothphase3 ");
 
         } else if (state == 21) {
             pane.moveStone(client.getPos1(), client.getPos2(), client.isPlayerNumber());
