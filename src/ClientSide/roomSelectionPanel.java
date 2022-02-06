@@ -12,11 +12,12 @@ public class roomSelectionPanel extends JPanel implements ActionListener {
     private JButton                     refresh;
     private JButton                     duell;
     private DefaultListModel<String>    model;
+    private Client Client = new Client();
 
 
-    public roomSelectionPanel() {
+    public roomSelectionPanel(Client client) {
         this.setLayout(null);
-
+        this.Client = client;
         //model DefaultListModel<String>
             model = new DefaultListModel<>();
 
@@ -61,6 +62,7 @@ public class roomSelectionPanel extends JPanel implements ActionListener {
         }if(e.getSource()==duell){
             //TODO request to the ServerSide.server for a 1v1
             String enemyName = (String) playerOnlineJList.getSelectedValue();
+
         }
     }
 

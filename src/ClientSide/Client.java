@@ -4,6 +4,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 import Data.*;
 public class Client{
 
@@ -18,6 +19,7 @@ public class Client{
     private ObjectOutputStream objWriter;
     private Color thisColor;
     private Color otherColor;
+    private List<String> userList;
 
 
 
@@ -58,7 +60,7 @@ public class Client{
      * Sends data when needed to Server and starts recive funktion
      * @throws IOException yeee
      */
-    public void sendData(String username , int password, boolean register) {
+    public void sendsLogin(String username , int password, boolean register) {
         LoginData logData = new LoginData(username,  password,register);
         try {
             objWriter.writeObject(logData);
@@ -66,6 +68,12 @@ public class Client{
             e.printStackTrace();
         }
     }
+
+    public void sendList(String username){
+        // sends list to server with opponent name
+        // wait for opponent
+    }
+
 
     public boolean waitForAllowed(){
             if(serverConn.isGotAllowed()) {
