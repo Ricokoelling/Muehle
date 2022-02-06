@@ -40,7 +40,6 @@ public class Clienthandler implements Runnable {
 
 
     public Clienthandler(Socket client, ArrayList<Clienthandler> clients) throws IOException, SQLException {
-        mainSQL.main(null);
         this.client = client;
         this.ALLclients = clients;
         objWriter = new ObjectOutputStream(client.getOutputStream());
@@ -57,9 +56,8 @@ public class Clienthandler implements Runnable {
             while (true) {
                 LoginData loginData = (LoginData) objReader.readObject();
                 SQLite sql = new SQLite();
-                sql.create(loginData.getPlayerID(), loginData.getPassword());
                 if (loginData.isRegister()) {
-                    /*if (sql.queryUsername(loginData.getPlayerID()) == null) {
+                    if (sql.queryUsername(loginData.getPlayerID()) == null) {
                         if (sql.create(loginData.getPlayerID(), loginData.getPassword())) {
                             //userList = sql.getPlayerList
                             //
@@ -71,9 +69,9 @@ public class Clienthandler implements Runnable {
                         }
                     } else {
                         //return that this user already exisits
-                    }*/
+                    }
                 } else {
-                    /*if (sql.queryUsername(loginData.getPlayerID()) != null) {
+                    if (sql.queryUsername(loginData.getPlayerID()) != null) {
                         if (sql.login(loginData.getPlayerID(), loginData.getPassword())) {
                             //return playerlist
                             this.playerID = loginData.getPlayerID();
@@ -83,7 +81,7 @@ public class Clienthandler implements Runnable {
                         }
                     } else {
                         //return that the player doesnt exits, same as above
-                    }*/
+                    }
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
