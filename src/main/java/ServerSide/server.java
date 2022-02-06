@@ -1,7 +1,9 @@
 package ServerSide;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -34,7 +36,7 @@ public class server {
      * starts client search and if founded will start clienthandler to process every upcoming stream
      * @throws IOException yee
      */
-    public static void start() throws IOException {
+    public static void start() throws IOException, SQLException {
         while (true) {
             System.out.println("[SERVER] Waiting for client connection....");
             Socket client = servs.accept();
@@ -46,9 +48,9 @@ public class server {
             pool.execute(clienthandler);
         }
     }
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, SQLException {
         server s = new server();
-        s.start();
+        start();
     }
 
 }

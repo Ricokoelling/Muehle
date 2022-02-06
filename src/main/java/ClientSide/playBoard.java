@@ -1,10 +1,11 @@
 package ClientSide;
 
+import ServerSide.Master;
+
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.*;
-import ServerSide.Master;
 
 public class playBoard extends JFrame implements MouseInputListener , ActionListener {
     private     static          Color       playerOne;

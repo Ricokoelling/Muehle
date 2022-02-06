@@ -1,5 +1,6 @@
+import ClientSide.LoginScreen;
+
 import java.io.IOException;
-import ClientSide.*;
 
 public class Main {
 

@@ -1,11 +1,13 @@
 package ClientSide;
 
+import Data.Data;
+import Data.LoginData;
+
 import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
-import Data.*;
 public class Client{
 
     private static Socket client;

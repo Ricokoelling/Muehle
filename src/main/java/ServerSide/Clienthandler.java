@@ -1,16 +1,19 @@
 package ServerSide;
 
+import Data.AcceptData;
 import Data.Data;
+import Data.ListData;
+import Data.LoginData;
+import SQL.SQLite;
 
 import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.*;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
-
-import Data.*;
 import SQL.*;
 
 public class Clienthandler implements Runnable {
@@ -34,10 +37,10 @@ public class Clienthandler implements Runnable {
     private boolean poswasTaken = false;
     private boolean phase3 = false;
     private boolean win = false;
-    SQLite sql = new SQLite();
 
 
-    public Clienthandler(Socket client, ArrayList<Clienthandler> clients) throws IOException {
+    public Clienthandler(Socket client, ArrayList<Clienthandler> clients) throws IOException, SQLException {
+        mainSQL.main(null);
         this.client = client;
         this.ALLclients = clients;
         objWriter = new ObjectOutputStream(client.getOutputStream());
@@ -53,8 +56,10 @@ public class Clienthandler implements Runnable {
         try {   //surround with do-while loop later
             while (true) {
                 LoginData loginData = (LoginData) objReader.readObject();
+                SQLite sql = new SQLite();
+                sql.create(loginData.getPlayerID(), loginData.getPassword());
                 if (loginData.isRegister()) {
-                    if (sql.queryUsername(loginData.getPlayerID()) == null) {
+                    /*if (sql.queryUsername(loginData.getPlayerID()) == null) {
                         if (sql.create(loginData.getPlayerID(), loginData.getPassword())) {
                             //userList = sql.getPlayerList
                             //
@@ -66,9 +71,9 @@ public class Clienthandler implements Runnable {
                         }
                     } else {
                         //return that this user already exisits
-                    }
+                    }*/
                 } else {
-                    if (sql.queryUsername(loginData.getPlayerID()) != null) {
+                    /*if (sql.queryUsername(loginData.getPlayerID()) != null) {
                         if (sql.login(loginData.getPlayerID(), loginData.getPassword())) {
                             //return playerlist
                             this.playerID = loginData.getPlayerID();
@@ -78,7 +83,7 @@ public class Clienthandler implements Runnable {
                         }
                     } else {
                         //return that the player doesnt exits, same as above
-                    }
+                    }*/
                 }
             }
         } catch (IOException | ClassNotFoundException e) {

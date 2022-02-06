@@ -1,7 +1,5 @@
 package ClientSide;
 
-import ClientSide.roomSelectionPanel;
-
 import javax.swing.*;
 
 public class roomSelectionFrame extends JFrame {

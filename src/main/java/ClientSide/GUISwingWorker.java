@@ -1,9 +1,5 @@
 package ClientSide;
 
-import ClientSide.Client;
-import ClientSide.MyPanel;
-import ClientSide.playBoardClient;
-
 import javax.swing.*;
 
 public class GUISwingWorker extends SwingWorker<Boolean, String> {

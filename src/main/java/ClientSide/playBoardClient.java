@@ -5,10 +5,6 @@ import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-import java.sql.Array;
-import java.sql.SQLOutput;
-import java.util.Arrays;
-import java.util.Scanner;
 
 public class playBoardClient extends JFrame implements MouseInputListener, ActionListener {
     private Color thisColor;

@@ -1,10 +1,12 @@
 package ClientSide;
 
+import Data.AcceptData;
+import Data.Data;
+
 import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
-import Data.*;
 
 public class ServerConnection implements Runnable{
 

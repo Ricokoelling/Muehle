@@ -1,6 +1,6 @@
 package ClientSide;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 public class LoginScreen extends JFrame {
 
