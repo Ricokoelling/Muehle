@@ -40,7 +40,7 @@ public class Clienthandler implements Runnable {
     private boolean win = false;
 
 
-    public Clienthandler(Socket client, ArrayList<Clienthandler> clients) throws IOException, SQLException {
+    public Clienthandler(Socket client, ArrayList<Clienthandler> clients) throws IOException{
         this.client = client;
         this.ALLclients = clients;
         objWriter = new ObjectOutputStream(client.getOutputStream());
@@ -60,10 +60,10 @@ public class Clienthandler implements Runnable {
                 SQLite sql = new SQLite();
                 if (loginData.isRegister()) {
                     if (sql.create(loginData.getPlayerID(), loginData.getPassword())) {
-                        System.out.println("du hurensohn");
+                        System.out.println("du hurensohn " + ALLclients.size());
                         this.playerID = loginData.getPlayerID();
                         for (Clienthandler ch : ALLclients) {
-                            if (!ch.playerID.equals(this.playerID)) {
+                            if (ch.playerID != null && !ch.playerID.equals(this.playerID)) {
                                 userList.add(ch.playerID);
                             }
                         }
@@ -74,7 +74,7 @@ public class Clienthandler implements Runnable {
                         System.out.println("nooo");
                     }
                 } else {
-                    System.out.println("nice cook");
+                    System.out.println("du hurensohn " + ALLclients.size());
                     if (sql.login(loginData.getPlayerID(), loginData.getPassword())) {
                         System.out.println("fotze");
                         this.playerID = loginData.getPlayerID();

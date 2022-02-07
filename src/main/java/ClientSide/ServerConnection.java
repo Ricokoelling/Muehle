@@ -81,6 +81,7 @@ public class ServerConnection implements Runnable{
     }
 
     public void print(){
+        System.out.println("hello");
         for(String s : userList){
             System.out.println(s);
         }

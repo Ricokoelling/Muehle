@@ -108,7 +108,6 @@ public class SQLite {
     * @param pw    Int password as hash
     */
     public void add(String username, int pw){
-        System.out.println(username + " pw: " + pw);
         String pass = "INSERT INTO "+tablename()+"(username, password) VALUES('"+username+"', "+pw+")";
         try{
             stat.execute(pass);

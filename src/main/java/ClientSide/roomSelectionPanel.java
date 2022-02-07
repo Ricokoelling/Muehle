@@ -11,7 +11,7 @@ public class roomSelectionPanel extends JPanel implements ActionListener {
     private JButton                     refresh;
     private JButton                     duell;
     private DefaultListModel<String>    model;
-    private Client Client = new Client();
+    private final Client Client;
 
 
     public roomSelectionPanel(Client client) {
