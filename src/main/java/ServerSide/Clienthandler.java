@@ -14,6 +14,7 @@ import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import SQL.*;
 
 public class Clienthandler implements Runnable {
@@ -28,7 +29,7 @@ public class Clienthandler implements Runnable {
     private final ObjectOutputStream objWriter;
     private final ArrayList<Clienthandler> ALLclients;
     private final ArrayList<Clienthandler> clients = new ArrayList<>();
-    private ArrayList<String> userList;
+    private ArrayList<String> userList = new ArrayList<>();
     private boolean playerNumber = true;
     private String playerID;
     private String playerName;
@@ -58,41 +59,36 @@ public class Clienthandler implements Runnable {
                 System.out.println(loginData.getPlayerID());
                 SQLite sql = new SQLite();
                 if (loginData.isRegister()) {
-                    if (sql.queryUsername(loginData.getPlayerID()) == null) {
-                        if (sql.create(loginData.getPlayerID(), loginData.getPassword())) {
-                            System.out.println("du hurensohn");
-                            this.playerID = loginData.getPlayerID();
-                            for(Clienthandler ch : ALLclients){
-                                if(ch.playerID.equals(this.playerID)) {
-                                    userList.add(ch.playerID);
-                                }
+                    if (sql.create(loginData.getPlayerID(), loginData.getPassword())) {
+                        System.out.println("du hurensohn");
+                        this.playerID = loginData.getPlayerID();
+                        for (Clienthandler ch : ALLclients) {
+                            if (!ch.playerID.equals(this.playerID)) {
+                                userList.add(ch.playerID);
                             }
-                            this.objWriter.writeObject(new ListData(userList,null,false));
-                            break;
-                        } else {
-                            //that creation failed
                         }
+                        System.out.println("yeee");
+                        this.objWriter.writeObject(new ListData(userList, null, false));
+                        break;
                     } else {
-                        //return that this user already exisits
+                        System.out.println("nooo");
                     }
                 } else {
-                    if (sql.queryUsername(loginData.getPlayerID()) != null) {
-                        System.out.println("nice cook");
-                        if (sql.login(loginData.getPlayerID(), loginData.getPassword())) {
-                            System.out.println("fotze");
-                            this.playerID = loginData.getPlayerID();
-                            for(Clienthandler ch : ALLclients){
-                                if(ch.playerID.equals(this.playerID)) {
-                                    userList.add(ch.playerID);
-                                }
+                    System.out.println("nice cook");
+                    if (sql.login(loginData.getPlayerID(), loginData.getPassword())) {
+                        System.out.println("fotze");
+                        this.playerID = loginData.getPlayerID();
+
+                        for (Clienthandler ch : ALLclients) {
+                            System.out.println(ch.playerID);
+                            if (ch.playerID != null && !ch.playerID.equals(this.playerID) ) {
+                                userList.add(ch.playerID);
                             }
-                            this.objWriter.writeObject(new ListData(userList,null,false));
-                            break;
-                        } else {
-                            //return that pw or name was wrong
                         }
+                        this.objWriter.writeObject(new ListData(userList, null, false));
+                        break;
                     } else {
-                        //return that the player doesnt exits, same as above
+                        System.out.println("wrong pw");
                     }
                 }
             }
@@ -105,7 +101,7 @@ public class Clienthandler implements Runnable {
                     ListData listData = (ListData) objReader.readObject();          // guy asks for match
                     if (listData.isJustreturnList()) {
                         //sql ask for list
-                        this.objWriter.writeObject(new ListData(userList, playerID,false));
+                        this.objWriter.writeObject(new ListData(userList, playerID, false));
                     } else {
                         if (listData.isChallenger()) {
                             for (Clienthandler cl : ALLclients) {
@@ -577,5 +573,10 @@ public class Clienthandler implements Runnable {
         phaseChange = false;
         boothphase3 = false;
         mst.reset();
+    }
+
+
+    public void print(){
+        System.out.println(playerID);
     }
 }

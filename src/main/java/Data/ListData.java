@@ -1,11 +1,12 @@
 package Data;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ListData {
+public class ListData implements Serializable {
 
     private ArrayList<String> UserList;
     private HashMap<String, Color> UserColor;

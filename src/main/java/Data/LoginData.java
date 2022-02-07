@@ -17,6 +17,7 @@ public class LoginData implements Serializable {
     public LoginData(String playerID, int password, boolean register) {
         this.PlayerID = playerID;
         this.Password = password;
+        this.register = register;
     }
 
     public String getPlayerID() {
