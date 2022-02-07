@@ -8,6 +8,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Locale;
 
 public class loginPanel extends JPanel implements ActionListener {
     private JLabel          username;
@@ -100,7 +101,7 @@ public class loginPanel extends JPanel implements ActionListener {
                 success.setText("Success");
                 try {
                     playBoardClient pbC = new playBoardClient();
-                    pbC.Login(userText.getText(), passwordField.getPassword().hashCode());
+                    pbC.Login(userText.getText().toLowerCase(Locale.ROOT), passwordField.getPassword().hashCode());
                 } catch (IOException | InterruptedException ex) {
                     ex.printStackTrace();
                 }

@@ -24,7 +24,6 @@ public class SQLite {
     *         false -> unsuccessfull
     */
     public boolean create(String username, int pw){
-        System.out.println(username + " pw: " + pw);
         ResultSet rs = queryUsername(username);
         try {
         if(!rs.next()){

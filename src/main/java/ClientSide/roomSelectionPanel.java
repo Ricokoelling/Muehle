@@ -47,7 +47,6 @@ public class roomSelectionPanel extends JPanel implements ActionListener {
         if(Client.waitForList()){
             ArrayList<String> userList = Client.getUserList() ;
             for(String ul : userList) {
-                System.out.println(ul);
                 model.addElement(ul);
             }
         }

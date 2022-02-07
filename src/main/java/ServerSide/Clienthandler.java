@@ -11,11 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
-
-import SQL.*;
 
 public class Clienthandler implements Runnable {
     protected final Master mst = new Master();
@@ -38,11 +34,13 @@ public class Clienthandler implements Runnable {
     private boolean poswasTaken = false;
     private boolean phase3 = false;
     private boolean win = false;
+    private SQLite sql;
 
 
-    public Clienthandler(Socket client, ArrayList<Clienthandler> clients) throws IOException{
+    public Clienthandler(Socket client, ArrayList<Clienthandler> clients, SQLite sql) throws IOException {
         this.client = client;
         this.ALLclients = clients;
+        this.sql = sql;
         objWriter = new ObjectOutputStream(client.getOutputStream());
         objReader = new ObjectInputStream(client.getInputStream());
     }
@@ -51,41 +49,48 @@ public class Clienthandler implements Runnable {
      * gets the output from each clint and sends it over: "outToDifferent" to the other client
      * !!! sends all Data.Data otherwise it could send wrong data
      */
+    /*
+    TODO: write function that sends everyone a ArrayList with all players except their self
+     */
     @Override
     public void run() {
-        try {   //surround with do-while loop later
+        try {
             while (true) {
                 LoginData loginData = (LoginData) objReader.readObject();
-                System.out.println(loginData.getPlayerID());
-                SQLite sql = new SQLite();
                 if (loginData.isRegister()) {
                     if (sql.create(loginData.getPlayerID(), loginData.getPassword())) {
-                        System.out.println("du hurensohn " + ALLclients.size());
                         this.playerID = loginData.getPlayerID();
                         for (Clienthandler ch : ALLclients) {
                             if (ch.playerID != null && !ch.playerID.equals(this.playerID)) {
                                 userList.add(ch.playerID);
                             }
                         }
-                        System.out.println("yeee");
-                        this.objWriter.writeObject(new ListData(userList, null, false));
+                        System.out.println("thisplayer: " + this.playerID);
+                        for (Clienthandler clienthandler : ALLclients) {
+                            clienthandler.objWriter.writeObject(new ListData(userList, null, false));
+                            System.out.println();
+                            System.out.println(clienthandler.playerID);
+                        }
+                        print();
                         break;
                     } else {
                         System.out.println("nooo");
                     }
                 } else {
-                    System.out.println("du hurensohn " + ALLclients.size());
                     if (sql.login(loginData.getPlayerID(), loginData.getPassword())) {
-                        System.out.println("fotze");
                         this.playerID = loginData.getPlayerID();
-
                         for (Clienthandler ch : ALLclients) {
-                            System.out.println(ch.playerID);
-                            if (ch.playerID != null && !ch.playerID.equals(this.playerID) ) {
+                            if (ch.playerID != null && !ch.playerID.equals(this.playerID)) {
                                 userList.add(ch.playerID);
                             }
                         }
-                        this.objWriter.writeObject(new ListData(userList, null, false));
+                        System.out.println("thisplayer: " + this.playerID);
+                        for (Clienthandler clienthandler : ALLclients) {
+                            clienthandler.objWriter.writeObject(new ListData(userList, null, false));
+                            System.out.println();
+                            System.out.println("cl id: " + clienthandler.playerID);
+                        }
+                        print();
                         break;
                     } else {
                         System.out.println("wrong pw");
@@ -576,7 +581,9 @@ public class Clienthandler implements Runnable {
     }
 
 
-    public void print(){
-        System.out.println(playerID);
+    public void print() {
+        for(String ul: userList){
+            System.out.println("ul: " + ul);
+        }
     }
 }

@@ -9,13 +9,13 @@ import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class ServerConnection implements Runnable{
+public class ServerConnection implements Runnable {
 
     private final Socket server;
     private final ObjectInputStream objReader;
     private int state = -1;
     private boolean gotData = false, gotAllowed = false;
-    private int pos1,pos2;
+    private int pos1, pos2;
     private boolean playerNumber;
     private boolean allowed = true;
     private String str;
@@ -41,7 +41,8 @@ public class ServerConnection implements Runnable{
     public int getState() {
         return state;
     }
-    public int getPos1(){
+
+    public int getPos1() {
         return pos1;
     }
 
@@ -56,7 +57,8 @@ public class ServerConnection implements Runnable{
     public boolean isPlayerNumber() {
         return playerNumber;
     }
-    public Boolean isAllowed(){
+
+    public Boolean isAllowed() {
         return allowed;
     }
 
@@ -80,15 +82,14 @@ public class ServerConnection implements Runnable{
         return colorTwo;
     }
 
-    public void print(){
-        System.out.println("hello");
-        for(String s : userList){
+    public void print() {
+        for (String s : userList) {
             System.out.println(s);
         }
     }
 
     public boolean isGotList() {
-        if(gotList) {
+        if (gotList) {
             gotList = false;
             return true;
         }
@@ -106,44 +107,44 @@ public class ServerConnection implements Runnable{
     @Override
     public void run() {
         try {
-            while (true){
+            while (true) {
                 ListData ldata = (ListData) objReader.readObject();
-                if(ldata.isChallenger()){
-                    userList = ldata.getUserList();
-                    print();
-                    gotList = true;
+                userList = ldata.getUserList();
+                print();
+                gotList = true;
+                if (ldata.isChallenger()) {
                     break;
                 }
             }
             while (true) {
-                    do {
-                        AcceptData acceptData = (AcceptData) objReader.readObject();
-                        allowed = acceptData.isAccept();
-                        if (allowed) {
-                            pos1 = acceptData.getPos1();
-                            pos2 = acceptData.getPos2();
-                            state = acceptData.getState();
-                            playerNumber = acceptData.isPlayerNumb();
-                            reset = acceptData.isReset();
-                        }
-                        gotAllowed = true;
-                    } while (!allowed);
-                    Data data = (Data) objReader.readObject();
-                    state = data.getState();
-                    playerNumber = data.isPlayer();
-                    colorOne = data.getPlayerOne();
-                    colorTwo = data.getPlayerTwo();
-                    if (state != -1) {
-                        pos1 = data.getPos1();
-                        pos2 = data.getPos2();
-                    } else {
-                        break;
+                do {
+                    AcceptData acceptData = (AcceptData) objReader.readObject();
+                    allowed = acceptData.isAccept();
+                    if (allowed) {
+                        pos1 = acceptData.getPos1();
+                        pos2 = acceptData.getPos2();
+                        state = acceptData.getState();
+                        playerNumber = acceptData.isPlayerNumb();
+                        reset = acceptData.isReset();
                     }
+                    gotAllowed = true;
+                } while (!allowed);
+                Data data = (Data) objReader.readObject();
+                state = data.getState();
+                playerNumber = data.isPlayer();
+                colorOne = data.getPlayerOne();
+                colorTwo = data.getPlayerTwo();
+                if (state != -1) {
+                    pos1 = data.getPos1();
+                    pos2 = data.getPos2();
+                } else {
+                    break;
+                }
                 gotData = true;
             }
-        }catch (IOException | ClassNotFoundException e){
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 objReader.close();
             } catch (IOException e) {

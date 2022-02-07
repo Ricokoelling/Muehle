@@ -1,5 +1,7 @@
 package ServerSide;
 
+import SQL.SQLite;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -13,6 +15,7 @@ public class server {
     static ServerSocket    servs;
     private static final ArrayList<Clienthandler> clients = new ArrayList<>();
     private static final ExecutorService pool = Executors.newFixedThreadPool(10);
+    private static SQLite sql = new SQLite();
 
     public server(){
         try{
@@ -41,7 +44,7 @@ public class server {
             System.out.println("[SERVER] Waiting for client connection....");
             Socket client = servs.accept();
             System.out.println("[SERVER] Connected to " + client.getLocalPort());
-            Clienthandler clienthandler = new Clienthandler(client,clients);
+            Clienthandler clienthandler = new Clienthandler(client,clients,sql);
             clients.add(clienthandler);
 
 
