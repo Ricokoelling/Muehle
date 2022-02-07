@@ -7,6 +7,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 public class Client{
 
@@ -21,7 +22,7 @@ public class Client{
     private ObjectOutputStream objWriter;
     private Color thisColor;
     private Color otherColor;
-    private List<String> userList;
+    private ArrayList<String> userList;
 
 
 
@@ -76,6 +77,13 @@ public class Client{
         // wait for opponent
     }
 
+    public boolean waitForList(){
+        if(serverConn.isGotList()){
+            userList = serverConn.getUserList();
+            return true;
+        }
+        return false;
+    }
 
     public boolean waitForAllowed(){
             if(serverConn.isGotAllowed()) {
@@ -210,4 +218,7 @@ public class Client{
         this.thisColor = thisColor;
     }
 
+    public ArrayList<String> getUserList() {
+        return userList;
+    }
 }

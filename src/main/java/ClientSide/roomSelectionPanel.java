@@ -3,6 +3,7 @@ package ClientSide;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class roomSelectionPanel extends JPanel implements ActionListener {
 
@@ -38,18 +39,19 @@ public class roomSelectionPanel extends JPanel implements ActionListener {
 
         //looks for online Players
             //TODO needs to connect to the ServerSide.server to do that
-            //refreshOnlinePlayers();
+            refreshOnlinePlayers();
     }
 
-    private void refreshOnlinePlayers(String[] arr){
-        /*
-        while(servconn doesnt have list){
-        }
-        for(int i=0;i!=arr.length;i++) model.addElement(arr[i]);
-        set serverconn list = null;
-         */
+    private void refreshOnlinePlayers(){
         model.removeAllElements();
-        for(int i=0;i!=arr.length;i++) model.addElement(arr[i]);
+        if(Client.waitForList()){
+            ArrayList<String> userList = Client.getUserList() ;
+            for(String ul : userList) {
+                System.out.println(ul);
+                model.addElement(ul);
+            }
+        }
+
     }
 
     //Button Control Room

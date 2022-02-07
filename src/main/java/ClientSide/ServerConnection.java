@@ -1,12 +1,13 @@
 package ClientSide;
 
-import Data.AcceptData;
-import Data.Data;
+
+import Data.*;
 
 import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class ServerConnection implements Runnable{
 
@@ -21,6 +22,8 @@ public class ServerConnection implements Runnable{
     private boolean reset = false;
     private Color colorOne;
     private Color colorTwo;
+    private ArrayList<String> userList = new ArrayList<>();
+    private boolean gotList = false;
 
     public ServerConnection(Socket server) throws IOException {
         this.server = server;
@@ -77,6 +80,24 @@ public class ServerConnection implements Runnable{
         return colorTwo;
     }
 
+    public void print(){
+        for(String s : userList){
+            System.out.println(s);
+        }
+    }
+
+    public boolean isGotList() {
+        if(gotList) {
+            gotList = false;
+            return true;
+        }
+        return false;
+    }
+
+    public ArrayList<String> getUserList() {
+        return userList;
+    }
+
     /**
      * while testing found out we don't have to use different parse etc. maybe we should do make sure its send corretly
      * if we don't it only sends Strings
@@ -84,12 +105,15 @@ public class ServerConnection implements Runnable{
     @Override
     public void run() {
         try {
-            /*while (true){
-                if(return from server == true){
-                    make playerlist....
+            while (true){
+                ListData ldata = (ListData) objReader.readObject();
+                if(ldata.isChallenger()){
+                    userList = ldata.getUserList();
+                    print();
+                    gotList = true;
+                    break;
                 }
-
-            }*/
+            }
             while (true) {
                     do {
                         AcceptData acceptData = (AcceptData) objReader.readObject();

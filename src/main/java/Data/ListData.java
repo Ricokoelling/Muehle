@@ -1,19 +1,20 @@
 package Data;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class ListData {
 
-    private List<String> UserList;
+    private ArrayList<String> UserList;
     private HashMap<String, Color> UserColor;
     private String opponent;
     private boolean challenger = false;
     private boolean accept = true;
     private boolean justreturnList = false;
 
-    public ListData(List<String> userList, String opponent, Boolean challenger) {
+    public ListData(ArrayList<String> userList, String opponent, Boolean challenger) {
         this.UserList = userList;
         this.opponent = opponent;
         this.challenger = challenger;
@@ -37,5 +38,9 @@ public class ListData {
 
     public boolean isJustreturnList() {
         return justreturnList;
+    }
+
+    public ArrayList<String> getUserList() {
+        return UserList;
     }
 }

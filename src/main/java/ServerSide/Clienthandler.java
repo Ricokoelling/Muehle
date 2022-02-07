@@ -28,7 +28,7 @@ public class Clienthandler implements Runnable {
     private final ObjectOutputStream objWriter;
     private final ArrayList<Clienthandler> ALLclients;
     private final ArrayList<Clienthandler> clients = new ArrayList<>();
-    private List<String> userList;
+    private ArrayList<String> userList;
     private boolean playerNumber = true;
     private String playerID;
     private String playerName;
@@ -55,14 +55,19 @@ public class Clienthandler implements Runnable {
         try {   //surround with do-while loop later
             while (true) {
                 LoginData loginData = (LoginData) objReader.readObject();
+                System.out.println(loginData.getPlayerID());
                 SQLite sql = new SQLite();
                 if (loginData.isRegister()) {
                     if (sql.queryUsername(loginData.getPlayerID()) == null) {
                         if (sql.create(loginData.getPlayerID(), loginData.getPassword())) {
-                            //userList = sql.getPlayerList
-                            //
-                            //return playerlist
+                            System.out.println("du hurensohn");
                             this.playerID = loginData.getPlayerID();
+                            for(Clienthandler ch : ALLclients){
+                                if(ch.playerID.equals(this.playerID)) {
+                                    userList.add(ch.playerID);
+                                }
+                            }
+                            this.objWriter.writeObject(new ListData(userList,null,false));
                             break;
                         } else {
                             //that creation failed
@@ -72,9 +77,16 @@ public class Clienthandler implements Runnable {
                     }
                 } else {
                     if (sql.queryUsername(loginData.getPlayerID()) != null) {
+                        System.out.println("nice cook");
                         if (sql.login(loginData.getPlayerID(), loginData.getPassword())) {
-                            //return playerlist
+                            System.out.println("fotze");
                             this.playerID = loginData.getPlayerID();
+                            for(Clienthandler ch : ALLclients){
+                                if(ch.playerID.equals(this.playerID)) {
+                                    userList.add(ch.playerID);
+                                }
+                            }
+                            this.objWriter.writeObject(new ListData(userList,null,false));
                             break;
                         } else {
                             //return that pw or name was wrong
