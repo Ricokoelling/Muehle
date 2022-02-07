@@ -24,6 +24,9 @@ public class ServerConnection implements Runnable {
     private Color colorTwo;
     private ArrayList<String> userList = new ArrayList<>();
     private boolean gotList = false;
+    private boolean gotAccepted = false;
+    private boolean accepted = true;
+    private boolean challenger = true;
 
     public ServerConnection(Socket server) throws IOException {
         this.server = server;
@@ -82,9 +85,16 @@ public class ServerConnection implements Runnable {
         return colorTwo;
     }
 
-    public void print() {
-        for (String s : userList) {
-            System.out.println(s);
+    public boolean isAccepted() {
+        return accepted;
+    }
+
+    public boolean isGotAccepted() {
+        if (gotAccepted) {
+            gotAccepted = false;
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -95,6 +105,13 @@ public class ServerConnection implements Runnable {
         }
         return false;
     }
+
+    public void print() {
+        for (String s : userList) {
+            System.out.println(s);
+        }
+    }
+
 
     public ArrayList<String> getUserList() {
         return userList;
@@ -107,15 +124,21 @@ public class ServerConnection implements Runnable {
     @Override
     public void run() {
         try {
-            while (true) {
+            do{
                 ListData ldata = (ListData) objReader.readObject();
-                userList = ldata.getUserList();
-                print();
                 gotList = true;
-                if (ldata.isChallenger()) {
-                    break;
+                gotAccepted = true;
+                accepted = ldata.isAccept();
+                challenger = ldata.isChallenger();
+                if (accepted) {
+                    for (String s : ldata.getUserList()) {
+                        System.out.println(s);
+                    }
+                    userList = ldata.getUserList();
+                    print();
+                    System.out.println("nutte");
                 }
-            }
+            }while (!challenger);
             while (true) {
                 do {
                     AcceptData acceptData = (AcceptData) objReader.readObject();

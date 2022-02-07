@@ -34,6 +34,7 @@ public class Clienthandler implements Runnable {
     private boolean poswasTaken = false;
     private boolean phase3 = false;
     private boolean win = false;
+    public boolean ingame = false;
     private SQLite sql;
 
 
@@ -60,40 +61,24 @@ public class Clienthandler implements Runnable {
                 if (loginData.isRegister()) {
                     if (sql.create(loginData.getPlayerID(), loginData.getPassword())) {
                         this.playerID = loginData.getPlayerID();
-                        for (Clienthandler ch : ALLclients) {
-                            if (ch.playerID != null && !ch.playerID.equals(this.playerID)) {
-                                userList.add(ch.playerID);
-                            }
-                        }
-                        System.out.println("thisplayer: " + this.playerID);
-                        for (Clienthandler clienthandler : ALLclients) {
-                            clienthandler.objWriter.writeObject(new ListData(userList, null, false));
-                            System.out.println();
-                            System.out.println(clienthandler.playerID);
-                        }
-                        print();
+                        sendList();
                         break;
                     } else {
-                        System.out.println("nooo");
+                        ListData wrongData = new ListData(userList,null,false);
+                        wrongData.setAccept(false);
+                        this.objWriter.writeObject(wrongData);
+
                     }
                 } else {
                     if (sql.login(loginData.getPlayerID(), loginData.getPassword())) {
                         this.playerID = loginData.getPlayerID();
-                        for (Clienthandler ch : ALLclients) {
-                            if (ch.playerID != null && !ch.playerID.equals(this.playerID)) {
-                                userList.add(ch.playerID);
-                            }
-                        }
-                        System.out.println("thisplayer: " + this.playerID);
-                        for (Clienthandler clienthandler : ALLclients) {
-                            clienthandler.objWriter.writeObject(new ListData(userList, null, false));
-                            System.out.println();
-                            System.out.println("cl id: " + clienthandler.playerID);
-                        }
-                        print();
+                        sendList();
                         break;
                     } else {
-                        System.out.println("wrong pw");
+                        System.out.println("falsche angaben du hond");
+                        ListData wrongData = new ListData(userList,null,false);
+                        wrongData.setAccept(false);
+                        this.objWriter.writeObject(wrongData);
                     }
                 }
             }
@@ -125,6 +110,7 @@ public class Clienthandler implements Runnable {
                                         cl.clients.add(cl);
                                     }
                                 }
+                                ingame = true;
                                 break;
                             }
                         }
@@ -580,7 +566,25 @@ public class Clienthandler implements Runnable {
         mst.reset();
     }
 
+/*
+geht bis zum ersten client, sieht okay
+ */
+    private void sendList() throws IOException {
+        for (Clienthandler ch : ALLclients){
+            if(!ch.ingame) {
+                for (Clienthandler chs : ALLclients) {
+                    if (chs.playerID != null && !ch.playerID.equals(chs.playerID)) {
 
+                        userList.add(chs.playerID);
+                    }
+                }
+                System.out.println(ch.playerID + ": ");
+                print();
+                ch.objWriter.writeObject(new ListData(userList,null,false));
+                userList.clear();
+            }
+        }
+    }
     public void print() {
         for(String ul: userList){
             System.out.println("ul: " + ul);

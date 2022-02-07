@@ -17,6 +17,8 @@ public class createPanel extends JPanel implements ActionListener, SwingConstant
     private JPasswordField passwordText;
     private JPasswordField passwordText2;
 
+    private final Client client = new Client();
+
     public createPanel() {
         this.setLayout(null);
 
@@ -110,9 +112,9 @@ public class createPanel extends JPanel implements ActionListener, SwingConstant
     }
 
     private boolean CheckPW() {
-        if(Arrays.equals(passwordText.getPassword(), passwordText2.getPassword())){
+        if (Arrays.equals(passwordText.getPassword(), passwordText2.getPassword())) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -127,16 +129,32 @@ public class createPanel extends JPanel implements ActionListener, SwingConstant
             s.dispose();
         }
         if (e.getSource() == create) {
-            if(CheckPW()){
-                playBoardClient pbC = null;
+            if (CheckPW()) {
                 try {
-                    pbC = new playBoardClient();
-                    pbC.Register(userText.getText(),passwordText.getPassword().hashCode());
+                    playBoardClient pbC = new playBoardClient(client);
+                    client.sendsLogin(userText.getText(), passwordText.getPassword().hashCode(), true);
+                    new Thread(() -> {
+                        while (true) {
+                            if (client.waitforAccept()) {
+                                if(client.isAccepted()) {
+
+                                    s.dispose();
+                                    pbC.setVisible(true);
+                                    new roomSelectionFrame(client,client.getUserList());
+                                    break;
+                                }
+                            }
+                            try {
+                                Thread.sleep(50);
+                            } catch (InterruptedException ie) {
+                                ie.printStackTrace();
+                            }
+                        }
+                    }).start();
                 } catch (IOException | InterruptedException ex) {
                     ex.printStackTrace();
                 }
             }
-            s.dispose();
         }
     }
 

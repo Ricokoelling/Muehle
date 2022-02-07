@@ -11,7 +11,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
     private Color otherColor;
     private static final MyPanel pane = new MyPanel();
     private static final JMenuBar menubar = new JMenuBar();
-    private final Client client = new Client();
+    private final Client client;
     private final JMenuItem resetItem;
     private final JMenuItem exitItem;
     private int pos = 0;
@@ -42,17 +42,6 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             }
         }
     };
-
-    public void Login(String username, int password){
-        client.sendsLogin(username,password,false);
-        thisplayerMove = false;
-        /*
-        if(client.getplayerlist != null)
-            new roomSelectionFrame(); + liste
-            client.playerlist = null;
-         */
-        new roomSelectionFrame(client);
-    }
     public void Register(String username, int password){
         client.sendsLogin(username,password,true);
         thisplayerMove = false;
@@ -61,7 +50,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             new roomSelectionFrame(); + liste + client
             client.playerlist = null;
          */
-        new roomSelectionFrame(client);
+        new roomSelectionFrame(client, client.getUserList());
     }
 
     public void setThisplayerMove() {
@@ -97,7 +86,8 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         this.otherColor = otherColor;
     }
 
-    public playBoardClient() throws IOException, InterruptedException {
+    public playBoardClient(Client client) throws IOException, InterruptedException {
+        this.client = client;
         this.setSize(1080, 720);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
@@ -120,8 +110,6 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         menubar.add(optionsMenu);
         this.setJMenuBar(menubar);
         this.addWindowListener(exitListener);
-        this.setVisible(true);
-
     }
 
     /**

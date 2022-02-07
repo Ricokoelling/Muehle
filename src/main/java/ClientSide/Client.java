@@ -1,14 +1,13 @@
 package ClientSide;
 
-import Data.Data;
-import Data.LoginData;
+
+import Data.*;
 
 import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 public class Client{
 
     private static Socket client;
@@ -18,6 +17,7 @@ public class Client{
     private boolean playerNumber;
     private boolean playerNumberOr;
     private boolean allowed = true;
+    private boolean accepted = true;
     private boolean reset;
     private ObjectOutputStream objWriter;
     private Color thisColor;
@@ -73,10 +73,21 @@ public class Client{
     }
 
     public void sendList(String username){
-        // sends list to server with opponent name
-        // wait for opponent
+        ListData ldata = new ListData(userList,username,true);
+        try {
+            objWriter.writeObject(ldata);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
+    public boolean waitforAccept(){
+        if(serverConn.isGotAccepted()){
+            accepted = serverConn.isAccepted();
+            return true;
+        }
+        return false;
+    }
     public boolean waitForList(){
         if(serverConn.isGotList()){
             userList = serverConn.getUserList();
@@ -220,5 +231,9 @@ public class Client{
 
     public ArrayList<String> getUserList() {
         return userList;
+    }
+
+    public boolean isAccepted() {
+        return accepted;
     }
 }
