@@ -32,7 +32,6 @@ public class loginPanel extends JPanel implements ActionListener {
 
         //userText TextField
         this.userText = new JTextField(this.userTextString());
-
         this.userText.addFocusListener(new FocusListener() {
             public void focusGained(FocusEvent e) {
                 if (loginPanel.this.userText.getText().equals("") || loginPanel.this.userText.getText().equals(userTextString())) {
@@ -66,7 +65,6 @@ public class loginPanel extends JPanel implements ActionListener {
                     loginPanel.this.passwordField.setText("");
                 }
             }
-
             public void focusLost(FocusEvent e) {
             }
         });
@@ -93,6 +91,7 @@ public class loginPanel extends JPanel implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
+        //This is to dispose of the parent so it can be closed
         Window s = SwingUtilities.getWindowAncestor(this);
         if (e.getSource() == login) {
             //control login credentials
