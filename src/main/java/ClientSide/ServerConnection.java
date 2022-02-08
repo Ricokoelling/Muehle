@@ -28,6 +28,8 @@ public class ServerConnection implements Runnable {
     private boolean challenger = true;
     private boolean acceptMatch = false;
     private String opponent;
+    private boolean disconnect = false;
+    private boolean alreadyOnline = false;
 
     public ServerConnection(Socket server) throws IOException {
         this.server = server;
@@ -124,6 +126,18 @@ public class ServerConnection implements Runnable {
         return acceptMatch;
     }
 
+    public boolean isDisconnect() {
+        return disconnect;
+    }
+
+    public void setDisconnect(boolean disconnect) {
+        this.disconnect = disconnect;
+    }
+
+    public boolean isAlreadyOnline() {
+        return alreadyOnline;
+    }
+
     public void print() {
         for (String s : userList) {
             System.out.println(s);
@@ -142,53 +156,60 @@ public class ServerConnection implements Runnable {
     @Override
     public void run() {
         try {
-            while (!acceptMatch){
-                System.out.println("[CLIENT] Wait for List....");
-                ListData ldata = (ListData) objReader.readObject();
-                System.out.println(ldata.toString());
-                acceptMatch = false;
-                gotList = true;
-                gotAccepted = true;
-                accepted = ldata.isAccept();
-                opponent = ldata.getOpponent();
-                challenger = ldata.isChallenger();
-                if (accepted) {
-                    userList = ldata.getUserList();
-                    if(challenger){
-                        if(ldata.isAcceptMatch()){
-                            acceptMatch = true;
-                            System.out.println("out");
+            while (true) {
+                while (!acceptMatch) {
+                    System.out.println("[CLIENT] Wait for List....");
+                    ListData ldata = (ListData) objReader.readObject();
+                    System.out.println(ldata.toString());
+                    acceptMatch = false;
+                    gotList = true;
+                    gotAccepted = true;
+                    accepted = ldata.isAccept();
+                    opponent = ldata.getOpponent();
+                    challenger = ldata.isChallenger();
+                    if (accepted) {
+                        userList = ldata.getUserList();
+                        if (challenger) {
+                            if (ldata.isAcceptMatch()) {
+                                acceptMatch = true;
+                                break;
+                            }
+                        }
+                    }else {
+                        alreadyOnline = ldata.isAlreadyOnline();
+                    }
+                }
+                while (true) {
+                    do {
+                        AcceptData acceptData = (AcceptData) objReader.readObject();
+                        allowed = acceptData.isAccept();
+                        if (allowed) {
+                            pos1 = acceptData.getPos1();
+                            pos2 = acceptData.getPos2();
+                            state = acceptData.getState();
+                            playerNumber = acceptData.isPlayerNumb();
+                            reset = acceptData.isReset();
+                        }
+                        gotAllowed = true;
+                    } while (!allowed);
+                    Data data = (Data) objReader.readObject();
+                    if (!data.isDisconnect()) {
+                        state = data.getState();
+                        playerNumber = data.isPlayer();
+                        colorOne = data.getPlayerOne();
+                        colorTwo = data.getPlayerTwo();
+                        if (state != -1) {
+                            pos1 = data.getPos1();
+                            pos2 = data.getPos2();
+                        } else {
                             break;
                         }
+                        gotData = true;
+                    } else {
+                        disconnect = true;
+                        break;
                     }
                 }
-            }
-            while (true) {
-                do {
-                    AcceptData acceptData = (AcceptData) objReader.readObject();
-                    System.out.println("gotit");
-                    allowed = acceptData.isAccept();
-                    if (allowed) {
-                        pos1 = acceptData.getPos1();
-                        pos2 = acceptData.getPos2();
-                        state = acceptData.getState();
-                        playerNumber = acceptData.isPlayerNumb();
-                        reset = acceptData.isReset();
-                    }
-                    gotAllowed = true;
-                } while (!allowed);
-                Data data = (Data) objReader.readObject();
-                state = data.getState();
-                playerNumber = data.isPlayer();
-                colorOne = data.getPlayerOne();
-                colorTwo = data.getPlayerTwo();
-                if (state != -1) {
-                    pos1 = data.getPos1();
-                    pos2 = data.getPos2();
-                } else {
-                    break;
-                }
-                gotData = true;
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

@@ -15,6 +15,8 @@ public class ListData implements Serializable {
     private boolean accept = true;
     private boolean justreturnList = false;
     private boolean acceptMatch = false;
+    private boolean justBreakwhile = false;
+    private boolean alreadyOnline = false;
 
     public ListData(ArrayList<String> userList, String opponent, Boolean challenger) {
         this.UserList = userList;
@@ -52,6 +54,22 @@ public class ListData implements Serializable {
 
     public boolean isAcceptMatch() {
         return acceptMatch;
+    }
+
+    public void setJustBreakwhile(boolean justBreakwhile) {
+        this.justBreakwhile = justBreakwhile;
+    }
+
+    public boolean isJustBreakwhile() {
+        return justBreakwhile;
+    }
+
+    public boolean isAlreadyOnline() {
+        return alreadyOnline;
+    }
+
+    public void setAlreadyOnline(boolean alreadyOnline) {
+        this.alreadyOnline = alreadyOnline;
     }
 
     @Override

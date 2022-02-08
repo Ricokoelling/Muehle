@@ -20,6 +20,8 @@ public class loginPanel extends JPanel implements ActionListener {
     private JButton login;
     private JButton createButton;
 
+    private boolean gebrochen = false;
+
     private final Client client = new Client();
 
     public loginPanel() {
@@ -99,7 +101,7 @@ public class loginPanel extends JPanel implements ActionListener {
             try {
                 playBoardClient pbC = new playBoardClient(client, userText.getText());
                 System.out.println(userText.getText() + "    " + Arrays.toString(passwordField.getPassword()));
-                client.sendsLogin(userText.getText(), passwordField.getPassword().hashCode(), false);
+                client.sendsLogin(userText.getText(), Arrays.hashCode(passwordField.getPassword()), false);
                 new Thread(() -> {
                     while (true) {
                         if (client.waitforAccept()) {
@@ -109,10 +111,15 @@ public class loginPanel extends JPanel implements ActionListener {
                                 new roomSelectionFrame(client, client.getUserList(), pbC, userText.getText());
                             } else {
                                 success.setForeground(Color.red);
-                                success.setText("Wrong Username or Password");
+                                if(client.isAlreadyOnline()){
+                                    success.setText("Player is already Online!");
+                                }else {
+                                    success.setText("Wrong Username or Password");
+                                }
                                 loginPanel.this.userText.setText("");
                                 loginPanel.this.passwordField.setText("");
                             }
+                            gebrochen = true;
                             break;
                         }
                         try {
@@ -127,8 +134,10 @@ public class loginPanel extends JPanel implements ActionListener {
             }
         }
         if (e.getSource() == createButton) {
-            new createFrame();
-            s.dispose();
+            if(gebrochen) {
+                new createFrame(client);
+                s.dispose();
+            }
         }
     }
 

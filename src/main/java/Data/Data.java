@@ -9,12 +9,13 @@ import java.io.Serializable;
  */
 public class Data implements Serializable {
 
-    private int state;
-    private int pos1;
-    private int pos2;
-    private String PlayerID;
-    private String PlayerName;
-    private boolean reset;
+    private final int state;
+    private final int pos1;
+    private final int pos2;
+    private final String PlayerID;
+    private boolean disconnect = false;
+    private boolean otherDisconnect = false;
+    private boolean reset = false;
     private boolean Player;
     private Color PlayerOne;
     private Color PlayerTwo;
@@ -28,13 +29,12 @@ public class Data implements Serializable {
         this.Player = player;
     }
 
-    public Data(int state, int pos1, int pos2, String PlayerID, boolean reset, String playerName) {
+    public Data(int state, int pos1, int pos2, String PlayerID,Boolean disconnect) {
         this.state = state;
         this.pos1 = pos1;
         this.pos2 = pos2;
         this.PlayerID = PlayerID;
-        this.reset = reset;
-        this.PlayerName = playerName;
+        this.disconnect = disconnect;
     }
 
     public int getState() {
@@ -75,5 +75,17 @@ public class Data implements Serializable {
 
     public Color getPlayerTwo() {
         return PlayerTwo;
+    }
+
+    public boolean isDisconnect() {
+        return disconnect;
+    }
+
+    public boolean isOtherDisconnect() {
+        return otherDisconnect;
+    }
+
+    public void setOtherDisconnect(boolean otherDisconnect) {
+        this.otherDisconnect = otherDisconnect;
     }
 }

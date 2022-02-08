@@ -24,8 +24,10 @@ public class Client{
     private Color otherColor;
     private ArrayList<String> userList;
     private String opponent;
-    private boolean matchFound;
+    private boolean disconnect;
     private String userID;
+    private boolean dontReset = true;
+    private boolean alreadyOnline = false;
 
 
 
@@ -34,6 +36,7 @@ public class Client{
             client = new Socket("localhost", 1337);
             serverConn = new ServerConnection(client);
             objWriter = new ObjectOutputStream(client.getOutputStream());
+            search();
             System.out.println("[ClientSide.Client] connected");
         }catch(IOException e){
             System.out.println("Beim Erstellen des Clients ist ein Fehler aufgetreten");
@@ -42,7 +45,7 @@ public class Client{
         new Thread(serverConn).start();
 
     }
-
+/*
     public Client(String ip, int port){
         try{
             client = new Socket(ip, port);
@@ -61,7 +64,17 @@ public class Client{
             e.printStackTrace();
         }
     }
-
+*/
+    public void sendBreak(){
+        ListData ldata = new ListData(userList,userID,false);
+        ldata.setJustBreakwhile(true);
+        serverConn.setAcceptMatch();
+        try {
+            objWriter.writeObject(ldata);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * Sends data when needed to Server and starts recive funktion
      * @throws IOException yeee
@@ -69,6 +82,7 @@ public class Client{
     public void sendsLogin(String username , int password, boolean register) {
         LoginData logData = new LoginData(username,  password,register);
         userID = username;
+        System.out.println("reg: " + register);
         try {
             objWriter.writeObject(logData);
         } catch (IOException e) {
@@ -108,6 +122,7 @@ public class Client{
     public boolean waitforAccept(){
         if(serverConn.isGotAccepted()){
             accepted = serverConn.isAccepted();
+            alreadyOnline = serverConn.isAlreadyOnline();
             return true;
         }
         return false;
@@ -157,27 +172,30 @@ public class Client{
                 }
                 serverConn.setGotData(false);
                 serverConn.setGotAllowed(false);
-                new Thread(() -> {
-                    while (true) {
-                        if (serverConn.isReset()) {
-                            serverConn.setReset(false);
-                            reset = true;
-                            break;
-                        }
-                        try {
-                            Thread.sleep(50);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
                 return true;
             }
         return false;
     }
 
-    public void reset(){
-
+    public void search(){
+        new Thread(() -> {
+            while (dontReset) {
+                if (serverConn.isReset()) {
+                    serverConn.setReset(false);
+                    reset = true;
+                }
+                if(serverConn.isDisconnect()){
+                    serverConn.setDisconnect(false);
+                    endConnection(false);
+                    disconnect = true;
+                }
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
     public void sendData(int state, int pos1){
         System.out.println(playerNumberOr);
@@ -198,13 +216,29 @@ public class Client{
         }
     }
 
+
     /***
      *      This function safely disconnects from the ServerSide.server
      */
     public void endConnection(){
         try{
+            Data data = new Data(state, pos1, 0, this.userID,true);
+            try {
+                objWriter.writeObject(data);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             client.close();
         }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+    public void endConnection(boolean k){
+        Data data = new Data(state, pos1, 0, this.userID, reset,true);
+        data.setOtherDisconnect(true);
+        try {
+            objWriter.writeObject(data);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -261,7 +295,11 @@ public class Client{
         return serverConn.isChallenger();
     }
 
-    public void setAC(){
-        serverConn.setAcceptMatch();
+    public boolean isDisconnect() {
+        return disconnect;
+    }
+
+    public boolean isAlreadyOnline() {
+        return alreadyOnline;
     }
 }

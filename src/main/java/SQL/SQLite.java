@@ -35,7 +35,6 @@ public class SQLite {
         }
         }catch (SQLException e){
             e.printStackTrace();
-            System.out.println("duhurensohn");
         }
         return false;
     }
@@ -52,9 +51,11 @@ public class SQLite {
         try {
             if(rs.next()){
                 //check if returned hash matches the send one from the client
+                System.out.println(rs.getInt("password") + " " + pw);
                 if(rs.getInt("password")==pw){
                     System.out.println("Login Successfull");
-                }return true;
+                    return true;
+                }
             }else return false;
         }catch (SQLException e){
             e.printStackTrace();

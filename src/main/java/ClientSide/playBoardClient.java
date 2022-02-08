@@ -27,6 +27,8 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
     protected boolean lethimwait = true;
     protected boolean phase3 = false;
     protected boolean reset = false;
+    protected boolean disconnect = false;
+    private String userID;
 
 
     WindowListener exitListener = new WindowAdapter() {
@@ -37,22 +39,43 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                     "Exit Confirmation", JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE, null, null, null);
             if (confirm == 0) {
-                //test.endConnection();
+                try {
+                    disconnect();
+                } catch (IOException | InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                client.endConnection();
                 System.exit(0);
             }
         }
     };
 
-    public void startMatch(){
-        this.playerNumber = false;
-        new WartenSwingWorker(this.client, false, pane,this).execute();
+    private void disconnect() throws IOException, InterruptedException {
+        this.dispose();
+        new roomSelectionFrame(client, client.getUserList(), this,userID);
     }
+
+    public void startMatch() {
+        this.playerNumber = false;
+        new WartenSwingWorker(this.client, false, pane, this).execute();
+    }
+
     public void setThisplayerMove() {
         this.thisplayerMove = true;
         new Thread(() -> {
             while (true) {
                 if (client.isReset()) {
+                    reset = true;
                     reset();
+                    break;
+                }
+                if (client.isDisconnect()) {
+                    try {
+                        disconnect();
+                    } catch (IOException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    disconnect = true;
                     break;
                 }
                 try {
@@ -82,6 +105,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
 
     public playBoardClient(Client client, String username) throws IOException, InterruptedException {
         this.setTitle(username);
+        this.userID = username;
         this.client = client;
         this.setSize(1080, 720);
         this.addMouseListener(this);
@@ -462,7 +486,12 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == exitItem) {
-            //test.endConnection();
+            client.endConnection();
+            try {
+                disconnect();
+            } catch (IOException | InterruptedException ex) {
+                ex.printStackTrace();
+            }
             System.exit(0);
         } else if (e.getSource() == resetItem) {
             playerNumber = client.isPlayerNumberOr();

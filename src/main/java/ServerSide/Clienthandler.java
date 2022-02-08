@@ -36,7 +36,8 @@ public class Clienthandler implements Runnable {
     private boolean win = false;
     public boolean ingame = false;
     private SQLite sql;
-    private boolean startMatch = false;
+    private boolean disconnect = false;
+    private boolean alreadyOnline = false;
 
 
     public Clienthandler(Socket client, ArrayList<Clienthandler> clients, SQLite sql) throws IOException {
@@ -59,27 +60,40 @@ public class Clienthandler implements Runnable {
         try {
             while (true) {
                 LoginData loginData = (LoginData) objReader.readObject();
-                if (loginData.isRegister()) {
-                    if (sql.create(loginData.getPlayerID(), loginData.getPassword())) {
-                        this.playerID = loginData.getPlayerID();
-                        sendList();
-                        break;
+                System.out.println(ALLclients.size());
+                for (Clienthandler ch : ALLclients) {
+                    if (ch.playerID != null && ch.playerID.equals(loginData.getPlayerID())) {
+                        alreadyOnline = true;
+                    }
+                }
+                if (!alreadyOnline) {
+                    if (loginData.isRegister()) {
+                        if (sql.create(loginData.getPlayerID(), loginData.getPassword())) {
+                            this.playerID = loginData.getPlayerID();
+                            sendList();
+                            break;
+                        } else {
+                            ListData wrongData = new ListData(userList, null, false);
+                            wrongData.setAccept(false);
+                            this.objWriter.writeObject(wrongData);
+                        }
                     } else {
-                        ListData wrongData = new ListData(userList,null,false);
-                        wrongData.setAccept(false);
-                        this.objWriter.writeObject(wrongData);
-
+                        if (sql.login(loginData.getPlayerID(), loginData.getPassword())) {
+                            this.playerID = loginData.getPlayerID();
+                            sendList();
+                            break;
+                        } else {
+                            ListData wrongData = new ListData(userList, null, false);
+                            wrongData.setAccept(false);
+                            this.objWriter.writeObject(wrongData);
+                        }
                     }
                 } else {
-                    if (sql.login(loginData.getPlayerID(), loginData.getPassword())) {
-                        this.playerID = loginData.getPlayerID();
-                        sendList();
-                        break;
-                    } else {
-                        ListData wrongData = new ListData(userList,null,false);
-                        wrongData.setAccept(false);
-                        this.objWriter.writeObject(wrongData);
-                    }
+                    ListData wrongData = new ListData(userList, null, false);
+                    wrongData.setAccept(false);
+                    wrongData.setAlreadyOnline(true);
+                    this.objWriter.writeObject(wrongData);
+                    alreadyOnline = false;
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
@@ -87,11 +101,10 @@ public class Clienthandler implements Runnable {
         }
         while (true) {
             try {
-                while (!startMatch) {   //doesnt get out in other client...
+                while (true) {
                     ListData listData = (ListData) objReader.readObject();          // guy asks for match
                     System.out.println("l: " + listData.getOpponent() + " " + listData.isAcceptMatch() + " " + listData.isChallenger());
                     if (listData.isJustreturnList()) {
-                        //sql ask for list
                         this.objWriter.writeObject(new ListData(new ArrayList<String>(userList), playerID, false));
                     } else {
                         if (listData.isChallenger()) {
@@ -107,8 +120,8 @@ public class Clienthandler implements Runnable {
                                     if (listData.getOpponent().equals(cl.playerID)) {
                                         ListData ldata = new ListData(userList, this.playerID, true);
                                         ldata.setAcceptMatch(true);
-                                        cl.playerNumber = true;
-                                        this.playerNumber = false;
+                                        cl.playerNumber = false;
+                                        this.playerNumber = true;
                                         this.objWriter.writeObject(ldata);
                                         cl.objWriter.writeObject(ldata);
                                         cl.objWriter.writeObject(new AcceptData(true, 1, 0, 0, this.playerID, playerNumber, false));
@@ -118,12 +131,13 @@ public class Clienthandler implements Runnable {
                                         cl.clients.add(cl);
                                         ingame = true;
                                         cl.ingame = true;
-                                        cl.startMatch = true;
-                                        this.startMatch = true;
                                         System.out.println(this.toString());
                                     }
                                 }
-
+                                break;
+                            }
+                            if (listData.isJustBreakwhile()) {
+                                break;
                             }
                         }
                     }
@@ -141,6 +155,15 @@ public class Clienthandler implements Runnable {
                         playerColor = data.getPlayerOne();
                     } else {
                         playerColor = data.getPlayerTwo();
+                    }
+                    if (data.isDisconnect()) {
+                        disconnect = true;
+                        disconnect();
+                        break;
+                    }
+                    if (data.isOtherDisconnect()) {
+                        reset(true);
+                        break;
                     }
                     System.out.println("[SERVER] state: " + state + " pos1: " + pos1 + " pos2: " + pos2 + " PlayerID " + data.getPlayerID() + " plNumber: " + playerNumber + " reset: " + data.isReset() + " count: " + count + " != " + maxstones);
 
@@ -360,12 +383,19 @@ public class Clienthandler implements Runnable {
 
                     } else if (state == 1000) {
                         reset();
+                        break;
+                    } else if (state == 0) {
+                        break;
                     } else {
                         break;
                     }
+
+                }
+                if (disconnect) {
+                    break;
                 }
             } catch (IOException | ClassNotFoundException e) {
-                System.err.println("Something happened that shouldn't have happened!");
+                System.err.println("Something happened that shouldn't have happened! " + playerID);
                 e.printStackTrace();
             }
         }
@@ -551,6 +581,14 @@ public class Clienthandler implements Runnable {
         }
     }
 
+    private void reset(boolean only) {
+        maxstones = 17;
+        count = 0;
+        phaseChange = false;
+        boothphase3 = false;
+        mst.reset();
+    }
+
     protected void resetOther() {
         maxstones = 17;
         count = 0;
@@ -559,27 +597,40 @@ public class Clienthandler implements Runnable {
         mst.reset();
     }
 
-/*
-geht bis zum ersten client, sieht okay
- */
+    /*
+    geht bis zum ersten client, sieht okay
+     */
     private void sendList() throws IOException {
-        for (Clienthandler ch : ALLclients){
-            if(!ch.ingame) {
+        for (Clienthandler ch : ALLclients) {
+            if (!ch.ingame) {
                 for (Clienthandler chs : ALLclients) {
-                    if (chs.playerID != null && !ch.playerID.equals(chs.playerID)) {
+                    if (chs.playerID != null && !ch.playerID.equals(chs.playerID) && !chs.ingame) {
 
                         userList.add(chs.playerID);
                     }
                 }
-                ch.objWriter.writeObject(new ListData(new ArrayList<String>(userList),null,false));
+                ch.objWriter.writeObject(new ListData(new ArrayList<String>(userList), null, false));
                 userList.clear();
             }
         }
     }
+
     public void print() {
-        for(String ul: userList){
+        for (String ul : userList) {
             System.out.println("ul: " + ul);
         }
+    }
+
+    private void disconnect() throws IOException {
+        ALLclients.remove(this);
+        System.out.println("[SERVER] Client " + playerID + " disconnected");
+        System.out.println("pbN: " + playerNumber);
+        if (clients.get(0).playerNumber == playerNumber) {
+            clients.get(1).objWriter.writeObject(new Data(0, 0, 0, playerID, true));
+        } else {
+            clients.get(0).objWriter.writeObject(new Data(0, 0, 0, playerID, true));
+        }
+
     }
 
     @Override

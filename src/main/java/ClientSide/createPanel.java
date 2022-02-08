@@ -17,10 +17,11 @@ public class createPanel extends JPanel implements ActionListener, SwingConstant
     private JPasswordField passwordText;
     private JPasswordField passwordText2;
 
-    private final Client client = new Client();
+    private final Client client;
 
-    public createPanel() {
+    public createPanel(Client client) {
         this.setLayout(null);
+        this.client = client;
 
         //username JLabel
         this.username = new JLabel(username());
@@ -132,17 +133,16 @@ public class createPanel extends JPanel implements ActionListener, SwingConstant
             if (CheckPW()) {
                 try {
                     playBoardClient pbC = new playBoardClient(client,userText.getText());
-                    client.sendsLogin(userText.getText(), passwordText.getPassword().hashCode(), true);
+                    client.sendsLogin(userText.getText(), Arrays.hashCode(passwordText.getPassword()), true);
                     new Thread(() -> {
                         while (true) {
                             if (client.waitforAccept()) {
                                 if(client.isAccepted()) {
-
                                     s.dispose();
                                     pbC.setVisible(true);
                                     new roomSelectionFrame(client,client.getUserList(), pbC,userText.getText());
-                                    break;
                                 }
+                                break;
                             }
                             try {
                                 Thread.sleep(50);

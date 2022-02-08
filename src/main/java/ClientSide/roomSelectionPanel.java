@@ -26,6 +26,7 @@ public class roomSelectionPanel extends JPanel implements ActionListener {
         this.Client = client;
         this.userList = userList;
         this.pbC = pbC;
+        pbC.setVisible(true);
         this.rSf = rsf;
         model = new DefaultListModel<>();
 
@@ -63,19 +64,20 @@ public class roomSelectionPanel extends JPanel implements ActionListener {
                     if (duel) {
                         if (Client.waitforAcceptMatch()) {
                             pbC.startMatch();
-                            Client.setAC();
+                            Client.sendBreak();
                             rSf.dispose();
                             break;
                         }
-                    }
-                    if (Client.isMatchFound()) {
-                        int answer = JOptionPane.showConfirmDialog(null, Client.getOpponent() + " wants to play!", "Match Found", JOptionPane.YES_NO_OPTION);
-                        if (answer == 0) {
-                            pbC.thisplayerMove = true;
-                            pbC.playerNumber = true;
-                            Client.sendAccept();
-                            rSf.dispose();
-                            break;
+                    } else {
+                        if (Client.isMatchFound()) {
+                            int answer = JOptionPane.showConfirmDialog(null, Client.getOpponent() + " wants to play!", "Match Found", JOptionPane.YES_NO_OPTION);
+                            if (answer == 0) {
+                                pbC.thisplayerMove = true;
+                                pbC.playerNumber = true;
+                                Client.sendAccept();
+                                rSf.dispose();
+                                break;
+                            }
                         }
                     }
                 }
