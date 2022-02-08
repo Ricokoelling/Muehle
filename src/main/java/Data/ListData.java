@@ -44,4 +44,16 @@ public class ListData implements Serializable {
     public ArrayList<String> getUserList() {
         return UserList;
     }
+
+    @Override
+    public String toString() {
+        return "ListData{" +
+                "UserList=" + UserList +
+                ", UserColor=" + UserColor +
+                ", opponent='" + opponent + '\'' +
+                ", challenger=" + challenger +
+                ", accept=" + accept +
+                ", justreturnList=" + justreturnList +
+                '}';
+    }
 }

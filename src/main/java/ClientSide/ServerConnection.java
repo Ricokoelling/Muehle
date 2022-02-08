@@ -125,18 +125,15 @@ public class ServerConnection implements Runnable {
     public void run() {
         try {
             do{
+                System.out.println("[CLIENT] Wait for List....");
                 ListData ldata = (ListData) objReader.readObject();
+                System.out.println(ldata.toString());
                 gotList = true;
                 gotAccepted = true;
                 accepted = ldata.isAccept();
                 challenger = ldata.isChallenger();
                 if (accepted) {
-                    for (String s : ldata.getUserList()) {
-                        System.out.println(s);
-                    }
                     userList = ldata.getUserList();
-                    print();
-                    System.out.println("nutte");
                 }
             }while (!challenger);
             while (true) {

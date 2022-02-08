@@ -75,7 +75,6 @@ public class Clienthandler implements Runnable {
                         sendList();
                         break;
                     } else {
-                        System.out.println("falsche angaben du hond");
                         ListData wrongData = new ListData(userList,null,false);
                         wrongData.setAccept(false);
                         this.objWriter.writeObject(wrongData);
@@ -578,9 +577,7 @@ geht bis zum ersten client, sieht okay
                         userList.add(chs.playerID);
                     }
                 }
-                System.out.println(ch.playerID + ": ");
-                print();
-                ch.objWriter.writeObject(new ListData(userList,null,false));
+                ch.objWriter.writeObject(new ListData(new ArrayList<String>(userList),null,false));
                 userList.clear();
             }
         }
