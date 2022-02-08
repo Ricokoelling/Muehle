@@ -140,7 +140,7 @@ public class createPanel extends JPanel implements ActionListener, SwingConstant
 
                                     s.dispose();
                                     pbC.setVisible(true);
-                                    new roomSelectionFrame(client,client.getUserList());
+                                    new roomSelectionFrame(client,client.getUserList(), pbC);
                                     break;
                                 }
                             }

@@ -18,7 +18,6 @@ public class ServerConnection implements Runnable {
     private int pos1, pos2;
     private boolean playerNumber;
     private boolean allowed = true;
-    private String str;
     private boolean reset = false;
     private Color colorOne;
     private Color colorTwo;
@@ -27,6 +26,8 @@ public class ServerConnection implements Runnable {
     private boolean gotAccepted = false;
     private boolean accepted = true;
     private boolean challenger = true;
+    private boolean acceptMatch = false;
+    private String opponent;
 
     public ServerConnection(Socket server) throws IOException {
         this.server = server;
@@ -35,6 +36,10 @@ public class ServerConnection implements Runnable {
 
     public void setGotData(boolean gotData) {
         this.gotData = gotData;
+    }
+
+    public void setAcceptMatch() {
+        this.acceptMatch = true;
     }
 
     public boolean isGotData() {
@@ -106,6 +111,15 @@ public class ServerConnection implements Runnable {
         return false;
     }
 
+
+    public boolean isChallenger() {
+        return challenger;
+    }
+
+    public String getOpponent() {
+        return opponent;
+    }
+
     public void print() {
         for (String s : userList) {
             System.out.println(s);
@@ -124,7 +138,7 @@ public class ServerConnection implements Runnable {
     @Override
     public void run() {
         try {
-            do{
+            while (true){
                 System.out.println("[CLIENT] Wait for List....");
                 ListData ldata = (ListData) objReader.readObject();
                 System.out.println(ldata.toString());
@@ -134,8 +148,20 @@ public class ServerConnection implements Runnable {
                 challenger = ldata.isChallenger();
                 if (accepted) {
                     userList = ldata.getUserList();
+                    if(challenger){
+                        if(ldata.isAcceptMatch()){
+                            break;
+                        }
+                        while (true){
+                            if(acceptMatch){
+                                opponent = ldata.getOpponent();
+                                break;
+                            }
+                        }
+                        if(acceptMatch) break;
+                    }
                 }
-            }while (!challenger);
+            }
             while (true) {
                 do {
                     AcceptData acceptData = (AcceptData) objReader.readObject();

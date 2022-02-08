@@ -107,7 +107,7 @@ public class loginPanel extends JPanel implements ActionListener {
                             if (client.isAccepted()) {
                                 s.dispose();
                                 pbC.setVisible(true);
-                                new roomSelectionFrame(client, client.getUserList());
+                                new roomSelectionFrame(client, client.getUserList(), pbC);
                             } else {
                                 success.setForeground(Color.red);
                                 success.setText("Wrong Username or Password");

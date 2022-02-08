@@ -3,6 +3,7 @@ package ClientSide;
 import ServerSide.Clienthandler;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -16,12 +17,16 @@ public class roomSelectionPanel extends JPanel implements ActionListener {
     ArrayList<String> userList = new ArrayList<>();
     private final Client Client;
     private boolean duel = false;
+    private playBoardClient pbC;
+    private roomSelectionFrame rSf;
 
 
-    public roomSelectionPanel(Client client, ArrayList<String> userList) {
+    public roomSelectionPanel(Client client, ArrayList<String> userList, playBoardClient pbC, roomSelectionFrame rsf) {
         this.setLayout(null);
         this.Client = client;
         this.userList = userList;
+        this.pbC = pbC;
+        this.rSf = rsf;
         model = new DefaultListModel<>();
 
         //playerOnline JList
@@ -53,11 +58,16 @@ public class roomSelectionPanel extends JPanel implements ActionListener {
                     model.removeAllElements();
                     userList = Client.getUserList();
                     for (String ul : userList) {
-                        System.out.println("ul: " +ul);
                         model.addElement(ul);
                     }
-                    if (duel) {
-                        break;
+                    if (Client.isMatchFound()) {
+                        int answer = JOptionPane.showConfirmDialog(null,Client.getOpponent() + " wants to play!", "Match Found",JOptionPane.YES_NO_OPTION);
+                        if(answer == 0) {
+                            pbC.thisplayerMove = true;
+                            Client.sendAccept();
+                            rSf.dispose();
+                            break;
+                        }
                     }
                 }
                 try {
@@ -79,7 +89,6 @@ public class roomSelectionPanel extends JPanel implements ActionListener {
         if (e.getSource() == duell) {
             //TODO request to the ServerSide.server for a 1v1
             String enemyName = (String) playerOnlineJList.getSelectedValue();
-            duel = true;
             Client.sendList(enemyName);
 
         }

@@ -23,6 +23,9 @@ public class Client{
     private Color thisColor;
     private Color otherColor;
     private ArrayList<String> userList;
+    private String opponent;
+    private boolean matchFound;
+    private String userID;
 
 
 
@@ -65,6 +68,7 @@ public class Client{
      */
     public void sendsLogin(String username , int password, boolean register) {
         LoginData logData = new LoginData(username,  password,register);
+        userID = username;
         try {
             objWriter.writeObject(logData);
         } catch (IOException e) {
@@ -81,6 +85,17 @@ public class Client{
         }
     }
 
+    public void sendAccept(){
+        ListData ldata = new ListData(userList,userID,true);
+        ldata.setAccept(true);
+        serverConn.setAcceptMatch();
+        try {
+            objWriter.writeObject(ldata);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public boolean waitforAccept(){
         if(serverConn.isGotAccepted()){
             accepted = serverConn.isAccepted();
@@ -88,6 +103,7 @@ public class Client{
         }
         return false;
     }
+
     public boolean waitForList(){
         if(serverConn.isGotList()){
             userList = serverConn.getUserList();
@@ -155,12 +171,7 @@ public class Client{
 
     }
     public void sendData(int state, int pos1){
-        Data data;
-        if(playerNumberOr) {
-            data = new Data(state, pos1, 0, "0001", reset, true);
-        }else {
-            data = new Data(state, pos1, 0, "0002", reset, false);
-        }
+        Data data = new Data(state, pos1, 0, this.userID, reset, false);
         try {
             objWriter.writeObject(data);
         } catch (IOException e) {
@@ -169,12 +180,7 @@ public class Client{
     }
 
     public void sendData(int state, int pos1, int pos2){
-        Data data;
-        if(playerNumberOr) {
-            data = new Data(state, pos1, pos2, "0001", reset, true);
-        }else {
-            data = new Data(state, pos1, pos2, "0002", reset, false);
-        }
+        Data data = new Data(state, pos1, 0, this.userID, reset, false);
         try {
             objWriter.writeObject(data);
         } catch (IOException e) {
@@ -235,5 +241,13 @@ public class Client{
 
     public boolean isAccepted() {
         return accepted;
+    }
+
+    public String getOpponent() {
+        return serverConn.getOpponent();
+    }
+
+    public boolean isMatchFound() {
+        return serverConn.isChallenger();
     }
 }

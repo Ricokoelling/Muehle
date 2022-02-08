@@ -14,6 +14,7 @@ public class ListData implements Serializable {
     private boolean challenger = false;
     private boolean accept = true;
     private boolean justreturnList = false;
+    private boolean acceptMatch = false;
 
     public ListData(ArrayList<String> userList, String opponent, Boolean challenger) {
         this.UserList = userList;
@@ -43,6 +44,14 @@ public class ListData implements Serializable {
 
     public ArrayList<String> getUserList() {
         return UserList;
+    }
+
+    public void setAcceptMatch(boolean acceptMatch) {
+        this.acceptMatch = acceptMatch;
+    }
+
+    public boolean isAcceptMatch() {
+        return acceptMatch;
     }
 
     @Override

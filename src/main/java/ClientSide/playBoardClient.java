@@ -42,16 +42,6 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             }
         }
     };
-    public void Register(String username, int password){
-        client.sendsLogin(username,password,true);
-        thisplayerMove = false;
-        /*
-        if(client.getplayerlist != null)
-            new roomSelectionFrame(); + liste + client
-            client.playerlist = null;
-         */
-        new roomSelectionFrame(client, client.getUserList());
-    }
 
     public void setThisplayerMove() {
         this.thisplayerMove = true;

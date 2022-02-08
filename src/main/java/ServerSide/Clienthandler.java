@@ -90,7 +90,7 @@ public class Clienthandler implements Runnable {
                     ListData listData = (ListData) objReader.readObject();          // guy asks for match
                     if (listData.isJustreturnList()) {
                         //sql ask for list
-                        this.objWriter.writeObject(new ListData(userList, playerID, false));
+                        this.objWriter.writeObject(new ListData(new ArrayList<String>(userList), playerID, false));
                     } else {
                         if (listData.isChallenger()) {
                             for (Clienthandler cl : ALLclients) {
@@ -102,14 +102,17 @@ public class Clienthandler implements Runnable {
                             if (listData.isAccept()) {
                                 for (Clienthandler cl : ALLclients) {
                                     if (listData.getOpponent().equals(cl.playerID)) {
-                                        cl.objWriter.writeObject(new ListData(userList, this.playerID, true));
+                                        ListData ldata = new ListData(userList, this.playerID, true);
+                                        ldata.setAcceptMatch(true);
+                                        cl.objWriter.writeObject(ldata);
                                         clients.add(this);
                                         clients.add(cl);
                                         cl.clients.add(this);
                                         cl.clients.add(cl);
+                                        ingame = true;
+                                        cl.ingame = true;
                                     }
                                 }
-                                ingame = true;
                                 break;
                             }
                         }
