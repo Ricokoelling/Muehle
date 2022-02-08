@@ -36,6 +36,7 @@ public class Clienthandler implements Runnable {
     private boolean win = false;
     public boolean ingame = false;
     private SQLite sql;
+    private boolean startMatch = false;
 
 
     public Clienthandler(Socket client, ArrayList<Clienthandler> clients, SQLite sql) throws IOException {
@@ -86,8 +87,9 @@ public class Clienthandler implements Runnable {
         }
         while (true) {
             try {
-                while (true) {
+                while (!startMatch) {   //doesnt get out in other client...
                     ListData listData = (ListData) objReader.readObject();          // guy asks for match
+                    System.out.println("l: " + listData.getOpponent() + " " + listData.isAcceptMatch() + " " + listData.isChallenger());
                     if (listData.isJustreturnList()) {
                         //sql ask for list
                         this.objWriter.writeObject(new ListData(new ArrayList<String>(userList), playerID, false));
@@ -99,21 +101,29 @@ public class Clienthandler implements Runnable {
                                 }
                             }
                         } else {
-                            if (listData.isAccept()) {
+                            if (listData.isAcceptMatch()) {
+                                System.out.println("accept: " + this.playerID + " " + listData.getOpponent());
                                 for (Clienthandler cl : ALLclients) {
                                     if (listData.getOpponent().equals(cl.playerID)) {
                                         ListData ldata = new ListData(userList, this.playerID, true);
                                         ldata.setAcceptMatch(true);
+                                        cl.playerNumber = true;
+                                        this.playerNumber = false;
+                                        this.objWriter.writeObject(ldata);
                                         cl.objWriter.writeObject(ldata);
+                                        cl.objWriter.writeObject(new AcceptData(true, 1, 0, 0, this.playerID, playerNumber, false));
                                         clients.add(this);
                                         clients.add(cl);
                                         cl.clients.add(this);
                                         cl.clients.add(cl);
                                         ingame = true;
                                         cl.ingame = true;
+                                        cl.startMatch = true;
+                                        this.startMatch = true;
+                                        System.out.println(this.toString());
                                     }
                                 }
-                                break;
+
                             }
                         }
                     }
@@ -123,10 +133,6 @@ public class Clienthandler implements Runnable {
             }
             try {
                 while (true) {
-                    if (!playerNumber && onlyAnfang) {
-                        outTosameClient(0, true, false, 0);
-                        onlyAnfang = false;
-                    }
                     Data data = (Data) objReader.readObject();
                     int state = data.getState();
                     int pos1 = data.getPos1();
@@ -136,7 +142,7 @@ public class Clienthandler implements Runnable {
                     } else {
                         playerColor = data.getPlayerTwo();
                     }
-                    System.out.println("[SERVER] state: " + state + " pos1: " + pos1 + " pos2: " + pos2 + " PlayerID " + data.getPlayerID() + "plNumber: " + playerNumber + " reset: " + data.isReset() + " count: " + count + " != " + maxstones);
+                    System.out.println("[SERVER] state: " + state + " pos1: " + pos1 + " pos2: " + pos2 + " PlayerID " + data.getPlayerID() + " plNumber: " + playerNumber + " reset: " + data.isReset() + " count: " + count + " != " + maxstones);
 
                     if (state == 1) {
                         if (phaseOne(pos1, this.playerNumber) && phaseOneOtherPlayer(pos1) && !phase3) {
@@ -374,7 +380,7 @@ public class Clienthandler implements Runnable {
             aClient.output.println(playerNumber);
         }*/
     private void outToclient(int state, boolean playerNumber, int pos1) throws IOException {
-        Data sendData = new Data(state, pos1, 0, null, false, playerNumber);
+        Data sendData = new Data(state, pos1, 0, playerID, false, playerNumber);
         if (playerNumber) {
             sendData.setPlayerOne(playerColor);
         } else {
@@ -388,7 +394,7 @@ public class Clienthandler implements Runnable {
     }
 
     private void outToclient(int state, boolean playerNumber, int pos1, int pos2) throws IOException {
-        Data sendData = new Data(state, pos1, pos2, null, false, playerNumber);
+        Data sendData = new Data(state, pos1, pos2, playerID, false, playerNumber);
         if (playerNumber) {
             sendData.setPlayerOne(playerColor);
         } else {
@@ -402,48 +408,33 @@ public class Clienthandler implements Runnable {
     }
 
     private void outTosameClient(int state, boolean allowed, boolean playerNumber, int pos1) throws IOException {
-        AcceptData acceptData = new AcceptData(allowed, state, pos1, 0, null, playerNumber, false);
-        if (clients.get(0).playerNumber == playerNumber) {
-            clients.get(0).objWriter.writeObject(acceptData);
-        } else {
-            clients.get(1).objWriter.writeObject(acceptData);
-        }
+        System.out.println("hier");
+        AcceptData acceptData = new AcceptData(allowed, state, pos1, 0, playerID, playerNumber, false);
+        this.objWriter.writeObject(acceptData);
     }
 
     private void outTosameClient(int state, boolean allowed, boolean playerNumber, int pos1, int pos2) throws IOException {
-        AcceptData acceptData = new AcceptData(allowed, state, pos1, pos2, null, playerNumber, false);
-        if (clients.get(0).playerNumber == playerNumber) {
-            clients.get(0).objWriter.writeObject(acceptData);
-        } else {
-            clients.get(1).objWriter.writeObject(acceptData);
-        }
+        AcceptData acceptData = new AcceptData(allowed, state, pos1, pos2, playerID, playerNumber, false);
+        this.objWriter.writeObject(acceptData);
     }
 
     private void outTosameClientData(int state, boolean playerNumber, int pos1) throws IOException {
-        Data sendData = new Data(state, pos1, 0, null, false, playerNumber);
+        Data sendData = new Data(state, pos1, 0, playerID, false, playerNumber);
         if (playerNumber) {
             sendData.setPlayerOne(playerColor);
         } else {
             sendData.setPlayerTwo(playerColor);
         }
-        if (clients.get(0).playerNumber == playerNumber) {
-            clients.get(0).objWriter.writeObject(sendData);
-        } else {
-            clients.get(1).objWriter.writeObject(sendData);
-        }
+        this.objWriter.writeObject(sendData);
     }
 
     private void outTosameClientData(int state, boolean playerNumber, int pos1, int pos2) throws IOException {
-        Data sendData = new Data(state, pos1, pos2, null, false, playerNumber);
-        if (clients.get(0).playerNumber == playerNumber) {
-            clients.get(0).objWriter.writeObject(sendData);
-        } else {
-            clients.get(1).objWriter.writeObject(sendData);
-        }
+        Data sendData = new Data(state, pos1, pos2, playerID, false, playerNumber);
+        this.objWriter.writeObject(sendData);
     }
 
     private void dummy() throws IOException {
-        AcceptData acceptData = new AcceptData(true, 0, 0, 0, null, playerNumber, false);
+        AcceptData acceptData = new AcceptData(true, 0, 0, 0, playerID, playerNumber, false);
         if (clients.get(0).playerNumber == playerNumber) {
             clients.get(1).objWriter.writeObject(acceptData);
         } else {
@@ -532,7 +523,7 @@ public class Clienthandler implements Runnable {
     private void win(int pos1, int pos2) throws IOException {
         outTosameClient(23, true, playerNumber, pos1, pos2);
         outToclient(23, playerNumber, pos1, pos2);
-        System.out.println("[SERVER] ClientSide.Client: " + playerNumber + " Won the Game!");
+        System.out.println("[SERVER] Client: " + playerNumber + " Won the Game!");
     }
 
     private void reset() throws IOException {           //only in one direction
@@ -589,5 +580,14 @@ geht bis zum ersten client, sieht okay
         for(String ul: userList){
             System.out.println("ul: " + ul);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Clienthandler{" +
+                ", playerNumber=" + playerNumber +
+                ", playerID='" + playerID + '\'' +
+                ", playerName='" + playerName + '\'' +
+                '}';
     }
 }

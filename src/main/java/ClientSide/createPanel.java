@@ -131,7 +131,7 @@ public class createPanel extends JPanel implements ActionListener, SwingConstant
         if (e.getSource() == create) {
             if (CheckPW()) {
                 try {
-                    playBoardClient pbC = new playBoardClient(client);
+                    playBoardClient pbC = new playBoardClient(client,userText.getText());
                     client.sendsLogin(userText.getText(), passwordText.getPassword().hashCode(), true);
                     new Thread(() -> {
                         while (true) {
@@ -140,7 +140,7 @@ public class createPanel extends JPanel implements ActionListener, SwingConstant
 
                                     s.dispose();
                                     pbC.setVisible(true);
-                                    new roomSelectionFrame(client,client.getUserList(), pbC);
+                                    new roomSelectionFrame(client,client.getUserList(), pbC,userText.getText());
                                     break;
                                 }
                             }

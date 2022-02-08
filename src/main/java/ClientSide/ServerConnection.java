@@ -120,6 +120,10 @@ public class ServerConnection implements Runnable {
         return opponent;
     }
 
+    public boolean isAcceptMatch() {
+        return acceptMatch;
+    }
+
     public void print() {
         for (String s : userList) {
             System.out.println(s);
@@ -138,33 +142,31 @@ public class ServerConnection implements Runnable {
     @Override
     public void run() {
         try {
-            while (true){
+            while (!acceptMatch){
                 System.out.println("[CLIENT] Wait for List....");
                 ListData ldata = (ListData) objReader.readObject();
                 System.out.println(ldata.toString());
+                acceptMatch = false;
                 gotList = true;
                 gotAccepted = true;
                 accepted = ldata.isAccept();
+                opponent = ldata.getOpponent();
                 challenger = ldata.isChallenger();
                 if (accepted) {
                     userList = ldata.getUserList();
                     if(challenger){
                         if(ldata.isAcceptMatch()){
+                            acceptMatch = true;
+                            System.out.println("out");
                             break;
                         }
-                        while (true){
-                            if(acceptMatch){
-                                opponent = ldata.getOpponent();
-                                break;
-                            }
-                        }
-                        if(acceptMatch) break;
                     }
                 }
             }
             while (true) {
                 do {
                     AcceptData acceptData = (AcceptData) objReader.readObject();
+                    System.out.println("gotit");
                     allowed = acceptData.isAccept();
                     if (allowed) {
                         pos1 = acceptData.getPos1();

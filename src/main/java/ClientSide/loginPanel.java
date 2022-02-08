@@ -98,7 +98,7 @@ public class loginPanel extends JPanel implements ActionListener {
             //control login credentials
             //TODO Server stuff
             try {
-                playBoardClient pbC = new playBoardClient(client);
+                playBoardClient pbC = new playBoardClient(client, userText.getText());
                 System.out.println(userText.getText() + "    " + Arrays.toString(passwordField.getPassword()));
                 client.sendsLogin(userText.getText(), passwordField.getPassword().hashCode(), false);
                 new Thread(() -> {
@@ -107,7 +107,7 @@ public class loginPanel extends JPanel implements ActionListener {
                             if (client.isAccepted()) {
                                 s.dispose();
                                 pbC.setVisible(true);
-                                new roomSelectionFrame(client, client.getUserList(), pbC);
+                                new roomSelectionFrame(client, client.getUserList(), pbC, userText.getText());
                             } else {
                                 success.setForeground(Color.red);
                                 success.setText("Wrong Username or Password");

@@ -43,6 +43,10 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         }
     };
 
+    public void startMatch(){
+        this.playerNumber = false;
+        new WartenSwingWorker(this.client, false, pane,this).execute();
+    }
     public void setThisplayerMove() {
         this.thisplayerMove = true;
         new Thread(() -> {
@@ -76,7 +80,8 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         this.otherColor = otherColor;
     }
 
-    public playBoardClient(Client client) throws IOException, InterruptedException {
+    public playBoardClient(Client client, String username) throws IOException, InterruptedException {
+        this.setTitle(username);
         this.client = client;
         this.setSize(1080, 720);
         this.addMouseListener(this);
@@ -115,12 +120,6 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         onlyOnce = false;
         changeStatus(1, playerNumber);
         pane.reset();
-        if (!playerNumber) {
-            new WartenSwingWorker(this.client, false, pane, this).execute();
-        } else {
-            lethimwait = false;
-            thisplayerMove = true;
-        }
         client.setReset(false);
 
     }

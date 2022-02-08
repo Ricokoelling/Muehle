@@ -78,6 +78,7 @@ public class Client{
 
     public void sendList(String username){
         ListData ldata = new ListData(userList,username,true);
+        this.playerNumberOr = false;
         try {
             objWriter.writeObject(ldata);
         } catch (IOException e) {
@@ -86,9 +87,10 @@ public class Client{
     }
 
     public void sendAccept(){
-        ListData ldata = new ListData(userList,userID,true);
-        ldata.setAccept(true);
+        ListData ldata = new ListData(userList,serverConn.getOpponent(),false);
+        ldata.setAcceptMatch(true);
         serverConn.setAcceptMatch();
+        this.playerNumberOr = true;
         try {
             objWriter.writeObject(ldata);
         } catch (IOException e) {
@@ -96,6 +98,13 @@ public class Client{
         }
     }
 
+    public boolean waitforAcceptMatch(){
+        if(serverConn.isAcceptMatch()){
+            opponent = serverConn.getOpponent();
+            return true;
+        }
+        return false;
+    }
     public boolean waitforAccept(){
         if(serverConn.isGotAccepted()){
             accepted = serverConn.isAccepted();
@@ -171,7 +180,8 @@ public class Client{
 
     }
     public void sendData(int state, int pos1){
-        Data data = new Data(state, pos1, 0, this.userID, reset, false);
+        System.out.println(playerNumberOr);
+        Data data = new Data(state, pos1, 0, this.userID, reset, playerNumberOr);
         try {
             objWriter.writeObject(data);
         } catch (IOException e) {
@@ -180,7 +190,7 @@ public class Client{
     }
 
     public void sendData(int state, int pos1, int pos2){
-        Data data = new Data(state, pos1, 0, this.userID, reset, false);
+        Data data = new Data(state, pos1, 0, this.userID, reset, playerNumberOr);
         try {
             objWriter.writeObject(data);
         } catch (IOException e) {
@@ -249,5 +259,9 @@ public class Client{
 
     public boolean isMatchFound() {
         return serverConn.isChallenger();
+    }
+
+    public void setAC(){
+        serverConn.setAcceptMatch();
     }
 }
