@@ -189,6 +189,11 @@ public class Client{
                     endConnection(false);
                     disconnect = true;
                 }
+                if(serverConn.isDisconnected()){
+                    serverConn.setDisconnected(false);
+                    endConnection(false);
+                    disconnect = true;
+                }
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException e) {
@@ -236,6 +241,25 @@ public class Client{
     public void endConnection(boolean k){
         Data data = new Data(state, pos1, 0, this.userID, reset,true);
         data.setOtherDisconnect(true);
+        try {
+            objWriter.writeObject(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void endConnection(byte b){
+        Data data = new Data(state, pos1, 0, this.userID,true);
+        data.setNotmymove(true);
+        try {
+            objWriter.writeObject(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void giveup(){
+        Data data = new Data(state, pos1, 0, this.userID,true);
+        data.setGiveup(true);
         try {
             objWriter.writeObject(data);
         } catch (IOException e) {
@@ -296,10 +320,18 @@ public class Client{
     }
 
     public boolean isDisconnect() {
-        return disconnect;
+        if(disconnect){
+            disconnect = false;
+            return true;
+        }
+        return false;
     }
 
     public boolean isAlreadyOnline() {
         return alreadyOnline;
+    }
+
+    public String getUserID() {
+        return userID;
     }
 }

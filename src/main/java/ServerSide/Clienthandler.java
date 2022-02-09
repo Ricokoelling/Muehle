@@ -38,6 +38,7 @@ public class Clienthandler implements Runnable {
     private SQLite sql;
     private boolean disconnect = false;
     private boolean alreadyOnline = false;
+    private boolean disconnected = false;
 
 
     public Clienthandler(Socket client, ArrayList<Clienthandler> clients, SQLite sql) throws IOException {
@@ -102,6 +103,11 @@ public class Clienthandler implements Runnable {
         while (true) {
             try {
                 while (true) {
+                    if(disconnected){
+                        System.out.println("out");
+                        disconnected = false;
+                        sendList();
+                    }
                     ListData listData = (ListData) objReader.readObject();          // guy asks for match
                     System.out.println("l: " + listData.getOpponent() + " " + listData.isAcceptMatch() + " " + listData.isChallenger());
                     if (listData.isJustreturnList()) {
@@ -118,6 +124,7 @@ public class Clienthandler implements Runnable {
                                 System.out.println("accept: " + this.playerID + " " + listData.getOpponent());
                                 for (Clienthandler cl : ALLclients) {
                                     if (listData.getOpponent().equals(cl.playerID)) {
+                                        clients.clear();
                                         ListData ldata = new ListData(userList, this.playerID, true);
                                         ldata.setAcceptMatch(true);
                                         cl.playerNumber = false;
@@ -131,6 +138,8 @@ public class Clienthandler implements Runnable {
                                         cl.clients.add(cl);
                                         ingame = true;
                                         cl.ingame = true;
+                                        sendList();
+                                        cl.sendList();
                                         System.out.println(this.toString());
                                     }
                                 }
@@ -147,6 +156,7 @@ public class Clienthandler implements Runnable {
             }
             try {
                 while (true) {
+                    System.out.println("waitforyourmum " + playerID);
                     Data data = (Data) objReader.readObject();
                     int state = data.getState();
                     int pos1 = data.getPos1();
@@ -157,12 +167,20 @@ public class Clienthandler implements Runnable {
                         playerColor = data.getPlayerTwo();
                     }
                     if (data.isDisconnect()) {
+                        if(data.isNotmymove()) {
+                            disconnected();
+                        }else{
+                            disconnect();
+                        }
                         disconnect = true;
-                        disconnect();
+                        ingame = false;
+                        reset(true);
                         break;
                     }
                     if (data.isOtherDisconnect()) {
                         reset(true);
+                        disconnected = true;
+                        ingame = false;
                         break;
                     }
                     System.out.println("[SERVER] state: " + state + " pos1: " + pos1 + " pos2: " + pos2 + " PlayerID " + data.getPlayerID() + " plNumber: " + playerNumber + " reset: " + data.isReset() + " count: " + count + " != " + maxstones);
@@ -582,6 +600,7 @@ public class Clienthandler implements Runnable {
     }
 
     private void reset(boolean only) {
+        System.out.println("pl " + playerID);
         maxstones = 17;
         count = 0;
         phaseChange = false;
@@ -605,7 +624,6 @@ public class Clienthandler implements Runnable {
             if (!ch.ingame) {
                 for (Clienthandler chs : ALLclients) {
                     if (chs.playerID != null && !ch.playerID.equals(chs.playerID) && !chs.ingame) {
-
                         userList.add(chs.playerID);
                     }
                 }
@@ -623,6 +641,7 @@ public class Clienthandler implements Runnable {
 
     private void disconnect() throws IOException {
         ALLclients.remove(this);
+        ingame = false;
         System.out.println("[SERVER] Client " + playerID + " disconnected");
         System.out.println("pbN: " + playerNumber);
         if (clients.get(0).playerNumber == playerNumber) {
@@ -631,6 +650,18 @@ public class Clienthandler implements Runnable {
             clients.get(0).objWriter.writeObject(new Data(0, 0, 0, playerID, true));
         }
 
+    }
+
+    private void disconnected() throws IOException {
+        ALLclients.remove(this);
+        ingame = false;
+        System.out.println("[SERVER] Client " + playerID + " disconnected");
+        System.out.println("pbN: " + playerNumber);
+        if (clients.get(0).playerNumber == playerNumber) {
+            clients.get(1).objWriter.writeObject(new AcceptData(true,0,0,0,playerID,playerNumber,false,true));
+        } else {
+            clients.get(0).objWriter.writeObject(new AcceptData(true,0,0,0,playerID,playerNumber,false,true));
+        }
     }
 
     @Override

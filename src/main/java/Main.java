@@ -13,9 +13,10 @@ public class Main {
 
 
 /*
-TODO:   Server disconnect doesnt work fully, only wenn players turn not when he waits for data (other client data to accept data)
+TODO:   after reset playing again doesnt work
         after win back to lobby and send bzw. recive list
         reset ask
-        idk prob more
+        giveup
+
 */
 

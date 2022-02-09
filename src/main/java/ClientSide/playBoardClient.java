@@ -14,6 +14,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
     private final Client client;
     private final JMenuItem resetItem;
     private final JMenuItem exitItem;
+    private final JMenuItem giveup;
     private int pos = 0;
     private int pos2 = 0;
     private int pos3 = 0;
@@ -44,47 +45,30 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                 } catch (IOException | InterruptedException ex) {
                     ex.printStackTrace();
                 }
-                client.endConnection();
+                if(thisplayerMove) {
+                    client.endConnection();
+                }else {
+                    client.endConnection((byte) 0);
+                }
                 System.exit(0);
             }
         }
     };
 
-    private void disconnect() throws IOException, InterruptedException {
+    public void disconnect() throws IOException, InterruptedException {
+        pane.reset();
         this.dispose();
-        new roomSelectionFrame(client, client.getUserList(), this,userID);
+        new roomSelectionFrame(client, client.getUserList(),userID);
     }
 
     public void startMatch() {
         this.playerNumber = false;
+        thisplayerMove = false;
         new WartenSwingWorker(this.client, false, pane, this).execute();
     }
 
     public void setThisplayerMove() {
         this.thisplayerMove = true;
-        new Thread(() -> {
-            while (true) {
-                if (client.isReset()) {
-                    reset = true;
-                    reset();
-                    break;
-                }
-                if (client.isDisconnect()) {
-                    try {
-                        disconnect();
-                    } catch (IOException | InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    disconnect = true;
-                    break;
-                }
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
     }
 
     public void setPhase3(boolean phase3) {
@@ -119,16 +103,42 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         otherColor = Color.GRAY;
         JMenu optionsMenu = new JMenu("Options");
         resetItem = new JMenuItem("Reset");
+        giveup = new JMenuItem("Aufgeben");
         exitItem = new JMenuItem("Exit");
 
         exitItem.addActionListener(this);
+        giveup.addActionListener(this);
         resetItem.addActionListener(this);
 
         optionsMenu.add(resetItem);
+        optionsMenu.add(giveup);
         optionsMenu.add(exitItem);
         menubar.add(optionsMenu);
         this.setJMenuBar(menubar);
         this.addWindowListener(exitListener);
+        new Thread(() -> {
+            while (true) {
+                if (client.isReset()) {
+                    reset = true;
+                    reset();
+                    break;
+                }
+                if (client.isDisconnect()) {
+                    try {
+                        disconnect();
+                    } catch (IOException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    disconnect = true;
+                    break;
+                }
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     /**
@@ -486,14 +496,26 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == exitItem) {
-            client.endConnection();
+            if(thisplayerMove) {
+                client.endConnection();
+            }else {
+                client.endConnection((byte) 0);
+            }
             try {
                 disconnect();
             } catch (IOException | InterruptedException ex) {
                 ex.printStackTrace();
             }
             System.exit(0);
-        } else if (e.getSource() == resetItem) {
+        }else if(e.getSource() == giveup){
+            client.giveup();
+            try {
+                disconnect();
+            } catch (IOException | InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
+        else if (e.getSource() == resetItem) {
             playerNumber = client.isPlayerNumberOr();
             pane.reset();
             client.sendData(1000, 0);

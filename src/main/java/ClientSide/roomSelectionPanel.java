@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class roomSelectionPanel extends JPanel implements ActionListener {
@@ -52,6 +53,36 @@ public class roomSelectionPanel extends JPanel implements ActionListener {
         refreshOnlinePlayers();
     }
 
+    public roomSelectionPanel(Client client, ArrayList<String> userList, String username, roomSelectionFrame rsf) throws IOException, InterruptedException {
+        this.setLayout(null);
+        this.Client = client;
+        this.userList = userList;
+        this.pbC = new playBoardClient(client,username);
+        pbC.setVisible(true);
+        this.rSf = rsf;
+        model = new DefaultListModel<>();
+
+        //playerOnline JList
+        this.playerOnlineJList = new JList(model);
+        this.playerOnlineJList.setBounds(40, 10, 120, 400);
+        this.add(this.playerOnlineJList);
+
+        //refresh JButton
+        this.refresh = new JButton(refresh());
+        this.refresh.setBounds(180, 10, 32, 32);
+        this.refresh.addActionListener(this);
+        this.add(refresh);
+
+        //testing button
+        this.duell = new JButton(duell());
+        this.duell.setBounds(180, 80, 80, 25);
+        this.duell.addActionListener(this);
+        this.add(duell);
+
+        //looks for online Players
+        //TODO needs to connect to the ServerSide.server to do that
+        refreshOnlinePlayers();
+    }
     private void refreshOnlinePlayers() {
         new Thread(() -> {
             while (true) {

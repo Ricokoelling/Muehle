@@ -33,6 +33,11 @@ public class GUISwingWorker extends SwingWorker<Boolean, String> {
             if (pbC.reset) {
                 reset = true;
             }
+            if(client.isDisconnect()){
+                pbC.disconnect();
+                reset = true;
+                break;
+            }
         }
         return null;
     }
