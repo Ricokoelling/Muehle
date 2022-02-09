@@ -21,6 +21,7 @@ public class Data implements Serializable {
     private Color PlayerTwo;
     private boolean notmymove = false;
     private boolean giveup = false;
+    private boolean setothergiveup = false;
 
 
     public Data(int state, int pos1, int pos2, String PlayerID, boolean reset, boolean player) {
@@ -107,4 +108,13 @@ public class Data implements Serializable {
     public void setGiveup(boolean giveup) {
         this.giveup = giveup;
     }
+
+    public boolean isSetothergiveup() {
+        return setothergiveup;
+    }
+
+    public void setSetothergiveup(boolean setothergiveup) {
+        this.setothergiveup = setothergiveup;
+    }
+
 }

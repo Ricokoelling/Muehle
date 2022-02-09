@@ -31,6 +31,7 @@ public class ServerConnection implements Runnable {
     private boolean disconnect = false;
     private boolean disconnected = false;
     private boolean alreadyOnline = false;
+    private boolean giveup = false;
 
     public ServerConnection(Socket server) throws IOException {
         this.server = server;
@@ -147,6 +148,14 @@ public class ServerConnection implements Runnable {
         this.disconnected = disconnected;
     }
 
+    public boolean isGiveup() {
+        return giveup;
+    }
+
+    public void setGiveup(boolean giveup) {
+        this.giveup = giveup;
+    }
+
     public void print() {
         for (String s : userList) {
             System.out.println(s);
@@ -191,6 +200,11 @@ public class ServerConnection implements Runnable {
                 while (true) {
                     do {
                         AcceptData acceptData = (AcceptData) objReader.readObject();
+                        if(acceptData.isGiveup()){
+                            System.out.println("breakkookoko");
+                            giveup = true;
+                            break;
+                        }
                         if(acceptData.getState() == 23){
                             break;
                         }
@@ -209,11 +223,16 @@ public class ServerConnection implements Runnable {
                             break;
                         }
                     } while (!allowed);
-                    if(disconnected){
+                    if(disconnected || giveup){
                         acceptMatch = false;
                         break;
                     }
                     Data data = (Data) objReader.readObject();
+                    if(data.isSetothergiveup()){
+                        System.out.println("break");
+                        acceptMatch = false;
+                        break;
+                    }
                     if(data.getState() == 23){
                         break;
                     }

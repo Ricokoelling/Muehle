@@ -61,7 +61,7 @@ GridBagConstraints
 
     protected void reset(){
         map.clear();
-        repaint();
+        update(this.getGraphics());
         setPlayerStatus("Player 1 place your first Stone\t", playerOne);
     }
     protected void setPlayerStatus(String playerStatus, Color c){

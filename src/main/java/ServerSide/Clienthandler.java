@@ -39,6 +39,7 @@ public class Clienthandler implements Runnable {
     private boolean disconnect = false;
     private boolean alreadyOnline = false;
     private boolean disconnected = false;
+    private boolean giveup = false;
 
 
     public Clienthandler(Socket client, ArrayList<Clienthandler> clients, SQLite sql) throws IOException {
@@ -103,12 +104,13 @@ public class Clienthandler implements Runnable {
         while (true) {
             try {
                 while (true) {
-                    if(disconnected){
+                    if (disconnected || giveup) {
                         disconnected = false;
+                        giveup = false;
                         sendList();
                     }
                     ListData listData = (ListData) objReader.readObject();          // guy asks for match
-                    if(listData.isDisconnect()){
+                    if (listData.isDisconnect()) {
                         disconnected = true;
                         disconnect("/");
                         sendList();
@@ -156,11 +158,13 @@ public class Clienthandler implements Runnable {
                             }
                         }
                     }
-                }if (disconnected){
+                }
+                if (disconnected) {
                     break;
                 }
-            } catch (IOException | ClassNotFoundException e) {
+            } catch (IOException | ClassNotFoundException | ClassCastException e ) {
                 e.printStackTrace();
+                //System.err.println("player: " + playerID);
             }
             try {
                 while (true) {
@@ -174,13 +178,32 @@ public class Clienthandler implements Runnable {
                         playerColor = data.getPlayerTwo();
                     }
                     if (data.isDisconnect()) {
-                        if(data.isNotmymove()) {
+                        if (data.isNotmymove()) {
                             disconnected();
-                        }else{
+                        } else {
                             disconnect();
                         }
                         disconnect = true;
                         ingame = false;
+                        reset(true);
+                        break;
+                    }
+                    if(data.isSetothergiveup()){
+                        reset(true);
+                        ingame = false;
+                        sendList();
+                        break;
+                    }
+                    if(data.isGiveup()){
+                        if(data.isNotmymove()){
+                            System.out.println(playerID);
+                            giveup(true);
+                        }else {
+                            System.out.println("g: " + playerID);
+                          giveup();
+                        }
+                        ingame = false;
+                        giveup = true;
                         reset(true);
                         break;
                     }
@@ -420,7 +443,7 @@ public class Clienthandler implements Runnable {
                     break;
                 }
             } catch (IOException | ClassNotFoundException e) {
-                System.err.println("Something happened that shouldn't have happened! " + playerID);
+                //System.err.println("Something happened that shouldn't have happened! " + playerID);
                 e.printStackTrace();
             }
         }
@@ -616,7 +639,6 @@ public class Clienthandler implements Runnable {
     }
 
     private void reset(boolean only) {
-        System.out.println("pl " + playerID);
         maxstones = 17;
         count = 0;
         phaseChange = false;
@@ -665,7 +687,34 @@ public class Clienthandler implements Runnable {
         } else {
             clients.get(0).objWriter.writeObject(new Data(0, 0, 0, playerID, true));
         }
+    }
 
+    private void giveup() throws IOException {
+        ingame = false;
+        Data sendata = new Data(0, 0, 0, playerID, false,playerNumber);
+        sendata.setGiveup(true);
+        if (clients.get(0).playerNumber == playerNumber) {
+            clients.get(1).objWriter.writeObject(sendata);
+        } else {
+            clients.get(0).objWriter.writeObject(sendata);
+        }
+        AcceptData acceptData = new AcceptData(true,0,0,0,playerID,playerNumber,false);
+        acceptData.setGiveup(true);
+        this.objWriter.writeObject(acceptData);
+    }
+
+    private void giveup(boolean k) throws IOException {
+        ingame = false;
+        AcceptData acceptData = new AcceptData(true,0,0,0,playerID,playerNumber,false);
+        acceptData.setGiveup(true);
+        if (clients.get(0).playerNumber == playerNumber) {
+            clients.get(1).objWriter.writeObject(acceptData);
+        } else {
+            clients.get(0).objWriter.writeObject(acceptData);
+        }
+        Data sendata = new Data(0, 0, 0, playerID, false,playerNumber);
+        sendata.setSetothergiveup(true);
+        this.objWriter.writeObject(sendata);
     }
     private void disconnect(String k) throws IOException {
         ALLclients.remove(this);
@@ -678,9 +727,9 @@ public class Clienthandler implements Runnable {
         System.out.println("[SERVER] Client " + playerID + " disconnected");
         System.out.println("pbN: " + playerNumber);
         if (clients.get(0).playerNumber == playerNumber) {
-            clients.get(1).objWriter.writeObject(new AcceptData(true,0,0,0,playerID,playerNumber,false,true));
+            clients.get(1).objWriter.writeObject(new AcceptData(true, 0, 0, 0, playerID, playerNumber, false, true));
         } else {
-            clients.get(0).objWriter.writeObject(new AcceptData(true,0,0,0,playerID,playerNumber,false,true));
+            clients.get(0).objWriter.writeObject(new AcceptData(true, 0, 0, 0, playerID, playerNumber, false, true));
         }
     }
 

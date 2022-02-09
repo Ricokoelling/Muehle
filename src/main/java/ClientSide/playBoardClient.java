@@ -30,6 +30,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
     protected boolean reset = false;
     protected boolean disconnect = false;
     private String userID;
+    protected boolean giveUp = false;
 
 
     WindowListener exitListener = new WindowAdapter() {
@@ -56,7 +57,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
     };
 
     public void disconnect() throws IOException, InterruptedException {
-        pane.reset();
+        reset();
         this.dispose();
         new roomSelectionFrame(client, client.getUserList(),userID);
     }
@@ -132,6 +133,16 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                     disconnect = true;
                     break;
                 }
+                if(client.isGiveup()){
+                    if(!giveUp) {
+                        try {
+                            disconnect();
+                        } catch (IOException | InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                }
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException e) {
@@ -155,6 +166,8 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
         changeStatus(1, playerNumber);
         pane.reset();
         client.setReset(false);
+        reset = false;
+        disconnect = false;
 
     }
 
@@ -508,12 +521,13 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
             }
             System.exit(0);
         }else if(e.getSource() == giveup){
-            client.giveup();
+            giveUp = true;
             try {
                 disconnect();
             } catch (IOException | InterruptedException ex) {
                 ex.printStackTrace();
             }
+            client.giveup(thisplayerMove);
         }
         else if (e.getSource() == resetItem) {
             playerNumber = client.isPlayerNumberOr();

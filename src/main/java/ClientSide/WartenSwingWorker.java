@@ -30,8 +30,11 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
         while (true) {
             Thread.sleep(20);
             if (client.waitforData()) {
-                if (pbC.reset || pbC.disconnect) {
+                if (pbC.reset || pbC.disconnect ) {
                     System.out.println("reset: " + pbC.reset + " dis: " + pbC.disconnect);
+                    reset = true;
+                }
+                if(pbC.giveUp || client.isGiveup()){
                     reset = true;
                 }
                 break;

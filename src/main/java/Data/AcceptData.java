@@ -11,6 +11,7 @@ public class AcceptData implements Serializable {
     private boolean PlayerNumb;
     private boolean Reset;
     private boolean disconnect;
+    private boolean giveup = false;
 
 
     public AcceptData(boolean accept, int state, int pos1, int pos2, String playerID, boolean playerNumb, boolean reset) {
@@ -63,5 +64,13 @@ public class AcceptData implements Serializable {
 
     public boolean isDisconnect() {
         return disconnect;
+    }
+
+    public boolean isGiveup() {
+        return giveup;
+    }
+
+    public void setGiveup(boolean giveup) {
+        this.giveup = giveup;
     }
 }

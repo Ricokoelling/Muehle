@@ -21,8 +21,7 @@ public class Client{
     private boolean accepted = true;
     private boolean reset;
     private ObjectOutputStream objWriter;
-    private Color thisColor;
-    private Color otherColor;
+    private boolean giveup = false;
     private ArrayList<String> userList;
     private String opponent;
     private boolean disconnect;
@@ -195,6 +194,11 @@ public class Client{
                     endConnection(false);
                     disconnect = true;
                 }
+                if(serverConn.isGiveup()){
+                    serverConn.setGiveup(false);
+                    giveup();
+                    giveup = true;
+                }
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException e) {
@@ -268,9 +272,22 @@ public class Client{
         }
     }
 
-    public void giveup(){
-        Data data = new Data(state, pos1, 0, this.userID,true);
+    public void giveup(boolean thisplayermove){
+        Data data = new Data(state, pos1, 0, this.userID,false,true);
         data.setGiveup(true);
+        if(!thisplayermove){
+            data.setNotmymove(true);
+        }
+        try {
+            objWriter.writeObject(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public  void giveup(){
+        Data data = new Data(state, pos1, 0, this.userID,false,true);
+        data.setSetothergiveup(true);
         try {
             objWriter.writeObject(data);
         } catch (IOException e) {
@@ -310,10 +327,6 @@ public class Client{
         this.reset = reset;
     }
 
-    public void setPlayerOne(Color thisColor) {
-        this.thisColor = thisColor;
-    }
-
     public ArrayList<String> getUserList() {
         return userList;
     }
@@ -340,6 +353,14 @@ public class Client{
 
     public boolean isAlreadyOnline() {
         return alreadyOnline;
+    }
+
+    public boolean isGiveup() {
+        if(giveup){
+            giveup = false;
+            return true;
+        }
+        return false;
     }
 
     public String getUserID() {

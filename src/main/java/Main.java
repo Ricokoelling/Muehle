@@ -6,7 +6,7 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        LoginScreen l = new LoginScreen();
+            LoginScreen ls = new LoginScreen();
     }
 
 }
@@ -15,6 +15,7 @@ public class Main {
 /*
 
 TODO:  giveup
+       check if win works
 
 */
 

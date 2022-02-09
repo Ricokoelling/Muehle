@@ -26,16 +26,20 @@ public class GUISwingWorker extends SwingWorker<Boolean, String> {
         System.out.println("[CLIENT] Wait for allowed...");
         while (true) {
             Thread.sleep(20);
-            if (client.waitForAllowed()) {
-                allowed = client.isAllowed();
-                break;
-            }
             if (pbC.reset) {
                 reset = true;
             }
             if(client.isDisconnect()){
                 pbC.disconnect();
                 reset = true;
+                break;
+            }
+            if(client.isGiveup()){
+                reset = true;
+                break;
+            }
+            if (client.waitForAllowed()) {
+                allowed = client.isAllowed();
                 break;
             }
         }
