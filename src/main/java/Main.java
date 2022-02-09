@@ -13,10 +13,8 @@ public class Main {
 
 
 /*
-TODO:   after reset playing again doesnt work
-        after win back to lobby and send bzw. recive list
-        reset ask
-        giveup
+
+TODO:  giveup
 
 */
 

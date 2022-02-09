@@ -104,11 +104,16 @@ public class Clienthandler implements Runnable {
             try {
                 while (true) {
                     if(disconnected){
-                        System.out.println("out");
                         disconnected = false;
                         sendList();
                     }
                     ListData listData = (ListData) objReader.readObject();          // guy asks for match
+                    if(listData.isDisconnect()){
+                        disconnected = true;
+                        disconnect("/");
+                        sendList();
+                        break;
+                    }
                     System.out.println("l: " + listData.getOpponent() + " " + listData.isAcceptMatch() + " " + listData.isChallenger());
                     if (listData.isJustreturnList()) {
                         this.objWriter.writeObject(new ListData(new ArrayList<String>(userList), playerID, false));
@@ -125,6 +130,7 @@ public class Clienthandler implements Runnable {
                                 for (Clienthandler cl : ALLclients) {
                                     if (listData.getOpponent().equals(cl.playerID)) {
                                         clients.clear();
+                                        cl.clients.clear();
                                         ListData ldata = new ListData(userList, this.playerID, true);
                                         ldata.setAcceptMatch(true);
                                         cl.playerNumber = false;
@@ -150,13 +156,14 @@ public class Clienthandler implements Runnable {
                             }
                         }
                     }
+                }if (disconnected){
+                    break;
                 }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
             try {
                 while (true) {
-                    System.out.println("waitforyourmum " + playerID);
                     Data data = (Data) objReader.readObject();
                     int state = data.getState();
                     int pos1 = data.getPos1();
@@ -571,7 +578,16 @@ public class Clienthandler implements Runnable {
     private void win(int pos1, int pos2) throws IOException {
         outTosameClient(23, true, playerNumber, pos1, pos2);
         outToclient(23, playerNumber, pos1, pos2);
-        System.out.println("[SERVER] Client: " + playerNumber + " Won the Game!");
+        System.out.println("[SERVER] Client: " + playerID + " Won the Game!");
+        ingame = false;
+        if (clients.get(0).playerNumber == playerNumber) {
+            clients.get(1).ingame = false;
+            clients.get(1).sendList();
+        } else {
+            clients.get(0).ingame = false;
+            clients.get(0).sendList();
+        }
+        sendList();
     }
 
     private void reset() throws IOException {           //only in one direction
@@ -650,6 +666,10 @@ public class Clienthandler implements Runnable {
             clients.get(0).objWriter.writeObject(new Data(0, 0, 0, playerID, true));
         }
 
+    }
+    private void disconnect(String k) throws IOException {
+        ALLclients.remove(this);
+        ingame = false;
     }
 
     private void disconnected() throws IOException {

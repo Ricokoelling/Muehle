@@ -191,6 +191,9 @@ public class ServerConnection implements Runnable {
                 while (true) {
                     do {
                         AcceptData acceptData = (AcceptData) objReader.readObject();
+                        if(acceptData.getState() == 23){
+                            break;
+                        }
                         if(!acceptData.isDisconnect()) {
                             allowed = acceptData.isAccept();
                             if (allowed) {
@@ -211,6 +214,9 @@ public class ServerConnection implements Runnable {
                         break;
                     }
                     Data data = (Data) objReader.readObject();
+                    if(data.getState() == 23){
+                        break;
+                    }
                     if (!data.isDisconnect()) {
                         state = data.getState();
                         playerNumber = data.isPlayer();

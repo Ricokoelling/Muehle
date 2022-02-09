@@ -1,6 +1,7 @@
 package ClientSide;
 
 import javax.swing.*;
+import java.io.IOException;
 
 public class GUISwingWorker extends SwingWorker<Boolean, String> {
 
@@ -26,7 +27,6 @@ public class GUISwingWorker extends SwingWorker<Boolean, String> {
         while (true) {
             Thread.sleep(20);
             if (client.waitForAllowed()) {
-
                 allowed = client.isAllowed();
                 break;
             }
@@ -46,7 +46,7 @@ public class GUISwingWorker extends SwingWorker<Boolean, String> {
     protected void done() {
         System.out.println("allowed: " + allowed);
         if (!reset && allowed) {
-            System.out.println("[CLIENT] HUISwingWorker: state " + client.getState() + " pos1: " + client.getPos1() + " pos2: " + client.getPos2() + " playnumber: " + client.isPlayerNumber());
+            System.out.println("[CLIENT] GUISwingWorker: state " + client.getState() + " pos1: " + client.getPos1() + " pos2: " + client.getPos2() + " playnumber: " + client.isPlayerNumber());
             playerNumber = client.isPlayerNumber();
             if (client.getState() == 1) {
                 pbC.changeStatus(1, !playerNumber);
@@ -152,6 +152,12 @@ public class GUISwingWorker extends SwingWorker<Boolean, String> {
                 pane.moveStone(client.getPos1(), client.getPos2(), playerNumber);
                 phase = 4;
                 pbC.changeStatus(5, playerNumber);
+                pbC.reset();
+                try {
+                    pbC.disconnect();
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
 
             }else if(client.getState() == 26){
 

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+
 public class Client{
 
     private static Socket client;
@@ -252,6 +253,16 @@ public class Client{
         data.setNotmymove(true);
         try {
             objWriter.writeObject(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void endConnection(String k){
+        ListData listData = new ListData(userList,userID,false);
+        listData.setDisconnect(true);
+        try {
+            objWriter.writeObject(listData);
         } catch (IOException e) {
             e.printStackTrace();
         }

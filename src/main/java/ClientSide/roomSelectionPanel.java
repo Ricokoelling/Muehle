@@ -4,8 +4,7 @@ import ServerSide.Clienthandler;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -20,6 +19,7 @@ public class roomSelectionPanel extends JPanel implements ActionListener {
     private boolean duel = false;
     private playBoardClient pbC;
     private roomSelectionFrame rSf;
+    private WindowListener exitlistener;
 
 
     public roomSelectionPanel(Client client, ArrayList<String> userList, playBoardClient pbC, roomSelectionFrame rsf) {
@@ -83,6 +83,11 @@ public class roomSelectionPanel extends JPanel implements ActionListener {
         //TODO needs to connect to the ServerSide.server to do that
         refreshOnlinePlayers();
     }
+
+    public void setExitlistener(WindowListener exitlistener) {
+        this.exitlistener = exitlistener;
+    }
+
     private void refreshOnlinePlayers() {
         new Thread(() -> {
             while (true) {

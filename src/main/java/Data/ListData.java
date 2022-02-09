@@ -17,6 +17,7 @@ public class ListData implements Serializable {
     private boolean acceptMatch = false;
     private boolean justBreakwhile = false;
     private boolean alreadyOnline = false;
+    private boolean disconnect = false;
 
     public ListData(ArrayList<String> userList, String opponent, Boolean challenger) {
         this.UserList = userList;
@@ -70,6 +71,14 @@ public class ListData implements Serializable {
 
     public void setAlreadyOnline(boolean alreadyOnline) {
         this.alreadyOnline = alreadyOnline;
+    }
+
+    public void setDisconnect(boolean disconnect) {
+        this.disconnect = disconnect;
+    }
+
+    public boolean isDisconnect() {
+        return disconnect;
     }
 
     @Override
