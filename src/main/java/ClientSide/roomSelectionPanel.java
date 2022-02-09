@@ -11,7 +11,6 @@ import java.util.ArrayList;
 public class roomSelectionPanel extends JPanel implements ActionListener {
 
     private JList playerOnlineJList;
-    private JButton refresh;
     private JButton duell;
     private DefaultListModel<String> model;
     ArrayList<String> userList = new ArrayList<>();
@@ -36,20 +35,12 @@ public class roomSelectionPanel extends JPanel implements ActionListener {
         this.playerOnlineJList.setBounds(40, 10, 120, 400);
         this.add(this.playerOnlineJList);
 
-        //refresh JButton
-        this.refresh = new JButton(refresh());
-        this.refresh.setBounds(180, 10, 32, 32);
-        this.refresh.addActionListener(this);
-        this.add(refresh);
-
         //testing button
         this.duell = new JButton(duell());
         this.duell.setBounds(180, 80, 80, 25);
         this.duell.addActionListener(this);
         this.add(duell);
 
-        //looks for online Players
-        //TODO needs to connect to the ServerSide.server to do that
         refreshOnlinePlayers();
     }
 
@@ -67,11 +58,6 @@ public class roomSelectionPanel extends JPanel implements ActionListener {
         this.playerOnlineJList.setBounds(40, 10, 120, 400);
         this.add(this.playerOnlineJList);
 
-        //refresh JButton
-        this.refresh = new JButton(refresh());
-        this.refresh.setBounds(180, 10, 32, 32);
-        this.refresh.addActionListener(this);
-        this.add(refresh);
 
         //testing button
         this.duell = new JButton(duell());
@@ -79,8 +65,6 @@ public class roomSelectionPanel extends JPanel implements ActionListener {
         this.duell.addActionListener(this);
         this.add(duell);
 
-        //looks for online Players
-        //TODO needs to connect to the ServerSide.server to do that
         refreshOnlinePlayers();
     }
 
@@ -130,11 +114,7 @@ public class roomSelectionPanel extends JPanel implements ActionListener {
     //Button Control Room
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == refresh) {
-            //refreshOnlinePlayers();
-        }
         if (e.getSource() == duell) {
-            //TODO request to the ServerSide.server for a 1v1
             String enemyName = (String) playerOnlineJList.getSelectedValue();
             Client.sendList(enemyName);
             duel = true;
@@ -144,10 +124,6 @@ public class roomSelectionPanel extends JPanel implements ActionListener {
     }
 
     //Srings
-    public String refresh(int a) {
-        return "Refresh";
-    }
-
     public String duell() {
         return "Duell";
     }

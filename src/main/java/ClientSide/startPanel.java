@@ -69,7 +69,7 @@ public class startPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Window s = SwingUtilities.getWindowAncestor(this);
         if(e.getSource()==sp){
-            //TODO start muehle singleplayer
+            playBoard pl = new playBoard();
             s.dispose();
         }
         if(e.getSource()==mp){
