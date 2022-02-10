@@ -46,9 +46,9 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                 } catch (IOException | InterruptedException ex) {
                     ex.printStackTrace();
                 }
-                if(thisplayerMove) {
+                if (thisplayerMove) {
                     client.endConnection();
-                }else {
+                } else {
                     client.endConnection((byte) 0);
                 }
                 System.exit(0);
@@ -59,7 +59,7 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
     public void disconnect() throws IOException, InterruptedException {
         reset();
         this.dispose();
-        new roomSelectionFrame(client, client.getUserList(),userID);
+        new roomSelectionFrame(client, client.getUserList(), userID);
     }
 
     public void startMatch() {
@@ -133,8 +133,8 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                     disconnect = true;
                     break;
                 }
-                if(client.isGiveup()){
-                    if(!giveUp) {
+                if (client.isGiveup()) {
+                    if (!giveUp) {
                         try {
                             disconnect();
                         } catch (IOException | InterruptedException e) {
@@ -509,9 +509,9 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == exitItem) {
-            if(thisplayerMove) {
+            if (thisplayerMove) {
                 client.endConnection();
-            }else {
+            } else {
                 client.endConnection((byte) 0);
             }
             try {
@@ -520,16 +520,9 @@ public class playBoardClient extends JFrame implements MouseInputListener, Actio
                 ex.printStackTrace();
             }
             System.exit(0);
-        }else if(e.getSource() == giveup){
-            giveUp = true;
-            try {
-                disconnect();
-            } catch (IOException | InterruptedException ex) {
-                ex.printStackTrace();
-            }
+        } else if (e.getSource() == giveup) {
             client.giveup(thisplayerMove);
-        }
-        else if (e.getSource() == resetItem) {
+        } else if (e.getSource() == resetItem) {
             playerNumber = client.isPlayerNumberOr();
             pane.reset();
             client.sendData(1000, 0);

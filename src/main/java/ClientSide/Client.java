@@ -82,7 +82,6 @@ public class Client{
     public void sendsLogin(String username , int password, boolean register) {
         LoginData logData = new LoginData(username,  password,register);
         userID = username;
-        System.out.println("reg: " + register);
         try {
             objWriter.writeObject(logData);
         } catch (IOException e) {
@@ -194,7 +193,7 @@ public class Client{
                     endConnection(false);
                     disconnect = true;
                 }
-                if(serverConn.isGiveup()){
+                if(serverConn.isGiveup() && serverConn.getState() != 50){
                     serverConn.setGiveup(false);
                     giveup();
                     giveup = true;

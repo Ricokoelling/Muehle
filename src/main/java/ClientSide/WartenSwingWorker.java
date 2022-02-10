@@ -30,8 +30,8 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
         while (true) {
             Thread.sleep(20);
             if (client.waitforData()) {
+                System.out.println(client.getState());
                 if (pbC.reset || pbC.disconnect ) {
-                    System.out.println("reset: " + pbC.reset + " dis: " + pbC.disconnect);
                     reset = true;
                 }
                 if(pbC.giveUp || client.isGiveup()){
@@ -50,7 +50,6 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
     protected void done() {
 
         System.out.println("[Client] Server Response!");
-        System.out.println("reset : " + reset);
         if(!reset) {
             state = client.getState();
             System.out.println("[CLIENT] WartenSwingWorker: state " + state + " pos1: " + client.getPos1() + " pos2: " + client.getPos2() + " playnumber: " + client.isPlayerNumber());
@@ -177,6 +176,7 @@ public class WartenSwingWorker extends SwingWorker<Boolean, String> {
                 pbC.reset();
                 try {
                     pbC.disconnect();
+                    System.out.println("wtf are u doing");
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }

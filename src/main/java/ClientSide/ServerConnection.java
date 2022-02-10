@@ -32,6 +32,7 @@ public class ServerConnection implements Runnable {
     private boolean disconnected = false;
     private boolean alreadyOnline = false;
     private boolean giveup = false;
+    private boolean win = false;
 
     public ServerConnection(Socket server) throws IOException {
         this.server = server;
@@ -176,7 +177,7 @@ public class ServerConnection implements Runnable {
         try {
             while (true) {
                 while (!acceptMatch) {
-                    System.out.println("[CLIENT] Wait for List....");
+                    System.out.println("[CLIENT] Wait for List.... " + giveup);
                     ListData ldata = (ListData) objReader.readObject();
                     System.out.println(ldata.toString());
                     acceptMatch = false;
@@ -201,11 +202,7 @@ public class ServerConnection implements Runnable {
                     do {
                         AcceptData acceptData = (AcceptData) objReader.readObject();
                         if(acceptData.isGiveup()){
-                            System.out.println("breakkookoko");
                             giveup = true;
-                            break;
-                        }
-                        if(acceptData.getState() == 23){
                             break;
                         }
                         if(!acceptData.isDisconnect()) {
@@ -218,22 +215,26 @@ public class ServerConnection implements Runnable {
                                 reset = acceptData.isReset();
                             }
                             gotAllowed = true;
+                            if(acceptData.getState() == 23){
+                                acceptMatch = false;
+                                win = true;
+                                break;
+                            }
                         }else {
                             disconnected = true;
                             break;
                         }
                     } while (!allowed);
-                    if(disconnected || giveup){
+                    if(disconnected || giveup || win){
+                        win = false;
                         acceptMatch = false;
                         break;
                     }
                     Data data = (Data) objReader.readObject();
+                    System.out.println(data.isSetothergiveup());
                     if(data.isSetothergiveup()){
-                        System.out.println("break");
                         acceptMatch = false;
-                        break;
-                    }
-                    if(data.getState() == 23){
+                        giveup = true;
                         break;
                     }
                     if (!data.isDisconnect()) {
@@ -248,6 +249,10 @@ public class ServerConnection implements Runnable {
                             break;
                         }
                         gotData = true;
+                        if(data.getState() == 23){
+                            acceptMatch = false;
+                            break;
+                        }
                     } else {
                         acceptMatch = false;
                         disconnect = true;

@@ -39,6 +39,7 @@ public class GUISwingWorker extends SwingWorker<Boolean, String> {
                 break;
             }
             if (client.waitForAllowed()) {
+                System.out.println(client.getState());
                 allowed = client.isAllowed();
                 break;
             }

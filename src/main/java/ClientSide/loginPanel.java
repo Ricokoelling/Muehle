@@ -21,6 +21,7 @@ public class loginPanel extends JPanel implements ActionListener {
     private JButton createButton;
 
     private boolean gebrochen = false;
+    private boolean start = true;
 
     private final Client client = new Client();
 
@@ -96,6 +97,7 @@ public class loginPanel extends JPanel implements ActionListener {
         //This is to dispose of the parent so it can be closed
         Window s = SwingUtilities.getWindowAncestor(this);
         if (e.getSource() == login) {
+            start = false;
             //control login credentials
             //TODO Server stuff
             try {
@@ -134,7 +136,7 @@ public class loginPanel extends JPanel implements ActionListener {
             }
         }
         if (e.getSource() == createButton) {
-            if(gebrochen) {
+            if(gebrochen || start) {
                 new createFrame(client);
                 s.dispose();
             }

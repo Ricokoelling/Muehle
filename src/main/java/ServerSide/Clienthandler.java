@@ -128,7 +128,6 @@ public class Clienthandler implements Runnable {
                             }
                         } else {
                             if (listData.isAcceptMatch()) {
-                                System.out.println("accept: " + this.playerID + " " + listData.getOpponent());
                                 for (Clienthandler cl : ALLclients) {
                                     if (listData.getOpponent().equals(cl.playerID)) {
                                         clients.clear();
@@ -164,7 +163,6 @@ public class Clienthandler implements Runnable {
                 }
             } catch (IOException | ClassNotFoundException | ClassCastException e ) {
                 e.printStackTrace();
-                //System.err.println("player: " + playerID);
             }
             try {
                 while (true) {
@@ -196,11 +194,9 @@ public class Clienthandler implements Runnable {
                     }
                     if(data.isGiveup()){
                         if(data.isNotmymove()){
-                            System.out.println(playerID);
                             giveup(true);
                         }else {
-                            System.out.println("g: " + playerID);
-                          giveup();
+                            giveup();
                         }
                         ingame = false;
                         giveup = true;
@@ -239,8 +235,11 @@ public class Clienthandler implements Runnable {
                                         }
                                     }
                                 } else {
+
                                     outTosameClient(1, true, playerNumber, pos1);
                                     outToclient(1, playerNumber, pos1);
+
+                                    //win(0,0);
                                 }
                             } else {
                                 System.out.println("[SERVER] MILL! in state 1: " + playerNumber);
@@ -443,7 +442,6 @@ public class Clienthandler implements Runnable {
                     break;
                 }
             } catch (IOException | ClassNotFoundException e) {
-                //System.err.println("Something happened that shouldn't have happened! " + playerID);
                 e.printStackTrace();
             }
         }
@@ -486,7 +484,6 @@ public class Clienthandler implements Runnable {
     }
 
     private void outTosameClient(int state, boolean allowed, boolean playerNumber, int pos1) throws IOException {
-        System.out.println("hier");
         AcceptData acceptData = new AcceptData(allowed, state, pos1, 0, playerID, playerNumber, false);
         this.objWriter.writeObject(acceptData);
     }
@@ -681,7 +678,6 @@ public class Clienthandler implements Runnable {
         ALLclients.remove(this);
         ingame = false;
         System.out.println("[SERVER] Client " + playerID + " disconnected");
-        System.out.println("pbN: " + playerNumber);
         if (clients.get(0).playerNumber == playerNumber) {
             clients.get(1).objWriter.writeObject(new Data(0, 0, 0, playerID, true));
         } else {
@@ -692,13 +688,13 @@ public class Clienthandler implements Runnable {
     private void giveup() throws IOException {
         ingame = false;
         Data sendata = new Data(0, 0, 0, playerID, false,playerNumber);
-        sendata.setGiveup(true);
+        sendata.setSetothergiveup(true);
         if (clients.get(0).playerNumber == playerNumber) {
             clients.get(1).objWriter.writeObject(sendata);
         } else {
             clients.get(0).objWriter.writeObject(sendata);
         }
-        AcceptData acceptData = new AcceptData(true,0,0,0,playerID,playerNumber,false);
+        AcceptData acceptData = new AcceptData(true,50,0,0,playerID,playerNumber,false);
         acceptData.setGiveup(true);
         this.objWriter.writeObject(acceptData);
     }
@@ -725,7 +721,6 @@ public class Clienthandler implements Runnable {
         ALLclients.remove(this);
         ingame = false;
         System.out.println("[SERVER] Client " + playerID + " disconnected");
-        System.out.println("pbN: " + playerNumber);
         if (clients.get(0).playerNumber == playerNumber) {
             clients.get(1).objWriter.writeObject(new AcceptData(true, 0, 0, 0, playerID, playerNumber, false, true));
         } else {
